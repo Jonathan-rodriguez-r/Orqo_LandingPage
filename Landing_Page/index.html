@@ -759,6 +759,14 @@ footer {
 }
 .footer-bacata-text a:hover { color: var(--acc); }
 
+/* ══ HAMBURGER ══ */
+.nav-hamburger {
+  display: none;
+  background: none; border: none; cursor: pointer;
+  color: var(--g06); padding: 4px; line-height: 1;
+  flex-shrink: 0;
+}
+
 /* ══ RESPONSIVE ══ */
 @media (max-width: 900px) {
   .steps { grid-template-columns: 1fr 1fr; }
@@ -766,7 +774,23 @@ footer {
   .cases { grid-template-columns: 1fr; }
   .hero-visual-wrap { display: none; }
   nav { padding: 1rem 1.25rem; }
-  .nav-links { display: none; }
+  .nav-hamburger { display: flex; align-items: center; }
+  .nav-links {
+    display: none;
+    position: fixed; top: 56px; left: 0; right: 0; z-index: 99;
+    background: rgba(11,16,13,0.97);
+    border-bottom: 1px solid var(--g03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    padding: 12px 16px 20px;
+    gap: 2px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links a { display: block; padding: 11px 14px; border-radius: 8px; font-size: 0.9rem; }
+  .nav-links a:hover { background: var(--g02); }
+  .nav-cta { text-align: center; margin-top: 4px; padding: 11px 14px !important; }
 }
 
 @media (max-width: 600px) {
@@ -774,6 +798,300 @@ footer {
   .hero-stats { flex-direction: column; gap: 1.5rem; }
   .cta-block { padding: 3rem 1.5rem; }
 }
+
+/* ══ WIDGET (embed) ══ */
+#orqo-widget {
+  position: fixed; bottom: 2rem; right: 2rem;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 1rem;
+  z-index: 9999;
+}
+#orqo-trigger {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: var(--g02);
+  border: 1px solid rgba(44,185,120,0.3);
+  cursor: pointer; outline: none;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.55), 0 0 0 0 rgba(44,185,120,0.3);
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+#orqo-trigger:hover {
+  transform: scale(1.08);
+  border-color: rgba(44,185,120,0.55);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 24px rgba(44,185,120,0.14);
+}
+#orqo-trigger.open { transform: rotate(90deg) scale(0.9); }
+.t-pulse {
+  position: absolute; inset: -4px; border-radius: 50%;
+  border: 1px solid rgba(44,185,120,0.25);
+  animation: tPulse 3s ease-out infinite;
+}
+.t-pulse.p2 { animation-delay: 1.5s; }
+@keyframes tPulse {
+  0%   { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.t-badge {
+  position: absolute; top: 1px; right: 1px;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--acc); border: 2px solid var(--g00);
+  font-family: var(--f-mono); font-size: 0.44rem; font-weight: 600;
+  color: var(--g00);
+  display: flex; align-items: center; justify-content: center;
+}
+#orqo-window {
+  width: 385px; height: 590px;
+  background: var(--g01);
+  border: 1px solid rgba(233,237,233,0.08);
+  border-radius: 20px; overflow: hidden;
+  display: flex; flex-direction: column;
+  box-shadow: 0 28px 64px rgba(0,0,0,0.65), 0 0 0 1px rgba(44,185,120,0.04);
+  transform-origin: bottom right;
+  transition:
+    width 0.38s cubic-bezier(0.4,0,0.2,1),
+    height 0.38s cubic-bezier(0.4,0,0.2,1),
+    transform 0.32s cubic-bezier(0.34,1.56,0.64,1),
+    opacity 0.25s ease,
+    border-radius 0.38s ease;
+}
+#orqo-window.w-hidden {
+  transform: scale(0.88) translateY(16px);
+  opacity: 0; pointer-events: none;
+}
+#orqo-window.w-max {
+  width: min(740px, 94vw);
+  height: min(88vh, 860px);
+  border-radius: 16px;
+}
+@media (max-width: 480px) {
+  #orqo-widget { right: 1rem; bottom: 1rem; }
+  #orqo-window { width: calc(100vw - 2rem); }
+}
+.w-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.9rem 1.1rem;
+  background: var(--g02);
+  border-bottom: 1px solid rgba(233,237,233,0.06);
+  flex-shrink: 0;
+}
+.w-hd-left { display: flex; align-items: center; gap: 0.55rem; }
+.w-brand {
+  font-family: var(--f-disp); font-weight: 800;
+  font-size: 0.95rem; letter-spacing: -0.04em; color: var(--g08);
+}
+.w-online {
+  display: flex; align-items: center; gap: 0.3rem;
+  font-family: var(--f-mono); font-size: 0.46rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--g05); opacity: 0.55;
+}
+.w-online-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--acc);
+  animation: onlinePulse 2s ease-in-out infinite;
+}
+@keyframes onlinePulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+.w-hd-right { display: flex; align-items: center; gap: 0.2rem; }
+.w-hbtn {
+  width: 28px; height: 28px; border-radius: 7px;
+  border: none; background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(233,237,233,0.28);
+  transition: background 0.15s, color 0.15s;
+}
+.w-hbtn:hover { background: rgba(233,237,233,0.07); color: rgba(233,237,233,0.7); }
+.w-backbar {
+  display: none; align-items: center; gap: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  background: var(--g02);
+  border-bottom: 1px solid rgba(233,237,233,0.04);
+  flex-shrink: 0;
+}
+.w-backbar.vis { display: flex; }
+.w-back-btn {
+  display: flex; align-items: center; gap: 0.35rem;
+  background: none; border: none; cursor: pointer;
+  font-family: var(--f-body); font-size: 0.78rem;
+  color: var(--g05); transition: color 0.15s; padding: 0;
+}
+.w-back-btn:hover { color: var(--acc); }
+.w-backbar-title {
+  font-family: var(--f-body); font-size: 0.8rem;
+  color: var(--g07); font-weight: 500;
+  margin-left: 0.15rem;
+}
+.w-body { flex: 1; overflow: hidden; position: relative; }
+.w-screen {
+  position: absolute; inset: 0;
+  overflow-y: auto; overflow-x: hidden;
+  opacity: 0; transform: translateX(18px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+.w-screen.active { opacity: 1; transform: translateX(0); pointer-events: all; }
+.w-screen::-webkit-scrollbar { width: 3px; }
+.w-screen::-webkit-scrollbar-track { background: transparent; }
+.w-screen::-webkit-scrollbar-thumb { background: var(--g03); border-radius: 3px; }
+.w-tabs {
+  display: flex;
+  border-top: 1px solid rgba(233,237,233,0.06);
+  background: var(--g02); flex-shrink: 0;
+}
+.w-tab {
+  flex: 1; padding: 0.8rem 0 0.65rem;
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 0.28rem;
+  color: rgba(233,237,233,0.22);
+  transition: color 0.18s;
+  position: relative;
+}
+.w-tab:hover { color: rgba(233,237,233,0.5); }
+.w-tab.active { color: var(--acc); }
+.w-tab.active::before {
+  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 22px; height: 2px; border-radius: 0 0 3px 3px; background: var(--acc);
+}
+.tab-lbl { font-family: var(--f-mono); font-size: 0.43rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.tab-dot {
+  position: absolute; top: 0.55rem; right: calc(50% - 16px);
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--acc); border: 1.5px solid var(--g02);
+}
+.h-hero { padding: 2rem 1.5rem 1.25rem; text-align: center; }
+.h-iso-ring {
+  width: 62px; height: 62px; border-radius: 50%;
+  background: var(--acc-g); border: 1px solid rgba(44,185,120,0.2);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.1rem; position: relative;
+}
+.h-iso-ring::before {
+  content: ''; position: absolute; inset: -7px; border-radius: 50%;
+  border: 1px solid rgba(44,185,120,0.08);
+}
+.h-title { font-family: var(--f-disp); font-weight: 800; font-size: 1.05rem; letter-spacing: -0.03em; color: var(--g08); margin-bottom: 0.35rem; }
+.h-sub { font-family: var(--f-body); font-size: 0.78rem; color: var(--g05); line-height: 1.65; }
+.h-actions { padding: 0 1rem 1.25rem; display: flex; flex-direction: column; gap: 0.45rem; }
+.h-action {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.8rem 0.9rem;
+  background: var(--g02); border: 1px solid rgba(233,237,233,0.06);
+  border-radius: 11px; cursor: pointer;
+  transition: border-color 0.2s, background 0.2s; text-align: left; width: 100%;
+}
+.h-action:hover { border-color: rgba(44,185,120,0.25); background: rgba(44,185,120,0.04); }
+.h-action-ico {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--acc-g); border: 1px solid rgba(44,185,120,0.15);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.h-action-name { font-family: var(--f-body); font-size: 0.82rem; color: var(--g07); font-weight: 500; }
+.h-action-desc { font-family: var(--f-body); font-size: 0.7rem; color: rgba(233,237,233,0.32); margin-top: 0.1rem; }
+.h-arrow { margin-left: auto; color: rgba(233,237,233,0.18); flex-shrink: 0; }
+.h-divider { height: 1px; background: rgba(233,237,233,0.05); margin: 0 1.5rem; }
+.h-section-lbl { font-family: var(--f-mono); font-size: 0.5rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--g05); opacity: 0.45; padding: 1.1rem 1.5rem 0.55rem; }
+.h-recent { padding: 0 0.9rem 1.5rem; }
+.h-conv {
+  display: flex; align-items: center; gap: 0.65rem;
+  padding: 0.75rem 0.7rem; border-radius: 10px; cursor: pointer;
+  transition: background 0.15s; margin-bottom: 2px;
+}
+.h-conv:hover { background: rgba(233,237,233,0.04); }
+.h-conv-ico { width: 30px; height: 30px; border-radius: 8px; background: var(--acc-g); border: 1px solid rgba(44,185,120,0.12); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.h-conv-name { font-family: var(--f-body); font-size: 0.8rem; color: var(--g07); font-weight: 500; margin-bottom: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.h-conv-preview { font-family: var(--f-body); font-size: 0.7rem; color: rgba(233,237,233,0.3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.h-conv-time { font-family: var(--f-mono); font-size: 0.44rem; color: rgba(233,237,233,0.18); flex-shrink: 0; margin-left: auto; }
+.h-empty { padding: 1.5rem 1.5rem 2rem; text-align: center; font-family: var(--f-body); font-size: 0.78rem; color: rgba(233,237,233,0.2); }
+.m-head { display: flex; align-items: center; justify-content: space-between; padding: 1.4rem 1.4rem 0.9rem; }
+.m-title { font-family: var(--f-disp); font-weight: 700; font-size: 1rem; letter-spacing: -0.03em; color: var(--g08); }
+.m-new { display: flex; align-items: center; gap: 0.35rem; padding: 0.42rem 0.85rem; background: var(--acc); color: var(--g00); border: none; border-radius: 6px; cursor: pointer; font-family: var(--f-body); font-size: 0.75rem; font-weight: 600; transition: opacity 0.2s; }
+.m-new:hover { opacity: 0.85; }
+.m-token-bar { margin: 0 1.4rem 1.1rem; padding: 0.85rem 1rem; background: var(--g02); border: 1px solid rgba(233,237,233,0.06); border-radius: 11px; }
+.m-tok-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.m-tok-lbl { font-family: var(--f-mono); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--g05); opacity: 0.55; }
+.m-tok-val { font-family: var(--f-mono); font-size: 0.6rem; color: var(--acc); }
+.m-tok-track { height: 3px; background: rgba(233,237,233,0.06); border-radius: 3px; overflow: hidden; }
+.m-tok-fill { height: 100%; background: var(--acc); border-radius: 3px; transition: width 0.5s ease; }
+.m-list { padding: 0 1rem 1.5rem; }
+.m-empty { padding: 3rem 1.5rem; text-align: center; font-family: var(--f-body); font-size: 0.8rem; color: rgba(233,237,233,0.2); }
+.m-item { display: flex; align-items: flex-start; gap: 0.7rem; padding: 0.85rem 0.7rem; border-radius: 10px; cursor: pointer; transition: background 0.15s; margin-bottom: 2px; }
+.m-item:hover { background: rgba(233,237,233,0.04); }
+.m-item-ico { width: 34px; height: 34px; border-radius: 9px; background: var(--acc-g); border: 1px solid rgba(44,185,120,0.13); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.m-item-title { font-family: var(--f-body); font-size: 0.81rem; color: var(--g07); font-weight: 500; margin-bottom: 0.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-item-prev { font-family: var(--f-body); font-size: 0.7rem; color: rgba(233,237,233,0.32); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m-item-time { font-family: var(--f-mono); font-size: 0.44rem; color: rgba(233,237,233,0.18); flex-shrink: 0; margin-top: 0.15rem; }
+.d-wrap { padding: 1.75rem 1.5rem; display: flex; flex-direction: column; min-height: 100%; }
+.d-ico { display: flex; justify-content: center; margin-bottom: 1.3rem; }
+.d-ico-ring { width: 54px; height: 54px; border-radius: 50%; background: var(--acc-g); border: 1px solid rgba(44,185,120,0.25); display: flex; align-items: center; justify-content: center; }
+.d-title { font-family: var(--f-disp); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--g08); text-align: center; margin-bottom: 0.4rem; }
+.d-sub { font-family: var(--f-body); font-size: 0.78rem; color: var(--g05); text-align: center; line-height: 1.65; margin-bottom: 1.4rem; }
+.d-token-box { background: var(--g02); border: 1px solid rgba(233,237,233,0.07); border-radius: 12px; padding: 1rem; margin-bottom: 1.1rem; }
+.d-tok-row { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.6rem; }
+.d-tok-lbl { font-family: var(--f-mono); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--g05); opacity: 0.55; }
+.d-tok-num { font-family: var(--f-disp); font-weight: 800; font-size: 1.5rem; color: var(--acc); line-height: 1; }
+.d-tok-of { font-family: var(--f-mono); font-size: 0.5rem; color: rgba(233,237,233,0.25); display: block; margin-top: 0.15rem; }
+.d-tok-track { height: 3px; background: rgba(233,237,233,0.06); border-radius: 3px; overflow: hidden; }
+.d-tok-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--acc), #4ade80); transition: width 0.5s ease; }
+.d-disclaimer { background: var(--g02); border: 1px solid rgba(233,237,233,0.05); border-radius: 12px; padding: 0.9rem 1rem; font-family: var(--f-body); font-size: 0.72rem; color: rgba(233,237,233,0.38); line-height: 1.75; margin-bottom: 1.3rem; max-height: 110px; overflow-y: auto; }
+.d-disclaimer strong { color: rgba(233,237,233,0.58); font-weight: 500; }
+.d-accept { width: 100%; padding: 0.88rem; background: var(--acc); color: var(--g00); border: none; border-radius: 11px; cursor: pointer; font-family: var(--f-body); font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.45rem; transition: opacity 0.2s, transform 0.18s; }
+.d-accept:hover { opacity: 0.88; transform: translateY(-1px); }
+.d-sugg { margin-top: 1.5rem; }
+.d-sugg-lbl { font-family: var(--f-mono); font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g05); opacity: 0.45; margin-bottom: 0.7rem; }
+.d-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+.d-chip { padding: 0.42rem 0.82rem; background: var(--g02); border: 1px solid rgba(233,237,233,0.08); border-radius: 100px; cursor: pointer; font-family: var(--f-body); font-size: 0.73rem; color: var(--g06); transition: border-color 0.2s, color 0.2s; }
+.d-chip:hover { border-color: rgba(44,185,120,0.3); color: var(--acc); }
+#screen-chat { display: flex; flex-direction: column; }
+.chat-msgs { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 1rem; display: flex; flex-direction: column; gap: 0.7rem; }
+.chat-msgs::-webkit-scrollbar { width: 3px; }
+.chat-msgs::-webkit-scrollbar-thumb { background: var(--g03); border-radius: 3px; }
+.bub-wrap { display: flex; align-items: flex-end; gap: 0.45rem; animation: bubIn 0.28s cubic-bezier(0.34,1.56,0.64,1) both; }
+@keyframes bubIn { from { opacity: 0; transform: translateY(10px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.bub-wrap.user { flex-direction: row-reverse; }
+.bub-av { width: 24px; height: 24px; border-radius: 7px; background: var(--acc-g); border: 1px solid rgba(44,185,120,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.bub { max-width: 78%; padding: 0.62rem 0.88rem; font-family: var(--f-body); font-size: 0.81rem; line-height: 1.55; border-radius: 14px; }
+.bub-wrap.bot .bub { background: var(--g02); border: 1px solid rgba(233,237,233,0.06); color: var(--g07); border-bottom-left-radius: 4px; }
+.bub-wrap.user .bub { background: var(--acc); color: var(--g00); font-weight: 500; border-bottom-right-radius: 4px; }
+.bub-time { font-family: var(--f-mono); font-size: 0.42rem; color: rgba(233,237,233,0.16); padding: 0 0.15rem; }
+.bub-wrap.user .bub-time { text-align: right; }
+.typing-dots { display: flex; gap: 3px; align-items: center; }
+.typing-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(233,237,233,0.35); animation: tDot 1.2s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation-delay: 0.18s; }
+.typing-dot:nth-child(3) { animation-delay: 0.36s; }
+@keyframes tDot { 0%, 60%, 100% { transform: translateY(0); opacity: 0.35; } 30% { transform: translateY(-5px); opacity: 1; } }
+.chat-input-area { padding: 0.7rem 0.9rem 0.9rem; border-top: 1px solid rgba(233,237,233,0.05); background: var(--g01); flex-shrink: 0; }
+.chat-box { background: var(--g02); border: 1.5px solid rgba(233,237,233,0.08); border-radius: 14px; overflow: hidden; transition: border-color 0.2s, box-shadow 0.2s; }
+.chat-box:focus-within { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59,130,246,0.09); }
+.chat-ta { width: 100%; background: transparent; border: none; outline: none; padding: 0.78rem 1rem 0.35rem; font-family: var(--f-body); font-size: 0.81rem; color: var(--g07); resize: none; min-height: 38px; max-height: 96px; line-height: 1.5; }
+.chat-ta::placeholder { color: rgba(233,237,233,0.18); }
+.chat-actions { display: flex; align-items: center; gap: 0.15rem; padding: 0.25rem 0.45rem; }
+.chat-att { width: 30px; height: 30px; border-radius: 7px; background: none; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: rgba(233,237,233,0.22); transition: background 0.15s, color 0.15s; }
+.chat-att:hover { background: rgba(233,237,233,0.06); color: rgba(233,237,233,0.6); }
+.chat-gif { font-family: var(--f-mono); font-size: 0.5rem; font-weight: 600; letter-spacing: 0.04em; width: 34px; }
+.chat-send { margin-left: auto; width: 30px; height: 30px; border-radius: 8px; background: var(--acc); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--g00); transition: opacity 0.2s, transform 0.15s; }
+.chat-send:hover { opacity: 0.85; transform: scale(1.06); }
+.chat-send:disabled { opacity: 0.28; transform: none; cursor: default; background: var(--g04); }
+.help-head { padding: 1.4rem 1.4rem 0.9rem; }
+.help-title { font-family: var(--f-disp); font-weight: 700; font-size: 1rem; letter-spacing: -0.02em; color: var(--g08); margin-bottom: 0.9rem; }
+.help-search-box { display: flex; align-items: center; gap: 0.55rem; background: var(--g02); border: 1.5px solid rgba(233,237,233,0.08); border-radius: 10px; padding: 0.62rem 0.85rem; transition: border-color 0.2s; }
+.help-search-box:focus-within { border-color: rgba(44,185,120,0.35); }
+.help-search-inp { background: none; border: none; outline: none; font-family: var(--f-body); font-size: 0.8rem; color: var(--g07); flex: 1; }
+.help-search-inp::placeholder { color: rgba(233,237,233,0.18); }
+.help-cats { padding: 0 1.1rem 0.5rem; }
+.help-sec-lbl { font-family: var(--f-mono); font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--g05); opacity: 0.45; margin-bottom: 0.65rem; }
+.help-cat { display: flex; align-items: center; gap: 0.7rem; padding: 0.78rem 0.65rem; border-radius: 10px; cursor: pointer; transition: background 0.15s; margin-bottom: 2px; }
+.help-cat:hover { background: rgba(233,237,233,0.04); }
+.help-cat-ico { width: 30px; height: 30px; border-radius: 8px; background: var(--g02); border: 1px solid rgba(233,237,233,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.help-cat-name { font-family: var(--f-body); font-size: 0.81rem; color: var(--g07); font-weight: 500; }
+.help-cat-count { font-family: var(--f-mono); font-size: 0.46rem; color: var(--g05); opacity: 0.38; margin-left: auto; letter-spacing: 0.06em; }
+.help-divider { height: 1px; background: rgba(233,237,233,0.05); margin: 0.5rem 1.4rem; }
+.help-arts { padding: 0.8rem 1.1rem 1.5rem; }
+.help-art { display: flex; align-items: center; justify-content: space-between; padding: 0.72rem 0; border-bottom: 1px solid rgba(233,237,233,0.04); cursor: pointer; }
+.help-art:last-child { border-bottom: none; }
+.help-art:hover .help-art-name { color: var(--acc); }
+.help-art-name { font-family: var(--f-body); font-size: 0.8rem; color: rgba(233,237,233,0.55); transition: color 0.15s; }
 </style>
 </head>
 <body>
@@ -791,13 +1109,18 @@ footer {
     </svg>
     <span class="logo-text">ORQO</span>
   </a>
-  <ul class="nav-links">
-    <li><a href="#como-funciona">Cómo funciona</a></li>
-    <li><a href="#wordpress">WordPress</a></li>
-    <li><a href="#casos">Casos de uso</a></li>
-    <li><a href="#contacto" class="nav-cta">Agendar demo</a></li>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#como-funciona" onclick="closeNav()">Cómo funciona</a></li>
+    <li><a href="#wordpress" onclick="closeNav()">WordPress</a></li>
+    <li><a href="#casos" onclick="closeNav()">Casos de uso</a></li>
+    <li><a href="#contacto" class="nav-cta" onclick="closeNav()">Agendar demo</a></li>
     <li><a href="https://dashboard.orqo.io" class="nav-cta" style="background:transparent;border:1px solid var(--g04);color:var(--g06)!important;">Ingresar →</a></li>
   </ul>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú" onclick="toggleNav()">
+    <svg id="ham-ico" width="22" height="22" viewBox="0 0 22 22" fill="none">
+      <path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+  </button>
 </nav>
 
 <!-- ══ HERO ══ -->
@@ -1208,6 +1531,185 @@ footer {
   </div>
 </footer>
 
+<!-- ══ CHAT WIDGET ══ -->
+<div id="orqo-widget">
+  <div id="orqo-window" class="w-hidden">
+    <div class="w-header">
+      <div class="w-hd-left">
+        <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+        </svg>
+        <span class="w-brand">ORQO</span>
+        <span class="w-online"><span class="w-online-dot"></span>En línea</span>
+      </div>
+      <div class="w-hd-right">
+        <button class="w-hbtn" id="btn-min" title="Minimizar">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="w-hbtn" id="btn-max" title="Maximizar">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" id="ico-max">
+            <rect x="2.5" y="2.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/>
+            <path d="M10 2.5V1M6 2.5V1M2.5 6H1M2.5 10H1M6 13.5V15M10 13.5V15M13.5 6H15M13.5 10H15" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <button class="w-hbtn" id="btn-close" title="Cerrar">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="w-backbar" id="w-backbar">
+      <button class="w-back-btn" id="btn-back">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Volver
+      </button>
+      <span class="w-backbar-title" id="backbar-title"></span>
+    </div>
+    <div class="w-body">
+      <div id="screen-home" class="w-screen active">
+        <div class="h-hero">
+          <div class="h-iso-ring">
+            <svg width="28" height="28" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="5" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="h-title">Hola, soy ORQO</div>
+          <div class="h-sub">Tu asistente de orquestación.<br>¿En qué puedo ayudarte hoy?</div>
+        </div>
+        <div class="h-actions">
+          <button class="h-action" onclick="goToNewChat()">
+            <div class="h-action-ico"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#2CB978" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+            <div style="flex:1;min-width:0;"><div class="h-action-name">Nueva conversación</div><div class="h-action-desc">Inicia un nuevo chat con ORQO Agent</div></div>
+            <div class="h-arrow"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </button>
+          <button class="h-action" onclick="switchTab('help')">
+            <div class="h-action-ico"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#2CB978" stroke-width="1.4"/><path d="M8 9V8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2" stroke="#2CB978" stroke-width="1.4" stroke-linecap="round"/><circle cx="8" cy="11.5" r="0.75" fill="#2CB978"/></svg></div>
+            <div style="flex:1;min-width:0;"><div class="h-action-name">Buscar ayuda</div><div class="h-action-desc">Artículos, soporte y documentación</div></div>
+            <div class="h-arrow"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          </button>
+        </div>
+        <div class="h-divider"></div>
+        <div class="h-section-lbl">Conversaciones recientes</div>
+        <div class="h-recent" id="home-recent"></div>
+      </div>
+      <div id="screen-messages" class="w-screen">
+        <div class="m-head">
+          <span class="m-title">Mensajes</span>
+          <button class="m-new" onclick="goToNewChat()">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Nuevo
+          </button>
+        </div>
+        <div class="m-token-bar">
+          <div class="m-tok-row"><span class="m-tok-lbl">Interacciones disponibles</span><span class="m-tok-val" id="tok-display">— / —</span></div>
+          <div class="m-tok-track"><div class="m-tok-fill" id="tok-fill" style="width:100%"></div></div>
+        </div>
+        <div class="m-list" id="msgs-list"></div>
+      </div>
+      <div id="screen-disclaimer" class="w-screen">
+        <div class="d-wrap">
+          <div class="d-ico"><div class="d-ico-ring">
+            <svg width="24" height="24" viewBox="0 0 72 72" fill="none"><path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4.5" stroke-linecap="round" fill="none"/><line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4.5" stroke-linecap="round"/><circle cx="66" cy="58" r="5.5" fill="#2CB978"/></svg>
+          </div></div>
+          <div class="d-title">Envíanos un mensaje</div>
+          <div class="d-sub">ORQO Agent responde en segundos.<br>El historial queda guardado en tu dispositivo.</div>
+          <div class="d-token-box">
+            <div class="d-tok-row"><span class="d-tok-lbl">Interacciones disponibles</span><div style="text-align:right"><span class="d-tok-num" id="d-tok-num">20</span><span class="d-tok-of">de 20 disponibles</span></div></div>
+            <div class="d-tok-track"><div class="d-tok-fill" id="d-tok-fill" style="width:100%"></div></div>
+          </div>
+          <div class="d-disclaimer">
+            <strong>Aviso de uso:</strong> ORQO Agent es un asistente de inteligencia artificial. Las respuestas se generan automáticamente y pueden contener errores. No sustituyen asesoría profesional. Al continuar, aceptas que tus mensajes sean procesados para generar respuestas. No compartas información confidencial ni datos personales sensibles. Bacata Digital Media no se responsabiliza por decisiones tomadas con base en las respuestas del asistente. Para soporte directo escríbenos al +57 301 321 1669.
+          </div>
+          <button class="d-accept" onclick="acceptDisclaimer()">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Entiendo y acepto
+          </button>
+          <div class="d-sugg">
+            <div class="d-sugg-lbl">Preguntas frecuentes</div>
+            <div class="d-chips">
+              <div class="d-chip" onclick="startWithSugg(this)">¿Cómo funciona ORQO?</div>
+              <div class="d-chip" onclick="startWithSugg(this)">¿Qué integraciones tiene?</div>
+              <div class="d-chip" onclick="startWithSugg(this)">¿Cuánto cuesta?</div>
+              <div class="d-chip" onclick="startWithSugg(this)">Quiero una demo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="screen-chat" class="w-screen">
+        <div class="chat-msgs" id="chat-msgs"></div>
+        <div class="chat-input-area">
+          <div class="chat-box">
+            <textarea class="chat-ta" id="chat-ta" placeholder="Escribe un mensaje..." rows="1"></textarea>
+            <div class="chat-actions">
+              <button class="chat-att" title="Adjuntar"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M13.5 7.5l-5.6 5.6a4 4 0 01-5.65-5.65l5.6-5.6a2.5 2.5 0 013.54 3.54L5.78 11a1 1 0 01-1.41-1.41l5.6-5.6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+              <button class="chat-att" title="Imagen"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><circle cx="5.5" cy="6.5" r="1.2" stroke="currentColor" stroke-width="1.3"/><path d="M2 10.5l3-3 2.5 2.5 2-2 2.5 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <button class="chat-att" title="Voz"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="6" y="2" width="4" height="7" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 8.5a4.5 4.5 0 009 0M8 13v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+              <button class="chat-att chat-gif" title="GIF">GIF</button>
+              <button class="chat-send" id="btn-send" onclick="sendMessage()">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 13V3M4 7l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="screen-help" class="w-screen">
+        <div class="help-head">
+          <div class="help-title">Centro de ayuda</div>
+          <div class="help-search-box">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:0.28;"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <input class="help-search-inp" placeholder="Busca artículos, guías...">
+          </div>
+        </div>
+        <div class="help-cats">
+          <div class="help-sec-lbl">Categorías</div>
+          <div class="help-cat"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L2 4.5v7l6 3 6-3v-7L8 1.5z" stroke="rgba(233,237,233,0.45)" stroke-width="1.3" stroke-linejoin="round"/></svg></div><span class="help-cat-name">Primeros pasos</span><span class="help-cat-count">6 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-cat"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="9.5" y="1.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="1.5" y="9.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="9.5" y="9.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/></svg></div><span class="help-cat-name">Integraciones</span><span class="help-cat-count">12 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-cat" onclick="goToNewChat()"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><path d="M8 9V8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2" stroke="rgba(233,237,233,0.45)" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11" r="0.7" fill="rgba(233,237,233,0.45)"/></svg></div><span class="help-cat-name">Cómo obtener soporte</span><span class="help-cat-count">3 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="help-divider"></div>
+        <div class="help-arts">
+          <div class="help-sec-lbl">Artículos populares</div>
+          <div class="help-art"><span class="help-art-name">¿Cómo conectar ORQO con WordPress?</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art"><span class="help-art-name">Configurar tu número de WhatsApp Business</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art"><span class="help-art-name">Flujos y agentes disponibles</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art"><span class="help-art-name">Límites de tokens e interacciones</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art"><span class="help-art-name">Instalar el plugin ORQO en WordPress</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="w-tabs">
+      <button class="w-tab active" id="tab-home" onclick="switchTab('home')">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M3 9.5L10 3l7 6.5V17a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/><path d="M7 18v-6h6v6" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <span class="tab-lbl">Inicio</span>
+      </button>
+      <button class="w-tab" id="tab-messages" onclick="switchTab('messages')">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M17 2H3a1 1 0 00-1 1v9a1 1 0 001 1h3l4 3.5 4-3.5h3a1 1 0 001-1V3a1 1 0 00-1-1z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/></svg>
+        <span class="tab-lbl">Mensajes</span>
+        <span class="tab-dot" id="tab-msgs-dot" style="display:none"></span>
+      </button>
+      <button class="w-tab" id="tab-help" onclick="switchTab('help')">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.4"/><path d="M10 11.5V11c1.38 0 2.5-1.12 2.5-2.5S11.38 6 10 6 7.5 7.12 7.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><circle cx="10" cy="14.5" r="0.9" fill="currentColor"/></svg>
+        <span class="tab-lbl">Ayuda</span>
+      </button>
+    </div>
+  </div>
+  <button id="orqo-trigger" onclick="toggleWidget()" aria-label="Abrir ORQO Chat">
+    <div class="t-pulse"></div>
+    <div class="t-pulse p2"></div>
+    <svg width="26" height="26" viewBox="0 0 72 72" fill="none" id="trigger-ico">
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4.5" stroke-linecap="round"/>
+      <circle cx="66" cy="58" r="5.5" fill="#2CB978"/>
+    </svg>
+    <span class="t-badge" id="t-badge" style="display:none">1</span>
+  </button>
+</div>
+
 <script>
 // Reveal on scroll
 const reveals = document.querySelectorAll('.reveal');
@@ -1274,6 +1776,273 @@ const statsObserver = new IntersectionObserver((entries) => {
 
 const heroStats = document.querySelector('.hero-stats');
 if (heroStats) statsObserver.observe(heroStats);
+
+// ══ HAMBURGER ══
+function toggleNav() {
+  const links = document.getElementById('nav-links');
+  const ico = document.getElementById('ham-ico');
+  const open = links.classList.toggle('open');
+  ico.innerHTML = open
+    ? '<path d="M4 4l14 14M18 4L4 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+    : '<path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>';
+}
+function closeNav() {
+  const links = document.getElementById('nav-links');
+  const ico = document.getElementById('ham-ico');
+  links.classList.remove('open');
+  ico.innerHTML = '<path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>';
+}
+// Cerrar menú al hacer click fuera
+document.addEventListener('click', e => {
+  const navEl = document.querySelector('nav');
+  if (!navEl.contains(e.target)) closeNav();
+});
+
+// ══ CHAT WIDGET ══
+const TOTAL_INT = 20;
+const STORAGE_KEY = 'orqo_wgt';
+let isOpen = false, isMax = false;
+let curTab = 'home', curScreen = 'home';
+let activeConvId = null;
+let pendingSugg = '';
+
+const S = {
+  load: () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; } },
+  save: d => localStorage.setItem(STORAGE_KEY, JSON.stringify(d)),
+  convs: () => S.load().conversations || [],
+  saveConvs: cs => { const d = S.load(); d.conversations = cs; S.save(d); },
+  disclaimerOk: () => !!S.load().disclaimerAccepted,
+  acceptDisclaimer: () => { const d = S.load(); d.disclaimerAccepted = true; S.save(d); },
+  usedInt: () => S.convs().reduce((n, c) => n + (c.messages || []).filter(m => m.role === 'user').length, 0),
+  remaining: () => Math.max(0, TOTAL_INT - S.usedInt()),
+};
+
+function toggleWidget() {
+  isOpen = !isOpen;
+  const win = document.getElementById('orqo-window');
+  const btn = document.getElementById('orqo-trigger');
+  if (isOpen) {
+    win.classList.remove('w-hidden');
+    btn.classList.add('open');
+    document.getElementById('t-badge').style.display = 'none';
+    renderHome(); renderMsgsList(); updateTokenUI();
+  } else {
+    win.classList.add('w-hidden');
+    btn.classList.remove('open');
+  }
+}
+
+document.getElementById('btn-close').onclick = () => { isOpen = false; document.getElementById('orqo-window').classList.add('w-hidden'); document.getElementById('orqo-trigger').classList.remove('open'); };
+document.getElementById('btn-min').onclick  = () => { isOpen = false; document.getElementById('orqo-window').classList.add('w-hidden'); document.getElementById('orqo-trigger').classList.remove('open'); };
+document.getElementById('btn-max').onclick  = () => {
+  isMax = !isMax;
+  document.getElementById('orqo-window').classList.toggle('w-max', isMax);
+  document.getElementById('ico-max').innerHTML = isMax
+    ? '<path d="M1 6h6V1M15 6h-6V1M1 10h6v5M15 10h-6v5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>'
+    : '<rect x="2.5" y="2.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M10 2.5V1M6 2.5V1M2.5 6H1M2.5 10H1M6 13.5V15M10 13.5V15M13.5 6H15M13.5 10H15" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>';
+};
+
+function switchTab(tab) {
+  ['home','messages','help'].forEach(t => document.getElementById('tab-'+t).classList.toggle('active', t === tab));
+  curTab = tab;
+  if (tab === 'messages') { renderMsgsList(); showScreen('messages', false); }
+  else { showScreen(tab, false); }
+  setBack(false);
+}
+
+function showScreen(name, back, backTitle) {
+  document.querySelectorAll('.w-screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  curScreen = name;
+  setBack(back, backTitle);
+  if (name === 'chat') scrollMsgs();
+}
+
+function setBack(show, title) {
+  const bar = document.getElementById('w-backbar');
+  document.getElementById('backbar-title').textContent = title || '';
+  bar.classList.toggle('vis', !!show);
+}
+
+document.getElementById('btn-back').onclick = () => {
+  if (curScreen === 'chat') { renderMsgsList(); showScreen('messages', false); hlTab('messages'); }
+  else if (curScreen === 'disclaimer') { showScreen('messages', false); hlTab('messages'); }
+  else { switchTab(curTab); }
+};
+
+function hlTab(tab) {
+  ['home','messages','help'].forEach(t => document.getElementById('tab-'+t).classList.toggle('active', t === tab));
+  curTab = tab;
+}
+
+function goToNewChat() {
+  if (!S.disclaimerOk()) { updateTokenUI(); showScreen('disclaimer', true, 'Nuevo mensaje'); hlTab('messages'); }
+  else { startNewConv(); }
+}
+
+function acceptDisclaimer() {
+  S.acceptDisclaimer();
+  startNewConv(pendingSugg || '');
+  pendingSugg = '';
+}
+
+function startWithSugg(el) {
+  pendingSugg = el.textContent;
+  if (!S.disclaimerOk()) { updateTokenUI(); showScreen('disclaimer', true, 'Nuevo mensaje'); hlTab('messages'); }
+  else { startNewConv(pendingSugg); pendingSugg = ''; }
+}
+
+function startNewConv(initial) {
+  const id = 'conv_' + Date.now();
+  const convs = S.convs();
+  convs.unshift({ id, title: initial ? initial.slice(0,42) : 'Nueva conversación', createdAt: new Date().toISOString(), messages: [] });
+  S.saveConvs(convs);
+  openConv(id, initial);
+}
+
+function openConv(id, initial) {
+  activeConvId = id;
+  renderChatMsgs(id);
+  showScreen('chat', true, 'ORQO Agent');
+  hlTab('messages');
+  const convs = S.convs();
+  const conv = convs.find(c => c.id === id);
+  if (conv && conv.messages.length === 0 && !initial) {
+    setTimeout(() => addBotMsg(id, '¡Hola! Soy ORQO Agent. ¿En qué puedo ayudarte hoy?'), 350);
+  }
+  if (initial) setTimeout(() => sendMessage(initial), 400);
+}
+
+const NOTCH_SM = `<svg width="14" height="14" viewBox="0 0 72 72" fill="none"><path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5" stroke-linecap="round" fill="none"/><line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="5" stroke-linecap="round"/><circle cx="66" cy="58" r="6" fill="#2CB978"/></svg>`;
+
+function renderChatMsgs(convId) {
+  const conv = S.convs().find(c => c.id === convId);
+  const c = document.getElementById('chat-msgs');
+  c.innerHTML = '';
+  if (!conv) return;
+  conv.messages.forEach(m => appendBubble(m.role, m.content, m.timestamp, false));
+  scrollMsgs();
+}
+
+function appendBubble(role, content, ts, anim) {
+  const c = document.getElementById('chat-msgs');
+  const w = document.createElement('div');
+  w.className = 'bub-wrap ' + role;
+  const t = ts ? new Date(ts).toLocaleTimeString('es-CO', {hour:'2-digit', minute:'2-digit'}) : '';
+  if (role === 'bot') {
+    w.innerHTML = `<div class="bub-av">${NOTCH_SM}</div><div><div class="bub">${escHtml(content)}</div><div class="bub-time">${t}</div></div>`;
+  } else {
+    w.innerHTML = `<div><div class="bub">${escHtml(content)}</div><div class="bub-time">${t}</div></div>`;
+  }
+  c.appendChild(w);
+  if (anim) scrollMsgs();
+}
+
+function addBotMsg(convId, text) {
+  const convs = S.convs();
+  const conv = convs.find(c => c.id === convId);
+  if (!conv) return;
+  const m = { role: 'bot', content: text, timestamp: new Date().toISOString() };
+  conv.messages.push(m); S.saveConvs(convs);
+  appendBubble('bot', text, m.timestamp, true);
+}
+
+function showTyping() {
+  const c = document.getElementById('chat-msgs');
+  const w = document.createElement('div');
+  w.className = 'bub-wrap bot'; w.id = 'typing';
+  w.innerHTML = `<div class="bub-av">${NOTCH_SM}</div><div class="bub" style="padding:0.72rem 0.9rem;"><div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  c.appendChild(w); scrollMsgs();
+}
+
+function removeTyping() { const e = document.getElementById('typing'); if (e) e.remove(); }
+function scrollMsgs() { const c = document.getElementById('chat-msgs'); if (c) setTimeout(() => c.scrollTop = c.scrollHeight, 20); }
+
+function sendMessage(override) {
+  const ta = document.getElementById('chat-ta');
+  const text = override || ta.value.trim();
+  if (!text || !activeConvId) return;
+  if (S.remaining() <= 0) {
+    addBotMsg(activeConvId, 'Has alcanzado el límite de interacciones. Contáctanos al +57 301 321 1669 para continuar.');
+    return;
+  }
+  const convs = S.convs();
+  const conv = convs.find(c => c.id === activeConvId);
+  if (!conv) return;
+  const m = { role: 'user', content: text, timestamp: new Date().toISOString() };
+  conv.messages.push(m);
+  if (conv.messages.filter(x => x.role === 'user').length === 1) conv.title = text.slice(0, 42);
+  S.saveConvs(convs);
+  appendBubble('user', text, m.timestamp, true);
+  ta.value = ''; ta.style.height = 'auto';
+  updateTokenUI(); showTyping();
+  setTimeout(() => {
+    removeTyping();
+    addBotMsg(activeConvId, getBotReply(text));
+    updateTokenUI(); renderHome();
+    const dot = document.getElementById('tab-msgs-dot');
+    if (dot) dot.style.display = 'none';
+  }, 900 + Math.random() * 700);
+}
+
+function getBotReply(txt) {
+  const t = txt.toLowerCase();
+  if (t.includes('funciona') || t.includes('qué es')) return 'ORQO conecta tu WordPress con WhatsApp vía MCP. Cuando llega un mensaje: interpreta la intención → ejecuta la acción en WooCommerce, formularios o REST API → responde al cliente. Todo en menos de 200ms, sin intervención humana.';
+  if (t.includes('integra') || t.includes('woocommerce') || t.includes('plugin')) return 'ORQO se integra de forma nativa con WooCommerce, WPForms, Gravity Forms, Bookly, Calendly y cualquier endpoint de la API REST de WordPress. El plugin se instala en 10 minutos, sin una línea de código.';
+  if (t.includes('cuesta') || t.includes('precio') || t.includes('plan') || t.includes('tarifa')) return 'Los planes están en fase de lanzamiento. Puedes agendar una demo gratuita de 30 minutos y te mostramos ORQO operando en un WordPress real. ¿Te interesa agendar?';
+  if (t.includes('demo')) return '¡Perfecto! Agenda tu demo por WhatsApp al +57 301 321 1669 o escribe a hola@orqo.io. La sesión dura 30 minutos y verás el sistema ejecutando acciones reales en un e-commerce en vivo.';
+  if (t.includes('wordpress')) return 'ORQO se conecta a WordPress mediante nuestra API REST y el protocolo MCP. Funciona con cualquier instalación estándar de WordPress 6.0 o superior.';
+  if (t.includes('whatsapp')) return 'ORQO usa la API oficial de WhatsApp Business. Tus clientes escriben al número de tu empresa y ORQO gestiona la conversación completa: pedidos, reservas, consultas y soporte.';
+  return 'Gracias por tu mensaje. Para una respuesta más detallada o una demostración en vivo, puedes contactarnos directamente por WhatsApp al +57 301 321 1669 o en hola@orqo.io.';
+}
+
+function renderMsgsList() {
+  const convs = S.convs();
+  const el = document.getElementById('msgs-list');
+  if (!convs.length) { el.innerHTML = '<div class="m-empty">No tienes conversaciones aún.<br>Inicia una nueva con el botón de arriba.</div>'; return; }
+  el.innerHTML = convs.map(c => {
+    const last = c.messages[c.messages.length - 1];
+    const prev = last ? last.content.slice(0, 48) + (last.content.length > 48 ? '…' : '') : '—';
+    return `<div class="m-item" onclick="openConv('${c.id}')"><div class="m-item-ico">${NOTCH_SM}</div><div style="flex:1;min-width:0;"><div class="m-item-title">${escHtml(c.title)}</div><div class="m-item-prev">${escHtml(prev)}</div></div><span class="m-item-time">${wRelTime(c.createdAt)}</span></div>`;
+  }).join('');
+}
+
+function renderHome() {
+  const convs = S.convs().slice(0, 3);
+  const el = document.getElementById('home-recent');
+  if (!convs.length) { el.innerHTML = '<div class="h-empty">Aún no tienes conversaciones recientes.</div>'; return; }
+  el.innerHTML = convs.map(c => {
+    const last = c.messages[c.messages.length - 1];
+    const prev = last ? last.content.slice(0, 42) + (last.content.length > 42 ? '…' : '') : '—';
+    return `<div class="h-conv" onclick="openConv('${c.id}')"><div class="h-conv-ico">${NOTCH_SM}</div><div style="flex:1;min-width:0;"><div class="h-conv-name">${escHtml(c.title)}</div><div class="h-conv-preview">${escHtml(prev)}</div></div><span class="h-conv-time">${wRelTime(c.createdAt)}</span></div>`;
+  }).join('');
+}
+
+function updateTokenUI() {
+  const r = S.remaining(), pct = (r / TOTAL_INT) * 100;
+  [['tok-display', `${r} / ${TOTAL_INT}`], ['d-tok-num', `${r}`]].forEach(([id, v]) => { const e = document.getElementById(id); if (e) e.textContent = v; });
+  ['tok-fill','d-tok-fill'].forEach(id => { const e = document.getElementById(id); if (e) e.style.width = pct + '%'; });
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function wRelTime(iso) {
+  if (!iso) return '';
+  const d = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(d / 60000);
+  if (m < 1) return 'ahora'; if (m < 60) return m + 'm';
+  const h = Math.floor(m / 60); if (h < 24) return h + 'h';
+  return Math.floor(h / 24) + 'd';
+}
+
+const chatTa = document.getElementById('chat-ta');
+chatTa.addEventListener('input', function() { this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 96) + 'px'; });
+chatTa.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
+
+updateTokenUI();
+if (S.convs().length > 0) {
+  document.getElementById('t-badge').style.display = 'flex';
+  document.getElementById('tab-msgs-dot').style.display = 'block';
+}
 </script>
 </body>
 </html>
