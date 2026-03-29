@@ -55,12 +55,95 @@
 .theme-toggle {
   width: 34px; height: 34px; border-radius: 8px;
   background: none; border: 1px solid var(--g03);
-  cursor: pointer; color: var(--g05);
+  cursor: pointer; color: var(--g06);
   display: flex; align-items: center; justify-content: center;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
   flex-shrink: 0;
 }
 .theme-toggle:hover { background: var(--g02); color: var(--g07); }
+
+/* ══ SVG LOGO COLOR (theme-aware) ══ */
+.logo-mark svg, .w-hd-left svg, .h-iso-ring svg,
+.d-ico-ring svg, #trigger-ico { color: var(--g07); }
+
+/* ══ LIGHT MODE — LANDING CONTENT ══ */
+[data-theme="light"] .step-desc,
+[data-theme="light"] .wp-feature-desc,
+[data-theme="light"] .flow-detail { color: var(--g05); }
+[data-theme="light"] .case-desc { color: var(--g06); }
+[data-theme="light"] .case-list li { color: var(--g05); }
+[data-theme="light"] .ticker-item { color: var(--g05); }
+[data-theme="light"] .ticker-wrap { background: var(--g02); border-color: var(--g03); }
+[data-theme="light"] .flow-item { background: var(--g02); border-color: var(--g03); }
+[data-theme="light"] .wp-visual { border-color: var(--g03); }
+[data-theme="light"] .wp-bar { border-bottom-color: var(--g03); }
+[data-theme="light"] .cta-block { border-color: var(--g03); }
+[data-theme="light"] .cases { background: var(--g03); }
+[data-theme="light"] .case-card { background: var(--g01); }
+[data-theme="light"] .case-card:hover { background: var(--g02); }
+[data-theme="light"] .nav-links a { color: var(--g06); }
+[data-theme="light"] .nav-links a:hover { color: var(--g08); }
+
+/* ══ LIGHT MODE — WIDGET ══ */
+[data-theme="light"] .w-tab { color: rgba(9,15,10,0.4); }
+[data-theme="light"] .w-tab:hover { color: rgba(9,15,10,0.65); }
+[data-theme="light"] .w-tab.active { color: var(--acc); }
+[data-theme="light"] .tab-lbl { font-size: 0.48rem; }
+[data-theme="light"] .w-hbtn { color: rgba(9,15,10,0.5); }
+[data-theme="light"] .w-hbtn:hover { background: rgba(9,15,10,0.07); color: rgba(9,15,10,0.85); }
+[data-theme="light"] .w-online { color: var(--g05); opacity: 1; }
+[data-theme="light"] .w-back-btn { color: var(--g06); }
+[data-theme="light"] .w-backbar { background: var(--g02); border-bottom-color: var(--g03); }
+[data-theme="light"] .w-header { background: var(--g02); border-bottom-color: var(--g03); }
+[data-theme="light"] .w-tabs { border-top-color: var(--g03); }
+[data-theme="light"] .chat-input-area { background: var(--g01); border-top-color: var(--g03); }
+[data-theme="light"] .chat-box { border-color: var(--g03); }
+[data-theme="light"] .chat-box:focus-within { border-color: var(--acc); box-shadow: 0 0 0 3px rgba(44,185,120,0.12); }
+[data-theme="light"] .chat-att { color: rgba(9,15,10,0.35); }
+[data-theme="light"] .chat-att:hover { background: rgba(9,15,10,0.06); color: rgba(9,15,10,0.7); }
+[data-theme="light"] .bub-wrap.bot .bub { color: var(--g07); border-color: var(--g03); }
+[data-theme="light"] .bub-time { color: var(--g05); opacity: 0.8; }
+[data-theme="light"] .h-action-desc { color: var(--g05); }
+[data-theme="light"] .h-conv-preview { color: var(--g05); }
+[data-theme="light"] .h-empty,
+[data-theme="light"] .m-empty { color: var(--g05); opacity: 1; }
+[data-theme="light"] .h-section-lbl,
+[data-theme="light"] .m-tok-lbl,
+[data-theme="light"] .d-tok-lbl,
+[data-theme="light"] .help-sec-lbl,
+[data-theme="light"] .d-sugg-lbl,
+[data-theme="light"] .tab-lbl { opacity: 1; color: var(--g05); }
+[data-theme="light"] .m-item-prev { color: var(--g05); }
+[data-theme="light"] .d-sub { color: var(--g06); }
+[data-theme="light"] .h-sub { color: var(--g06); }
+[data-theme="light"] .d-disclaimer { color: var(--g06); }
+[data-theme="light"] .d-disclaimer strong { color: var(--g07); }
+[data-theme="light"] .help-art-name { color: var(--g06); }
+[data-theme="light"] .help-cat-count { color: var(--g05); opacity: 1; }
+[data-theme="light"] .help-cat-ico svg path,
+[data-theme="light"] .help-cat-ico svg rect,
+[data-theme="light"] .help-cat-ico svg circle { stroke: var(--g05); }
+[data-theme="light"] .h-arrow svg path,
+[data-theme="light"] .help-art svg path,
+[data-theme="light"] .help-cat > svg path { stroke: var(--g04); opacity: 1; }
+[data-theme="light"] #orqo-trigger {
+  border-color: rgba(44,185,120,0.5);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+[data-theme="light"] .t-pulse { border-color: rgba(44,185,120,0.35); }
+
+/* ══ MAXIMIZED — font size increase ══ */
+#orqo-window.w-max .bub { font-size: 0.9rem; line-height: 1.65; }
+#orqo-window.w-max .chat-ta { font-size: 0.88rem; }
+#orqo-window.w-max .h-title { font-size: 1.18rem; }
+#orqo-window.w-max .h-sub { font-size: 0.85rem; }
+#orqo-window.w-max .h-action-name { font-size: 0.88rem; }
+#orqo-window.w-max .help-title { font-size: 1.1rem; }
+#orqo-window.w-max .m-title { font-size: 1.1rem; }
+#orqo-window.w-max .m-item-title { font-size: 0.88rem; }
+#orqo-window.w-max .w-brand { font-size: 1.05rem; }
+#orqo-window.w-max .help-art-name { font-size: 0.86rem; }
+#orqo-window.w-max .help-cat-name { font-size: 0.88rem; }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -666,10 +749,14 @@ section {
 }
 .btn-wa:hover { opacity: 0.88; transform: translateY(-1px); }
 
-/* ══ FOOTER ══ */
+/* ══ FOOTER — always dark ══ */
+.footer-outer {
+  background: #070C08;
+  border-top: 1px solid rgba(44,185,120,0.08);
+  margin-top: 5rem;
+}
 footer {
-  border-top: 1px solid rgba(233,237,233,0.05);
-  padding: 3rem 2rem;
+  padding: 3.5rem 2rem 2rem;
   max-width: 1100px;
   margin: 0 auto;
   display: flex;
@@ -681,10 +768,10 @@ footer {
 
 .footer-copy {
   font-family: var(--f-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(233,237,233,0.2);
+  color: rgba(233,237,233,0.35);
 }
 
 .footer-links {
@@ -692,12 +779,12 @@ footer {
 }
 .footer-links a {
   font-family: var(--f-body);
-  font-size: 0.8rem;
-  color: rgba(233,237,233,0.25);
+  font-size: 0.9rem;
+  color: rgba(233,237,233,0.4);
   text-decoration: none;
   transition: color 0.2s;
 }
-.footer-links a:hover { color: rgba(233,237,233,0.6); }
+.footer-links a:hover { color: rgba(233,237,233,0.8); }
 
 /* ══ ANIMATIONS ══ */
 @keyframes fadeup {
@@ -776,13 +863,13 @@ footer {
   width: 100%;
   text-align: center;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(233,237,233,0.04);
+  border-top: 1px solid rgba(233,237,233,0.06);
   margin-top: 0.5rem;
 }
 .footer-bacata-text {
   font-family: var(--f-mono);
-  font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(233,237,233,0.15);
+  font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(233,237,233,0.3);
 }
 .footer-bacata-text a {
   color: rgba(44,185,120,0.45);
@@ -1135,7 +1222,7 @@ footer {
 <nav>
   <a href="#" class="logo-mark">
     <svg width="22" height="22" viewBox="0 0 72 72" fill="none">
-      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
       <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3" stroke-linecap="round"/>
       <circle cx="66" cy="58" r="3.5" fill="#2CB978"/>
     </svg>
@@ -1440,7 +1527,7 @@ footer {
           <div class="flow-item">
             <div class="flow-icon fi-orqo">
               <svg width="14" height="14" viewBox="0 0 72 72" fill="none">
-                <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5" stroke-linecap="round" fill="none"/>
+                <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/>
                 <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="5" stroke-linecap="round"/>
                 <circle cx="66" cy="58" r="7" fill="#2CB978"/>
               </svg>
@@ -1544,14 +1631,15 @@ footer {
 </section>
 
 <!-- ══ FOOTER ══ -->
+<div class="footer-outer">
 <footer>
   <a href="#" class="logo-mark">
-    <svg width="18" height="18" viewBox="0 0 72 72" fill="none">
-      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <svg width="22" height="22" viewBox="0 0 72 72" fill="none" style="color:#E9EDE9;">
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
       <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
       <circle cx="66" cy="58" r="4" fill="#2CB978"/>
     </svg>
-    <span class="logo-text" style="font-size:1.1rem;color:rgba(245,245,242,0.25);">ORQO</span>
+    <span class="logo-text" style="font-size:1.2rem;color:rgba(245,245,242,0.7);">ORQO</span>
   </a>
   <ul class="footer-links">
     <li><a href="#">Privacidad</a></li>
@@ -1567,6 +1655,7 @@ footer {
     </p>
   </div>
 </footer>
+</div>
 
 <!-- ══ CHAT WIDGET ══ -->
 <div id="orqo-widget">
@@ -1574,7 +1663,7 @@ footer {
     <div class="w-header">
       <div class="w-hd-left">
         <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
-          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
           <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
           <circle cx="66" cy="58" r="4" fill="#2CB978"/>
         </svg>
@@ -1610,7 +1699,7 @@ footer {
         <div class="h-hero">
           <div class="h-iso-ring">
             <svg width="28" height="28" viewBox="0 0 72 72" fill="none">
-              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="4" stroke-linecap="round" fill="none"/>
               <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
               <circle cx="66" cy="58" r="5" fill="#2CB978"/>
             </svg>
@@ -1651,7 +1740,7 @@ footer {
       <div id="screen-disclaimer" class="w-screen">
         <div class="d-wrap">
           <div class="d-ico"><div class="d-ico-ring">
-            <svg width="24" height="24" viewBox="0 0 72 72" fill="none"><path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4.5" stroke-linecap="round" fill="none"/><line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4.5" stroke-linecap="round"/><circle cx="66" cy="58" r="5.5" fill="#2CB978"/></svg>
+            <svg width="24" height="24" viewBox="0 0 72 72" fill="none"><path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" fill="none"/><line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4.5" stroke-linecap="round"/><circle cx="66" cy="58" r="5.5" fill="#2CB978"/></svg>
           </div></div>
           <div class="d-title">Envíanos un mensaje</div>
           <div class="d-sub">ORQO Agent responde en segundos.<br>El historial queda guardado en tu dispositivo.</div>
@@ -1739,7 +1828,7 @@ footer {
     <div class="t-pulse"></div>
     <div class="t-pulse p2"></div>
     <svg width="26" height="26" viewBox="0 0 72 72" fill="none" id="trigger-ico">
-      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" fill="none"/>
       <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4.5" stroke-linecap="round"/>
       <circle cx="66" cy="58" r="5.5" fill="#2CB978"/>
     </svg>
@@ -1965,7 +2054,7 @@ function openConv(id, initial) {
   if (initial) setTimeout(() => sendMessage(initial), 400);
 }
 
-const NOTCH_SM = `<svg width="14" height="14" viewBox="0 0 72 72" fill="none"><path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5" stroke-linecap="round" fill="none"/><line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="5" stroke-linecap="round"/><circle cx="66" cy="58" r="6" fill="#2CB978"/></svg>`;
+const NOTCH_SM = `<svg width="14" height="14" viewBox="0 0 72 72" fill="none" style="color:var(--g07)"><path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="5" stroke-linecap="round" fill="none"/><line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="5" stroke-linecap="round"/><circle cx="66" cy="58" r="6" fill="#2CB978"/></svg>`;
 
 function renderChatMsgs(convId) {
   const conv = S.convs().find(c => c.id === convId);
