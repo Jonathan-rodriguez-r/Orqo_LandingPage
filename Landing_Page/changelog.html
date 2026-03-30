@@ -16,9 +16,13 @@
   --acc: #2CB978; --acc-g: rgba(44,185,120,0.10);
   --f-disp: 'Syne', sans-serif; --f-body: 'Figtree', sans-serif; --f-mono: 'DM Mono', monospace;
 }
+[data-theme="light"] {
+  --g00: #F4F7F4; --g01: #FFFFFF; --g02: #EDF2ED; --g03: #D5E3D5;
+  --g04: #B0C8B0; --g05: #527060; --g06: #2A4434; --g07: #152018; --g08: #090F0A;
+}
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-body { background: var(--g00); color: var(--g07); font-family: var(--f-body); line-height: 1.6; padding-top: 64px; overflow-x: hidden; }
+body { background: var(--g00); color: var(--g07); font-family: var(--f-body); line-height: 1.6; padding-top: 64px; overflow-x: hidden; transition: background 0.2s, color 0.2s; }
 ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-track { background: var(--g01); } ::-webkit-scrollbar-thumb { background: var(--g04); border-radius: 3px; }
 
 /* Nav */
@@ -86,9 +90,19 @@ nav {
 .ft-links { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; list-style: none; }
 .ft-links a { font-family: var(--f-body); font-size: 0.8rem; color: var(--g05); text-decoration: none; transition: color 0.15s; }
 .ft-links a:hover { color: var(--acc); }
-.ft-copy { font-family: var(--f-mono); font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(233,237,233,0.16); }
-.ft-bacata { font-family: var(--f-body); font-size: 0.76rem; color: rgba(233,237,233,0.22); }
+.ft-copy { font-family: var(--f-mono); font-size: 0.54rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g04); }
+.ft-bacata { font-family: var(--f-body); font-size: 0.76rem; color: var(--g04); }
 .ft-bacata a { color: inherit; text-decoration: none; } .ft-bacata a:hover { color: var(--acc); }
+.ft-logo-text { color: var(--g06); }
+
+.theme-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: none; border: 1px solid var(--g03);
+  cursor: pointer; color: var(--g06); transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.theme-toggle:hover { background: var(--g02); color: var(--g07); border-color: var(--g04); }
+.nav-right { display: flex; align-items: center; gap: 8px; }
 
 @media (max-width: 640px) { .pg { padding: 3rem 1.2rem 2rem; } nav { padding: 1rem 1.2rem; } }
 </style>
@@ -104,10 +118,15 @@ nav {
     </svg>
     <span class="nav-logo-text">ORQO</span>
   </a>
-  <a href="https://orqo.io" class="nav-back">
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Volver al inicio
-  </a>
+  <div class="nav-right">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+      <span id="theme-ico"></span>
+    </button>
+    <a href="https://orqo.io" class="nav-back">
+      <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Volver al inicio
+    </a>
+  </div>
 </nav>
 
 <div class="pg">
@@ -117,6 +136,78 @@ nav {
   <p class="page-sub">Actualizaciones del sistema ORQO — plataforma web, dashboard y widget embebible.</p>
 
   <div class="timeline">
+
+    <!-- v1.2 — Marzo 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.2</span>
+        <span class="release-date">Marzo 2026</span>
+        <span class="release-tag tag-feat">Observabilidad</span>
+        <span class="release-tag tag-dash">Dashboard</span>
+        <span class="release-tag" style="background:rgba(44,185,120,0.12);border:1px solid rgba(44,185,120,0.3);color:#2CB978;">🟢 En producción</span>
+      </div>
+      <div class="section-lbl">Sistema de auditoría completo</div>
+      <div class="changes">
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>LoggerService centralizado</strong> — <code style="font-family:var(--f-mono);font-size:0.78em;background:var(--g03);padding:1px 5px;border-radius:3px;">lib/logger.ts</code> con schema ECS-inspired: correlationId, level, severity, category, action, actor/target, metadata before/after/diff.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>TTL automático en MongoDB</strong> — campo <code style="font-family:var(--f-mono);font-size:0.78em;background:var(--g03);padding:1px 5px;border-radius:3px;">expiresAt</code> con <code style="font-family:var(--f-mono);font-size:0.78em;background:var(--g03);padding:1px 5px;border-radius:3px;">expireAfterSeconds: 0</code> y variable de entorno <code style="font-family:var(--f-mono);font-size:0.78em;background:var(--g03);padding:1px 5px;border-radius:3px;">LOG_RETENTION_DAYS</code> (por defecto 90 días).</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>Auto-log de todas las acciones críticas</strong> — inicios de sesión, invitaciones, cambios de usuario/rol, intentos de acceso no autorizado, CSRF, expiración de tokens.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>UI Logs & Auditoría</strong> — filtros combinables (nivel INFO/WARN/ERROR/FATAL, categoría, fecha con presets 1h/24h/7d/30d, búsqueda de texto). Tabla con filas expandibles que muestran JSON before/after/diff en acordeón.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>Aggregation <code style="font-family:var(--f-mono);font-size:0.78em;background:var(--g03);padding:1px 5px;border-radius:3px;">$facet</code> en MongoDB</strong> — items + conteos por nivel + conteos por categoría + total en un solo round-trip.</div>
+        </div>
+      </div>
+      <div class="section-lbl">Conversaciones e inteligencia</div>
+      <div class="changes">
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>Columna Modelo</strong> — badge de color por proveedor: Anthropic (verde), OpenAI (azul), Google (azul). Modelos soportados: Claude Sonnet/Haiku/Opus, GPT-4o/mini, Gemini 2.0 Flash.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>Estimación de tokens</strong> — total con sufijo <code style="font-family:var(--f-mono);font-size:0.78em;background:var(--g03);padding:1px 5px;border-radius:3px;">k</code> + desglose ↑ entrada · ↓ salida por conversación.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg></div>
+          <div class="change-text"><strong>ID de conversación</strong> — identificador único <code style="font-family:var(--f-mono);font-size:0.78em;background:var(--g03);padding:1px 5px;border-radius:3px;">CNV-XXXXXX</code> en monospace, buscable en filtros.</div>
+        </div>
+      </div>
+      <div class="section-lbl">Correcciones y UX</div>
+      <div class="changes">
+        <div class="change">
+          <div class="change-ico ico-fix"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 2v4M5 7.5v.5" stroke="#60A5FA" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <span class="change-text"><strong>Empty state corregido</strong> — Vista General, Informes y Conversaciones ya muestran el botón "Cargar datos de demostración" cuando no hay datos (antes se renderizaban vacíos sin indicación).</span>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-fix"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 2v4M5 7.5v.5" stroke="#60A5FA" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <span class="change-text"><strong>Acceso no autorizado</strong> — muestra "No autorizado" en rojo (no "Enlace inválido") y registra un log de seguridad WARN/HIGH automáticamente.</span>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-fix"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 2v4M5 7.5v.5" stroke="#60A5FA" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <span class="change-text"><strong>Link de activación copiable</strong> — al invitar un usuario, el enlace aparece en pantalla además de enviarse por correo. Válido 72h.</span>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-fix"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 2v4M5 7.5v.5" stroke="#60A5FA" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <span class="change-text"><strong>Changelog e identidad de marca</strong> — ahora siguen el sistema dark/light del usuario (persistido en localStorage).</span>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-fix"><svg width="9" height="9" viewBox="0 0 10 10" fill="none"><path d="M5 2v4M5 7.5v.5" stroke="#60A5FA" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+          <span class="change-text"><strong>Roles del sistema protegidos</strong> — owner, admin, analyst, agent_manager, viewer y operations no pueden eliminarse desde la UI ni la API.</span>
+        </div>
+      </div>
+    </div>
 
     <!-- v1.1 — Marzo 2026 -->
     <div class="release">
@@ -502,5 +593,20 @@ nav {
   </footer>
 </div>
 
+<script>
+const SUN_ICO = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+const MOON_ICO = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const ico = document.getElementById('theme-ico');
+  if (ico) ico.innerHTML = theme === 'light' ? MOON_ICO : SUN_ICO;
+  localStorage.setItem('orqo_theme', theme);
+}
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+applyTheme(localStorage.getItem('orqo_theme') || 'dark');
+</script>
 </body>
 </html>
