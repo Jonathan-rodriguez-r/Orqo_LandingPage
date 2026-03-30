@@ -118,6 +118,58 @@ nav {
 
   <div class="timeline">
 
+    <!-- v1.0 — Marzo 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.0</span>
+        <span class="release-date">Marzo 2026</span>
+        <span class="release-tag tag-feat">Refactoring Mayor</span>
+        <span class="release-tag tag-dash">Dashboard</span>
+      </div>
+      <ul class="change-list">
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>Dashboard Mobile-First</strong> — sidebar off-canvas con hamburguesa, overlay y animación fluida. 100% responsive en todos los breakpoints (≥320px).
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>Vista General con métricas de ROI</strong> — gráficas interactivas (recharts): tendencia diaria (AreaChart), distribución por canal (PieChart), horas pico (BarChart), resolución vs escalación. KPIs: tasa de resolución, desvío a humano, tiempo promedio de respuesta.
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>Página de Informes</strong> — análisis de rendimiento con selector de período (7/30/90 días), tabla de rendimiento diario y estimación de ROI (horas ahorradas).
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>Configuración consolidada</strong> — una sola sección con 4 pestañas: Widget, Integraciones, Accesos y Cuenta. Elimina fragmentación del menú anterior.
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>Catálogo de integraciones MCP</strong> — bloques por categoría: Meta (WA, IG, FB), Motores de BD (PostgreSQL, MySQL, MongoDB, Oracle, DynamoDB), Fuentes de Datos (Sheets, Excel) y Sistemas Core (Shopify, WordPress, Salesforce, HubSpot).
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>Iconos de canal en Conversaciones</strong> — cada fila muestra el origen (WhatsApp, Instagram, Facebook, Shopify, WooCommerce, Widget Web) con ícono de color y filtros de canal en pills.
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>MongoDB — colección analytics_daily</strong> + seed de 30 días y 60 conversaciones mock. Índices optimizados: compound (workspaceId + date), text search en conversaciones.
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>API /api/analytics</strong> — endpoint con agregación de totales, tendencia diaria, distribución horaria y por canal. Soporta parámetro <code>?days=7|30|90</code>.
+        </li>
+        <li class="change-item feat">
+          <span class="change-kind feat">Nuevo</span>
+          <strong>API /api/seed</strong> — inicialización idempotente de datos de demostración con POST. Crea índices en MongoDB automáticamente.
+        </li>
+        <li class="change-item arch">
+          <span class="change-kind arch">Arch</span>
+          <strong>Menú lateral rediseñado (B2B-first)</strong> — jerarquía: Vista General → Conversaciones → Agentes → Informes | Configuración → Centro de ayuda. Secciones con etiquetas "Principal" / "Sistema".
+        </li>
+      </ul>
+    </div>
+
     <!-- v0.9 — Marzo 2026 -->
     <div class="release">
       <div class="release-header">
