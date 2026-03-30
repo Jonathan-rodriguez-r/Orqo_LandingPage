@@ -118,6 +118,82 @@ nav {
 
   <div class="timeline">
 
+    <!-- v1.1 — Marzo 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.1</span>
+        <span class="release-date">Marzo 2026</span>
+        <span class="release-tag tag-feat">Seguridad</span>
+        <span class="release-tag tag-dash">Auth / RBAC</span>
+      </div>
+      <div class="section-lbl">Autenticación</div>
+      <div class="changes">
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>Google OAuth 2.0 (SSO)</strong> — inicio de sesión con cuenta Google via Authorization Code Flow (sin dependencias externas, solo fetch).</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>Magic Link</strong> — mejorado con provisionamiento RBAC completo en primer acceso; propietario auto-asignado con permisos totales.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>JWT con permisos embebidos</strong> — <code>SessionPayload</code> incluye <code>sub, email, name, avatar, workspaceId, role, permissions[], jti, provider</code>. Cero queries a DB en cada request.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>UI Enterprise de Login</strong> — Google SSO como botón primario + magic link como alternativa en acordeón. Estética Vercel/Stripe.</div>
+        </div>
+      </div>
+      <div class="section-lbl">RBAC — Control de Acceso Basado en Roles</div>
+      <div class="changes">
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>15 módulos de sistema</strong> — catálogo completo: dashboard, conversaciones, agentes, informes, configuración (widget, integraciones, usuarios, roles, facturación), admin (logs, seed).</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>5 roles predeterminados</strong> — <code>owner</code>, <code>admin</code>, <code>analyst</code>, <code>agent_manager</code>, <code>viewer</code> con permisos curados por perfil de negocio.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>Edge Middleware (proxy.ts)</strong> — verificación de JWT + chequeo de permiso por ruta en Vercel Edge Runtime. Zero DB, sub-ms.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong><code>PermissionGate</code></strong> — componente React para renderizado condicional por permiso. <strong><code>usePermissions</code></strong> — hook cliente para UI reactiva.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>API RBAC</strong> — <code>GET/POST/DELETE /api/users</code>, <code>GET/PATCH /api/roles</code>, <code>GET /api/auth/me</code>, <code>POST /api/seed/rbac</code>.</div>
+        </div>
+        <div class="change">
+          <div class="change-ico ico-feat">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#2CB978" stroke-width="1.5"/></svg>
+          </div>
+          <div class="change-text"><strong>Tabla de Usuarios mejorada</strong> — muestra avatar de Google, rol con badge de color, último acceso y fecha de alta.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- v1.0 — Marzo 2026 -->
     <div class="release">
       <div class="release-header">
