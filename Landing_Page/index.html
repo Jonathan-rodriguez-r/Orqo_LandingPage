@@ -144,6 +144,10 @@
 #orqo-window.w-max .m-title { font-size: 1.2rem; }
 #orqo-window.w-max .m-item-title { font-size: 0.95rem; }
 #orqo-window.w-max .w-brand { font-size: 1.1rem; }
+.w-powered { text-align: center; padding: 5px 0 7px; font-size: 10px; color: rgba(233,237,233,0.28); flex-shrink: 0; }
+.w-powered a { color: inherit; text-decoration: none; transition: color 0.15s; }
+.w-powered a:hover { color: var(--acc); }
+[data-theme="light"] .w-powered { color: rgba(9,15,10,0.28); }
 #orqo-window.w-max .help-art-name { font-size: 1rem; }
 #orqo-window.w-max .help-cat-name { font-size: 1.05rem; }
 #orqo-window.w-max .art-body { font-size: 1rem; }
@@ -1930,6 +1934,7 @@ footer {
         <span class="tab-lbl">Ayuda</span>
       </button>
     </div>
+    <div class="w-powered" id="orqo-powered-by">powered by <a href="https://orqo.io" target="_blank" rel="noopener">orqo.io</a></div>
   </div>
   <button id="orqo-trigger" onclick="toggleWidget()" aria-label="Abrir ORQO Chat">
     <div class="t-pulse"></div>
@@ -2498,15 +2503,62 @@ if (S.convs().length > 0) {
     }
 
     // 5. Icono / avatar en el botón trigger
-    if (cfg.iconMode === 'favicon' && cfg.faviconUrl) {
-      const btn = document.getElementById('orqo-trigger');
-      if (btn) btn.innerHTML = `<img src="${cfg.faviconUrl}" width="32" height="32" style="border-radius:50%;object-fit:cover;" alt=""/>`;
-    } else if (cfg.iconMode === 'photo' && cfg.agentPhoto) {
-      const photoUrl = cfg.agentPhoto.startsWith('g')
-        ? `https://api.dicebear.com/7.x/avataaars/svg?seed=orqo-${cfg.agentPhoto}&radius=50`
-        : cfg.agentPhoto;
-      const btn = document.getElementById('orqo-trigger');
-      if (btn) btn.innerHTML = `<img src="${photoUrl}" width="48" height="48" style="border-radius:50%;object-fit:cover;" alt=""/>`;
+    const PHOTO_MAP = {
+      w1: 'https://randomuser.me/api/portraits/women/44.jpg',
+      w2: 'https://randomuser.me/api/portraits/women/65.jpg',
+      w3: 'https://randomuser.me/api/portraits/women/90.jpg',
+      w4: 'https://randomuser.me/api/portraits/women/29.jpg',
+      m1: 'https://randomuser.me/api/portraits/men/32.jpg',
+      m2: 'https://randomuser.me/api/portraits/men/43.jpg',
+      m3: 'https://randomuser.me/api/portraits/men/75.jpg',
+      m4: 'https://randomuser.me/api/portraits/men/91.jpg',
+    };
+    const ICON_SVGS = {
+      chat:     '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>',
+      support:  '<path d="M3 11a9 9 0 1 1 18 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M21 11v4a2 2 0 0 1-2 2h-1M3 11v4a2 2 0 0 0 2 2h1" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M12 18v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+      robot:    '<rect x="3" y="9" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8" fill="none"/><circle cx="9" cy="14" r="1.5" fill="currentColor"/><circle cx="15" cy="14" r="1.5" fill="currentColor"/><path d="M9 18h6M12 9V6m-3 0h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>',
+      spark:    '<path d="M12 2l1.5 4H18l-3.5 2.5 1.5 4L12 10l-4 2.5 1.5-4L6 6h4.5z" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linejoin="round"/><path d="M19 15l1 2-2 1 2 1-1 2-1-2-2 1 1-2-2-1 2-1z" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linejoin="round"/>',
+      bolt:     '<path d="M13 2L4.5 13H12l-1 9L21 11H14z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>',
+      heart:    '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>',
+      star:     '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>',
+      phone:    '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12a19.79 19.79 0 0 1-3-8.59A2 2 0 0 1 3.12 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/>',
+      store:    '<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linejoin="round"/><line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="1.8"/><path d="M16 10a4 4 0 0 1-8 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/>',
+      question: '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="12" cy="17" r="0.8" fill="currentColor"/>',
+    };
+    const triggerBtn = document.getElementById('orqo-trigger');
+    if (triggerBtn) {
+      if (cfg.iconMode === 'favicon') {
+        if (cfg.faviconPreset && ICON_SVGS[cfg.faviconPreset]) {
+          triggerBtn.innerHTML = `<svg width="26" height="26" viewBox="0 0 24 24" fill="none">${ICON_SVGS[cfg.faviconPreset]}</svg>`;
+        } else if (cfg.faviconUrl) {
+          triggerBtn.innerHTML = `<img src="${cfg.faviconUrl}" width="32" height="32" style="border-radius:50%;object-fit:cover;" alt=""/>`;
+        }
+      } else if (cfg.iconMode === 'photo' && cfg.agentPhoto) {
+        const photoUrl = PHOTO_MAP[cfg.agentPhoto] || cfg.agentPhoto;
+        triggerBtn.innerHTML = `<img src="${photoUrl}" width="48" height="48" style="border-radius:50%;object-fit:cover;" alt=""/>`;
+      }
+    }
+
+    // 5b. Posición del widget
+    if (cfg.position) {
+      const widgetEl = document.getElementById('orqo-widget');
+      const windowEl = document.getElementById('orqo-window');
+      if (widgetEl) {
+        const isTop = cfg.position.includes('top');
+        const isLeft = cfg.position.includes('left');
+        const isCenter = cfg.position === 'center';
+        widgetEl.style.bottom = isTop ? 'auto' : '2rem';
+        widgetEl.style.top = isTop ? '2rem' : 'auto';
+        widgetEl.style.right = (isLeft || isCenter) ? 'auto' : '2rem';
+        widgetEl.style.left = isLeft ? '2rem' : isCenter ? '50%' : 'auto';
+        widgetEl.style.alignItems = isLeft ? 'flex-start' : 'flex-end';
+        if (isCenter) widgetEl.style.transform = 'translateX(-50%)';
+        if (windowEl) {
+          const vOrig = isTop ? 'top' : 'bottom';
+          const hOrig = isLeft ? 'left' : 'right';
+          windowEl.style.transformOrigin = `${vOrig} ${hOrig}`;
+        }
+      }
     }
 
     // 6. Artículos desde API (override ARTICLES y WIDGET_CONFIG)
@@ -2521,6 +2573,12 @@ if (S.convs().length > 0) {
         return { id, label: art ? art.title : id };
       });
       renderHomeArticles();
+    }
+
+    // 6c. Branding
+    if (cfg.showBranding === false) {
+      const pb = document.getElementById('orqo-powered-by');
+      if (pb) pb.style.display = 'none';
     }
 
     // 7. Límite de interacciones
