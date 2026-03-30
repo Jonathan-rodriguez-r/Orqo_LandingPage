@@ -1748,7 +1748,7 @@ footer {
 </div>
 
 <!-- ══ CHAT WIDGET ══ -->
-<div id="orqo-widget">
+<div id="orqo-widget" style="opacity:0;pointer-events:none;">
   <div id="orqo-window" class="w-hidden">
     <div class="w-header">
       <div class="w-hd-left">
@@ -2449,17 +2449,25 @@ if (S.convs().length > 0) {
 
 // ══ WIDGET CONFIG — cargar desde dashboard API ══════════════════════════════
 (async function loadWidgetConfig() {
+  const widget = document.getElementById('orqo-widget');
+  function showWidget() {
+    if (widget) { widget.style.opacity = ''; widget.style.pointerEvents = ''; }
+  }
+  function hideWidget() {
+    if (widget) widget.style.display = 'none';
+  }
+
   try {
     const res = await fetch('https://dashboard.orqo.io/api/public/widget', { cache: 'no-store' });
-    if (!res.ok) return;
+    if (!res.ok) { showWidget(); return; }
     const cfg = await res.json();
 
     // 1. Activo / inactivo
     if (cfg.active === false) {
-      const w = document.getElementById('orqo-widget');
-      if (w) w.style.display = 'none';
+      hideWidget();
       return;
     }
+    showWidget();
 
     // 2. Textos
     if (cfg.title) {
@@ -2527,7 +2535,8 @@ if (S.convs().length > 0) {
     }
 
   } catch (e) {
-    // Si falla (sin conexión al dashboard), el widget funciona con defaults
+    // Si falla la API, mostrar el widget con defaults
+    showWidget();
   }
 })();
 </script>
