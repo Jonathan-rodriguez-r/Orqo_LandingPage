@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORQO — Manual de Marca · Entrega Final</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500;600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* ── SISTEMA CROMÁTICO ORQO ── */
+  --ink-00: #060908;   /* Fondo primario dark */
+  --ink-01: #0B100D;   /* Fondo secundario dark */
+  --ink-02: #111812;   /* Superficie / cards dark */
+  --ink-03: #1D2920;   /* Bordes dark */
+  --ink-04: #2E4038;   /* Bordes medios */
+  --mid-05: #7A9488;   /* Texto secundario */
+  --mid-06: #B4C4BC;   /* Texto terciario */
+  --lit-07: #E9EDE9;   /* Texto primario dark */
+  --lit-08: #F5F5F2;   /* Fondo light / bg claro */
+  --acc:    #2CB978;   /* Acento único · dark mode */
+  --acc-lt: #1A8A55;   /* Acento · light mode */
+  --acc-g:  rgba(44,185,120,0.10);
+
+  /* ── TIPOGRAFÍA ── */
+  --f-disp: 'Syne', sans-serif;
+  --f-body: 'Figtree', sans-serif;
+  --f-mono: 'DM Mono', monospace;
+  --f-edit: 'Fraunces', serif;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--ink-00); color: var(--lit-07); font-family: var(--f-body); overflow-x: hidden; line-height: 1.6; }
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--ink-01); }
+::-webkit-scrollbar-thumb { background: var(--ink-04); border-radius: 3px; }
+
+/* ══ PRINT COVER ══ */
+.pg-cover {
+  height: 100svh; min-height: 680px;
+  background: var(--ink-00);
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 4rem;
+  position: relative; overflow: hidden;
+}
+.pg-cover::before {
+  content: '';
+  position: absolute; bottom: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(44,185,120,0.06) 0%, transparent 60%);
+}
+.cover-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.cover-mid { position: relative; z-index: 1; }
+.cover-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.cover-mark {
+  font-family: var(--f-disp); font-weight: 800;
+  font-size: clamp(5rem, 18vw, 14rem);
+  letter-spacing: -0.055em; line-height: 0.88;
+  color: var(--lit-08);
+}
+.cover-tagline {
+  font-family: var(--f-edit); font-style: italic; font-weight: 300;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: var(--mid-05); margin-top: 1.5rem;
+  font-optical-sizing: auto;
+}
+.cover-meta { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid-05); opacity: 0.45; }
+.cover-version { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--acc); opacity: 0.7; }
+
+/* ══ PAGE STRUCTURE ══ */
+.pg {
+  max-width: 1140px; margin: 0 auto; padding: 0 3rem;
+}
+.chapter {
+  padding: 6rem 0; border-bottom: 1px solid rgba(233,237,233,0.05);
+}
+.chapter:last-child { border-bottom: none; }
+
+/* Chapter header */
+.ch-num {
+  font-family: var(--f-mono); font-size: 0.56rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--acc); opacity: 0.6;
+  display: block; margin-bottom: 1rem;
+}
+.ch-title {
+  font-family: var(--f-disp); font-weight: 800;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  letter-spacing: -0.04em; line-height: 1.0;
+  color: var(--lit-08); margin-bottom: 0.6rem;
+}
+.ch-sub {
+  font-family: var(--f-body); font-size: 0.9rem;
+  color: var(--mid-05); line-height: 1.75; max-width: 560px;
+  margin-bottom: 3rem;
+}
+
+/* ══ GRID SYSTEM ══ */
+.g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(233,237,233,0.05); border-radius: 16px; overflow: hidden; }
+.g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(233,237,233,0.05); border-radius: 16px; overflow: hidden; }
+.g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(233,237,233,0.05); border-radius: 16px; overflow: hidden; }
+.g6 { display: grid; grid-template-columns: repeat(6,1fr); gap: 1px; background: rgba(233,237,233,0.05); border-radius: 16px; overflow: hidden; }
+.full { grid-column: 1 / -1; }
+.span2 { grid-column: span 2; }
+
+.cell {
+  background: var(--ink-00); padding: 2.5rem;
+  display: flex; flex-direction: column;
+}
+.cell.s1 { background: var(--ink-01); }
+.cell.s2 { background: var(--ink-02); }
+.cell.lbg { background: var(--lit-08); }
+.cell.gbg { background: var(--acc); }
+.cell.w { background: #1A1A1A; }
+
+/* ══ LABELS ══ */
+.lbl {
+  font-family: var(--f-mono); font-size: 0.54rem; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--mid-05); opacity: 0.45;
+  margin-bottom: 1rem;
+}
+.lbl-acc { color: var(--acc); opacity: 0.7; }
+.lbl-inv { color: rgba(11,16,13,0.3); }
+
+/* ══ ISOTIPO CONSTRUCTION ══ */
+.iso-construction {
+  display: grid; grid-template-columns: 300px 1fr; gap: 3rem; align-items: start;
+  margin-bottom: 3rem;
+}
+
+/* ══ NOTCH SVG HELPERS ══ */
+/* All isotipos use the same base path */
+/* notch-dark: stroke E9EDE9 arc, 2CB978 vector+dot */
+/* notch-light: stroke 0B100D arc, 1A8A55 vector+dot */
+/* notch-mono: all in one color */
+
+/* ══ WORDMARK DISPLAY ══ */
+.wm-lg { font-family: var(--f-disp); font-weight: 800; letter-spacing: -0.055em; line-height: 1; }
+.wm-dk { color: var(--lit-08); }
+.wm-lt { color: var(--ink-00); }
+
+/* ══ SIZE LABELS ══ */
+.sz-row { display: flex; gap: 1.5rem; align-items: flex-end; margin-top: 1.2rem; }
+.sz-item { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.sz-lbl { font-family: var(--f-mono); font-size: 0.48rem; color: var(--mid-05); opacity: 0.38; letter-spacing: 0.06em; }
+
+/* ══ PALETTE STRIP ══ */
+.pal-strip { display: grid; grid-template-columns: repeat(9, 1fr); border-radius: 12px; overflow: hidden; height: 96px; }
+.pal-chip { position: relative; padding: 0.6rem 0.5rem; display: flex; align-items: flex-end; }
+.pal-chip-lbl {
+  font-family: var(--f-mono); font-size: 0.44rem; letter-spacing: 0.06em;
+  writing-mode: vertical-lr; color: rgba(233,237,233,0.3);
+}
+.pal-chip-lbl.inv { color: rgba(6,9,8,0.3); }
+
+/* ══ TYPO SAMPLES ══ */
+.typo-row {
+  display: grid; grid-template-columns: 90px 1fr; gap: 1rem; align-items: baseline;
+  padding: 0.55rem 0; border-bottom: 1px solid rgba(233,237,233,0.04);
+}
+.typo-role { font-family: var(--f-mono); font-size: 0.5rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--mid-05); opacity: 0.35; white-space: nowrap; }
+.typo-val  { font-family: var(--f-body); font-size: 0.8rem; color: rgba(233,237,233,0.6); }
+
+/* ══ USAGE RULES ══ */
+.rule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+.rule-card {
+  border-radius: 12px; padding: 1.8rem;
+  border: 1px solid rgba(233,237,233,0.07);
+}
+.rule-card.ok  { border-color: rgba(44,185,120,0.2); background: rgba(44,185,120,0.04); }
+.rule-card.no  { border-color: rgba(220,60,60,0.2);  background: rgba(220,60,60,0.04); }
+.rule-card-hd {
+  font-family: var(--f-mono); font-size: 0.56rem; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+.rule-card-hd.ok { color: var(--acc); }
+.rule-card-hd.no { color: #DC3C3C; }
+.rule-body { font-family: var(--f-body); font-size: 0.82rem; color: rgba(233,237,233,0.58); line-height: 1.7; }
+.rule-ex { margin-top: 1rem; padding: 1rem; border-radius: 8px; background: rgba(233,237,233,0.03); display: flex; align-items: center; justify-content: center; min-height: 80px; }
+.rule-ex.ok-ex { border: 1px solid rgba(44,185,120,0.12); }
+.rule-ex.no-ex { border: 1px solid rgba(220,60,60,0.1); }
+
+/* ══ DO/DON'T INDICATOR ══ */
+.do-dot  { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); display: inline-block; margin-right: 0.5rem; }
+.dn-dot  { width: 8px; height: 8px; border-radius: 50%; background: #DC3C3C; display: inline-block; margin-right: 0.5rem; }
+
+/* ══ CLEARSPACE DIAGRAM ══ */
+.clearspace-wrap {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  padding: 2rem;
+}
+.clearspace-line-h {
+  position: absolute; top: 50%; left: 0; right: 0; height: 1px;
+  border-top: 1px dashed rgba(44,185,120,0.3);
+}
+.clearspace-line-v {
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+  border-left: 1px dashed rgba(44,185,120,0.3);
+}
+.clearspace-box {
+  position: absolute; inset: 0.5rem;
+  border: 1px dashed rgba(44,185,120,0.2);
+}
+.cs-dim {
+  position: absolute; font-family: var(--f-mono); font-size: 0.48rem;
+  color: var(--acc); opacity: 0.55; letter-spacing: 0.08em;
+}
+
+/* ══ SCORE BAR ══ */
+.sb { margin-top: 0.5rem; }
+.sb-t { height: 2px; background: rgba(233,237,233,0.07); border-radius: 2px; overflow: hidden; }
+.sb-f { height: 100%; background: var(--acc); border-radius: 2px; }
+
+/* ══ APP MOCKUPS ══ */
+.dash-mock {
+  background: var(--ink-01); border-radius: 12px; overflow: hidden;
+  aspect-ratio: 16/10; display: flex;
+}
+.dash-sb { width: 50px; background: var(--ink-02); display: flex; flex-direction: column; align-items: center; padding: 0.9rem 0; gap: 0.9rem; flex-shrink: 0; }
+.dash-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--ink-04); }
+.dash-dot.a { background: var(--acc); }
+.dash-main { flex: 1; padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.dash-top { height: 20px; background: rgba(233,237,233,0.03); border-radius: 4px; }
+.dash-body { flex: 1; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 0.45rem; }
+.dash-panel { background: rgba(233,237,233,0.02); border: 1px solid rgba(233,237,233,0.04); border-radius: 6px; padding: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.dash-bar-row { display: flex; align-items: center; gap: 0.35rem; }
+.dash-bl { width: 14px; height: 2.5px; background: rgba(233,237,233,0.1); border-radius: 2px; }
+.dash-bf { height: 2.5px; border-radius: 2px; background: var(--acc); }
+.dash-stat { display: flex; flex-direction: column; justify-content: center; align-items: center; }
+
+.land-mock {
+  background: var(--lit-08); border-radius: 12px; overflow: hidden;
+  aspect-ratio: 16/10; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.75rem;
+}
+.land-nav { display: flex; justify-content: space-between; align-items: center; }
+.land-logo { display: flex; align-items: center; gap: 0.45rem; }
+.land-wm { font-family: var(--f-disp); font-weight: 800; font-size: 0.68rem; letter-spacing: -0.03em; color: var(--ink-00); }
+.land-hero { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.45rem; }
+.land-h1 { font-family: var(--f-disp); font-weight: 800; font-size: clamp(0.65rem,1.8vw,1.05rem); letter-spacing: -0.03em; color: var(--ink-00); line-height: 1.1; }
+.land-bar { height: 3.5px; background: rgba(11,16,13,0.1); border-radius: 3px; width: 75%; }
+.land-cta { align-self: flex-start; height: 11px; width: 56px; background: var(--ink-00); border-radius: 4px; }
+.land-cards { display: flex; gap: 0.4rem; }
+.land-card { flex: 1; height: 16px; background: rgba(11,16,13,0.04); border: 1px solid rgba(11,16,13,0.06); border-radius: 4px; }
+
+.deck-mock {
+  background: var(--ink-00); border: 1px solid rgba(233,237,233,0.06);
+  border-radius: 12px; aspect-ratio: 16/10;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.8rem; padding: 2rem;
+}
+
+/* ══ FILE LIST ══ */
+.file-section { margin-bottom: 2rem; }
+.file-section-title {
+  font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--acc); opacity: 0.65;
+  margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem;
+}
+.file-section-title::after {
+  content: ''; flex: 1; height: 1px; background: rgba(44,185,120,0.15);
+}
+.file-row {
+  display: grid; grid-template-columns: 280px 80px 1fr auto;
+  gap: 1rem; align-items: center;
+  padding: 0.75rem 1rem; border-radius: 8px;
+  border: 1px solid rgba(233,237,233,0.04);
+  margin-bottom: 4px;
+  background: rgba(233,237,233,0.015);
+  transition: background 0.15s;
+}
+.file-row:hover { background: rgba(233,237,233,0.03); }
+.fn { font-family: var(--f-mono); font-size: 0.72rem; color: var(--lit-07); letter-spacing: 0.02em; }
+.ft { font-family: var(--f-mono); font-size: 0.6rem; color: var(--acc); opacity: 0.7; letter-spacing: 0.08em; }
+.fd { font-family: var(--f-body); font-size: 0.78rem; color: rgba(233,237,233,0.4); }
+.fs { font-family: var(--f-mono); font-size: 0.58rem; color: var(--mid-06); opacity: 0.4; }
+
+/* ══ BADGE ══ */
+.badge {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  border-radius: 100px; padding: 0.25rem 0.7rem;
+  font-family: var(--f-mono); font-size: 0.52rem; letter-spacing: 0.09em; text-transform: uppercase;
+}
+.b-acc { background: var(--acc-g); border: 1px solid rgba(44,185,120,0.25); color: var(--acc); }
+.b-dim { background: rgba(233,237,233,0.04); border: 1px solid rgba(233,237,233,0.1); color: var(--mid-06); }
+.b-green { background: var(--acc); color: var(--ink-00); }
+
+/* ══ ICON GRID ══ */
+.icon-grid { display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap; }
+.icon-item { display: flex; flex-direction: column; align-items: center; gap: 0.45rem; }
+.icon-box { background: var(--ink-02); display: flex; align-items: center; justify-content: center; }
+.icon-lbl { font-family: var(--f-mono); font-size: 0.46rem; color: var(--mid-05); opacity: 0.4; letter-spacing: 0.06em; }
+
+/* ══ BDY TEXT ══ */
+.bdy { font-family: var(--f-body); font-size: 0.84rem; color: rgba(233,237,233,0.55); line-height: 1.75; }
+
+/* ══ TOC ══ */
+.toc { display: flex; flex-direction: column; gap: 0; }
+.toc-item {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 0.75rem 0; border-bottom: 1px solid rgba(233,237,233,0.05);
+}
+.toc-num { font-family: var(--f-mono); font-size: 0.56rem; color: var(--acc); opacity: 0.6; letter-spacing: 0.12em; width: 3rem; }
+.toc-name { font-family: var(--f-body); font-size: 0.88rem; color: var(--lit-07); flex: 1; }
+.toc-pg { font-family: var(--f-mono); font-size: 0.54rem; color: var(--mid-05); opacity: 0.35; }
+
+/* ══ SPEC BOX ══ */
+.spec { background: var(--ink-01); border-radius: 10px; padding: 1.5rem 2rem; }
+.spec-row { display: grid; grid-template-columns: 140px 1fr; gap: 0.8rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(233,237,233,0.04); font-family: var(--f-mono); font-size: 0.66rem; }
+.spec-k { color: var(--mid-05); opacity: 0.45; letter-spacing: 0.1em; }
+.spec-v { color: rgba(233,237,233,0.75); }
+.spec-row:last-child { border-bottom: none; }
+
+/* ══ DIVIDER LINE ══ */
+.div { height: 1px; background: linear-gradient(90deg,transparent,rgba(233,237,233,0.06) 40%,rgba(233,237,233,0.06) 60%,transparent); margin: 0; }
+
+/* ══ CONSTRUCTION ANNOTATION ══ */
+.annotation {
+  position: absolute;
+  font-family: var(--f-mono); font-size: 0.46rem; color: var(--acc);
+  opacity: 0.55; letter-spacing: 0.08em; white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+  .pg { padding: 0 1.5rem; }
+  .g2,.g3,.g4 { grid-template-columns: 1fr; }
+  .g6 { grid-template-columns: repeat(3,1fr); }
+  .rule-grid { grid-template-columns: 1fr; }
+  .iso-construction { grid-template-columns: 1fr; }
+  .file-row { grid-template-columns: 1fr; }
+  .pg-cover { padding: 2rem; }
+}
+
+/* ══ SHARED NAV ══ */
+.m-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1.1rem 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(6,9,8,0.88); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(233,237,233,0.06);
+}
+.m-nav-logo { display: flex; align-items: center; gap: 0.55rem; text-decoration: none; }
+.m-nav-logo-text { font-family: var(--f-disp); font-weight: 800; font-size: 1.1rem; letter-spacing: -0.04em; color: var(--lit-08); }
+.m-nav-back {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--mid-05); text-decoration: none;
+  padding: 0.45rem 0.9rem; border-radius: 8px;
+  border: 1px solid rgba(233,237,233,0.07);
+  transition: color 0.15s, border-color 0.15s;
+}
+.m-nav-back:hover { color: var(--acc); border-color: rgba(44,185,120,0.3); }
+.m-nav-back svg { flex-shrink: 0; }
+body { padding-top: 60px; }
+.pg-cover { padding-top: 60px; }
+
+/* ══ SHARED FOOTER ══ */
+.m-footer-outer {
+  background: var(--ink-01); border-top: 1px solid rgba(233,237,233,0.05);
+  margin-top: 0; padding: 3rem 2rem 2rem;
+}
+.m-footer {
+  max-width: 1140px; margin: 0 auto;
+  display: flex; flex-direction: column; align-items: center; gap: 1.2rem;
+  text-align: center;
+}
+.m-footer-logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
+.m-footer-logo-text { font-family: var(--f-disp); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.04em; color: rgba(245,245,242,0.7); }
+.m-footer-links { display: flex; gap: 2rem; list-style: none; }
+.m-footer-links a { font-family: var(--f-body); font-size: 0.82rem; color: var(--mid-05); text-decoration: none; transition: color 0.15s; }
+.m-footer-links a:hover { color: var(--acc); }
+.m-footer-copy { font-family: var(--f-mono); font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(233,237,233,0.18); }
+.m-footer-bacata { font-family: var(--f-body); font-size: 0.78rem; color: rgba(233,237,233,0.25); }
+.m-footer-bacata a { color: inherit; text-decoration: none; transition: color 0.15s; }
+.m-footer-bacata a:hover { color: var(--acc); }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="m-nav">
+  <a href="https://orqo.io" class="m-nav-logo">
+    <svg width="22" height="22" viewBox="0 0 72 72" fill="none">
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+    </svg>
+    <span class="m-nav-logo-text">ORQO</span>
+  </a>
+  <a href="https://orqo.io" class="m-nav-back">
+    <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Volver al inicio
+  </a>
+</nav>
+
+<!-- ══════════════════════════════════ -->
+<!-- PORTADA                           -->
+<!-- ══════════════════════════════════ -->
+<div class="pg-cover">
+  <div class="cover-top">
+    <div>
+      <svg width="28" height="28" viewBox="0 0 72 72" fill="none">
+        <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="66" cy="58" r="3.5" fill="#2CB978"/>
+      </svg>
+    </div>
+    <div class="cover-version">Manual de Marca · v1.0 · Entrega Final</div>
+  </div>
+
+  <div class="cover-mid">
+    <div class="cover-mark">ORQO</div>
+    <div class="cover-tagline">"El gesto mínimo que lo ordena todo."</div>
+  </div>
+
+  <div class="cover-bottom">
+    <div class="cover-meta">
+      Plataforma de Orquestación de Agentes IA<br>
+      Sistema de identidad visual completo · NOTCH
+    </div>
+    <div style="opacity:0.15;">
+      <svg width="64" height="64" viewBox="0 0 72 72" fill="none">
+        <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="66" cy="58" r="3" fill="#2CB978"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════ -->
+<!-- ÍNDICE                            -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter">
+  <span class="ch-num">Índice</span>
+  <h1 class="ch-title">Contenido del manual</h1>
+  <div class="toc">
+    <div class="toc-item"><span class="toc-num">01</span><span class="toc-name">Marca — Concepto y posicionamiento</span><span class="toc-pg">§01</span></div>
+    <div class="toc-item"><span class="toc-num">02</span><span class="toc-name">Isotipo NOTCH — Construcción geométrica</span><span class="toc-pg">§02</span></div>
+    <div class="toc-item"><span class="toc-num">03</span><span class="toc-name">Sistema de logo — Todas las versiones</span><span class="toc-pg">§03</span></div>
+    <div class="toc-item"><span class="toc-num">04</span><span class="toc-name">Paleta cromática — Sistema de color</span><span class="toc-pg">§04</span></div>
+    <div class="toc-item"><span class="toc-num">05</span><span class="toc-name">Tipografía — Sistema completo</span><span class="toc-pg">§05</span></div>
+    <div class="toc-item"><span class="toc-num">06</span><span class="toc-name">Área de respeto y uso mínimo</span><span class="toc-pg">§06</span></div>
+    <div class="toc-item"><span class="toc-num">07</span><span class="toc-name">Línea gráfica — Sistema visual</span><span class="toc-pg">§07</span></div>
+    <div class="toc-item"><span class="toc-num">08</span><span class="toc-name">Uso correcto e incorrecto</span><span class="toc-pg">§08</span></div>
+    <div class="toc-item"><span class="toc-num">09</span><span class="toc-name">Aplicaciones reales</span><span class="toc-pg">§09</span></div>
+    <div class="toc-item"><span class="toc-num">10</span><span class="toc-name">Lista de archivos de producción</span><span class="toc-pg">§10</span></div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 01 · MARCA                        -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s01">
+  <span class="ch-num">§01 · Marca</span>
+  <h1 class="ch-title">Concepto y<br>posicionamiento</h1>
+  <p class="ch-sub">La base conceptual que sostiene todas las decisiones de diseño. No se cambia sin cambiar la estrategia de negocio.</p>
+
+  <div class="g2">
+    <div class="cell s1">
+      <div class="lbl">Qué es ORQO</div>
+      <p class="bdy" style="margin-bottom:1.2rem;">ORQO es una plataforma de orquestación de agentes de IA para negocios. Coordina conversaciones, enruta intenciones, conecta sistemas y ejecuta acciones reales en canales como WhatsApp, e-commerce y plataformas enterprise.</p>
+      <p class="bdy">No es un chatbot. Es la capa operativa inteligente que transforma conversaciones en ejecución real.</p>
+    </div>
+    <div class="cell">
+      <div class="lbl">Posicionamiento de marca</div>
+      <div style="font-family:var(--f-edit);font-style:italic;font-weight:300;font-size:1.2rem;color:var(--lit-08);line-height:1.4;margin-bottom:1.2rem;font-optical-sizing:auto;">"No automatización.<br>Orquestación."</div>
+      <p class="bdy">La diferencia es estratégica: automatizar ejecuta tareas predefinidas. Orquestar coordina agentes con inteligencia, adaptando el flujo según el contexto. ORQO vende infraestructura, no asistentes.</p>
+    </div>
+    <div class="cell full s1">
+      <div class="lbl">Los cinco atributos de marca</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:2rem;">
+        <div>
+          <div style="font-family:var(--f-disp);font-weight:700;font-size:1rem;color:var(--acc);margin-bottom:0.4rem;">Control</div>
+          <p class="bdy">Opera desde el centro sin ser visible. Autoridad sin ruido.</p>
+        </div>
+        <div>
+          <div style="font-family:var(--f-disp);font-weight:700;font-size:1rem;color:var(--acc);margin-bottom:0.4rem;">Precisión</div>
+          <p class="bdy">Cada acción tiene un propósito exacto. Nada es ornamental.</p>
+        </div>
+        <div>
+          <div style="font-family:var(--f-disp);font-weight:700;font-size:1rem;color:var(--acc);margin-bottom:0.4rem;">Ejecución</div>
+          <p class="bdy">Las conversaciones terminan en resultados reales, no en respuestas.</p>
+        </div>
+        <div>
+          <div style="font-family:var(--f-disp);font-weight:700;font-size:1rem;color:var(--acc);margin-bottom:0.4rem;">Confianza</div>
+          <p class="bdy">Premium, institucional, construido para entornos empresariales.</p>
+        </div>
+        <div>
+          <div style="font-family:var(--f-disp);font-weight:700;font-size:1rem;color:var(--acc);margin-bottom:0.4rem;">Escala</div>
+          <p class="bdy">La identidad crece con el producto sin fracturas ni crisis de coherencia.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 02 · ISOTIPO — CONSTRUCCIÓN       -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s02">
+  <span class="ch-num">§02 · Isotipo NOTCH</span>
+  <h1 class="ch-title">Construcción<br>geométrica</h1>
+  <p class="ch-sub">NOTCH se construye con tres elementos y tres únicamente. Cualquier modificación a estas especificaciones produce una versión no autorizada.</p>
+
+  <!-- CONSTRUCCIÓN PRINCIPAL -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-bottom:3rem;">
+    <div>
+      <!-- ISOTIPO GRANDE con anotaciones -->
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;padding:3rem;background:var(--ink-01);border-radius:16px;">
+        <svg width="160" height="160" viewBox="0 0 72 72" fill="none">
+          <!-- Círculo guía (solo referencia) -->
+          <circle cx="36" cy="36" r="30" stroke="rgba(44,185,120,0.12)" stroke-width="0.5" stroke-dasharray="2 2" fill="none"/>
+          <!-- ARCO PRINCIPAL 340° -->
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <!-- VECTOR DE SALIDA -->
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.2" stroke-linecap="round"/>
+          <!-- PUNTO TERMINAL -->
+          <circle cx="66" cy="58" r="3.2" fill="#2CB978"/>
+          <!-- Anotaciones -->
+          <line x1="36" y1="36" x2="36" y2="6" stroke="rgba(44,185,120,0.3)" stroke-width="0.4" stroke-dasharray="1.5 1.5"/>
+          <line x1="36" y1="36" x2="66" y2="36" stroke="rgba(44,185,120,0.3)" stroke-width="0.4" stroke-dasharray="1.5 1.5"/>
+          <line x1="36" y1="36" x2="52" y2="59.5" stroke="rgba(44,185,120,0.2)" stroke-width="0.3" stroke-dasharray="1 1"/>
+        </svg>
+        <!-- Anotaciones fuera del SVG -->
+        <div style="position:absolute;top:1rem;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:0.46rem;color:var(--acc);opacity:0.55;white-space:nowrap;">R = 30px (en viewbox 72×72)</div>
+        <div style="position:absolute;bottom:1rem;left:1.5rem;font-family:var(--f-mono);font-size:0.44rem;color:var(--acc);opacity:0.45;white-space:nowrap;">gap 20°</div>
+        <div style="position:absolute;bottom:1.5rem;right:1.5rem;font-family:var(--f-mono);font-size:0.44rem;color:var(--acc);opacity:0.45;white-space:nowrap;">punto (66,58)</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      <div class="spec">
+        <div class="lbl" style="margin-bottom:1rem;">Especificaciones técnicas · Viewbox 72×72</div>
+        <div class="spec-row"><span class="spec-k">Radio del arco</span><span class="spec-v">R = 30 · Centro (36,36)</span></div>
+        <div class="spec-row"><span class="spec-k">Amplitud del arco</span><span class="spec-v">340° (gap de 20° en ≈135°–155°)</span></div>
+        <div class="spec-row"><span class="spec-k">Inicio del arco</span><span class="spec-v">Punto (52, 59.5)</span></div>
+        <div class="spec-row"><span class="spec-k">Fin del arco</span><span class="spec-v">Punto (59.5, 52)</span></div>
+        <div class="spec-row"><span class="spec-k">Dirección del arco</span><span class="spec-v">Counterclockwise (sweep=1)</span></div>
+        <div class="spec-row"><span class="spec-k">Vector de salida</span><span class="spec-v">(59.5,52) → (66,58) · 9px</span></div>
+        <div class="spec-row"><span class="spec-k">Ángulo del vector</span><span class="spec-v">≈45° (diagonal inferior-derecha)</span></div>
+        <div class="spec-row"><span class="spec-k">Punto terminal</span><span class="spec-v">Centro (66,58) · Radio 3.2px</span></div>
+        <div class="spec-row"><span class="spec-k">Stroke-linecap</span><span class="spec-v">round (arco y vector)</span></div>
+        <div class="spec-row"><span class="spec-k">Stroke-width base</span><span class="spec-v">2.2px · proporcional al viewbox</span></div>
+      </div>
+      <div class="spec">
+        <div class="lbl" style="margin-bottom:1rem;">SVG Path · Copia exacta para producción</div>
+        <div style="font-family:var(--f-mono);font-size:0.62rem;color:var(--acc);line-height:1.8;opacity:0.85;">
+          &lt;!-- Arco --&gt;<br>
+          &lt;path d="M52 59.5 A30 30 0 1 1 59.5 52"<br>
+          &nbsp;&nbsp;stroke="#E9EDE9" stroke-width="2.2"<br>
+          &nbsp;&nbsp;stroke-linecap="round" fill="none"/&gt;<br><br>
+          &lt;!-- Vector --&gt;<br>
+          &lt;line x1="59.5" y1="52" x2="66" y2="58"<br>
+          &nbsp;&nbsp;stroke="#2CB978" stroke-width="2.2"<br>
+          &nbsp;&nbsp;stroke-linecap="round"/&gt;<br><br>
+          &lt;!-- Punto --&gt;<br>
+          &lt;circle cx="66" cy="58" r="3.2"<br>
+          &nbsp;&nbsp;fill="#2CB978"/&gt;
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAMAÑOS -->
+  <div class="g4" style="margin-top:2rem;">
+    <div class="cell s1">
+      <div class="lbl">88px · Hero / Portadas</div>
+      <svg width="88" height="88" viewBox="0 0 72 72" fill="none">
+        <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="66" cy="58" r="3.2" fill="#2CB978"/>
+      </svg>
+      <div style="margin-top:0.8rem;"><div class="spec-row" style="border:none;padding:0;font-size:0.56rem;"><span class="spec-k">Stroke-width</span><span class="spec-v">2.2px</span></div></div>
+    </div>
+    <div class="cell">
+      <div class="lbl">48px · Navbar / Headers</div>
+      <svg width="48" height="48" viewBox="0 0 72 72" fill="none">
+        <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+        <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.8" stroke-linecap="round"/>
+        <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+      </svg>
+      <div style="margin-top:0.8rem;"><div class="spec-row" style="border:none;padding:0;font-size:0.56rem;"><span class="spec-k">Stroke-width</span><span class="spec-v">2.8px</span></div></div>
+    </div>
+    <div class="cell s1">
+      <div class="lbl">24px · Sidebar / Tabs</div>
+      <svg width="24" height="24" viewBox="0 0 72 72" fill="none">
+        <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.8" stroke-linecap="round" fill="none"/>
+        <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.8" stroke-linecap="round"/>
+        <circle cx="66" cy="58" r="5.5" fill="#2CB978"/>
+      </svg>
+      <div style="margin-top:0.8rem;"><div class="spec-row" style="border:none;padding:0;font-size:0.56rem;"><span class="spec-k">Stroke-width</span><span class="spec-v">3.8px · Punto R5.5</span></div></div>
+    </div>
+    <div class="cell">
+      <div class="lbl">16px · Favicon mínimo</div>
+      <svg width="16" height="16" viewBox="0 0 72 72" fill="none">
+        <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+        <circle cx="66" cy="58" r="8" fill="#2CB978"/>
+      </svg>
+      <div style="margin-top:0.8rem;"><div class="spec-row" style="border:none;padding:0;font-size:0.56rem;"><span class="spec-k">Nota</span><span class="spec-v">Vector omitido a 16px · Punto R8</span></div></div>
+    </div>
+  </div>
+
+  <div style="margin-top:1rem;">
+    <div class="cell s1" style="border-radius:8px;padding:1.5rem 2rem;">
+      <div class="lbl lbl-acc">Regla de stroke proporcional</div>
+      <p class="bdy">El stroke-width se escala inversamente al tamaño de renderizado para mantener la legibilidad visual. A 88px se usa 2.2px. A 16px se usa 5.5px. La fórmula orientativa: <span style="font-family:var(--f-mono);color:var(--acc);font-size:0.78rem;">sw = 2.2 × (88 / tamaño)</span>. A 16px el vector de salida se suprime — solo el arco y el punto. El contraste entre masa del arco y punto verde es suficiente para la identidad a favicon.</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 03 · SISTEMA DE LOGO              -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s03">
+  <span class="ch-num">§03 · Sistema de logo</span>
+  <h1 class="ch-title">Todas las<br>versiones</h1>
+  <p class="ch-sub">El sistema completo incluye ocho versiones del logo. Cada una tiene un contexto exacto de uso. No se improvisan versiones adicionales.</p>
+
+  <div class="g2" style="margin-bottom:1px;">
+
+    <!-- ISOTIPO SOLO DARK -->
+    <div class="cell s1">
+      <div class="lbl">3.1 · Isotipo solo · Dark mode</div>
+      <div style="display:flex;align-items:center;gap:2rem;flex:1;">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="3.2" fill="#2CB978"/>
+        </svg>
+        <p class="bdy" style="font-size:0.76rem;">Uso exclusivo cuando el wordmark ya está presente en el contexto inmediato. Cabeceras de documento, watermarks, íconos de app.</p>
+      </div>
+    </div>
+
+    <!-- ISOTIPO SOLO LIGHT -->
+    <div class="cell lbg">
+      <div class="lbl lbl-inv">3.2 · Isotipo solo · Light mode</div>
+      <div style="display:flex;align-items:center;gap:2rem;flex:1;">
+        <svg width="72" height="72" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#0B100D" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#1A8A55" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="3.2" fill="#1A8A55"/>
+        </svg>
+        <p style="font-family:var(--f-body);font-size:0.76rem;color:rgba(11,16,13,0.45);line-height:1.7;">Sobre fondos claros. Arco en #0B100D, vector y punto en #1A8A55 para ratio WCAG AA mínimo 4.5:1.</p>
+      </div>
+    </div>
+
+    <!-- LOGOTIPO SOLO DARK -->
+    <div class="cell">
+      <div class="lbl">3.3 · Logotipo · Solo wordmark · Dark</div>
+      <div style="flex:1;display:flex;align-items:center;">
+        <div class="wm-lg wm-dk" style="font-size:3.5rem;">ORQO</div>
+      </div>
+      <p class="bdy" style="font-size:0.74rem;margin-top:1rem;">Syne ExtraBold 800 · tracking −55 (−0.055em). Solo cuando el isotipo ya está visible en el contexto. Documentos, firmas de email, textos largos donde el símbolo ya apareció.</p>
+    </div>
+
+    <!-- LOGOTIPO SOLO LIGHT -->
+    <div class="cell lbg">
+      <div class="lbl lbl-inv">3.4 · Logotipo · Solo wordmark · Light</div>
+      <div style="flex:1;display:flex;align-items:center;">
+        <div class="wm-lg wm-lt" style="font-size:3.5rem;">ORQO</div>
+      </div>
+      <p style="font-family:var(--f-body);font-size:0.74rem;color:rgba(11,16,13,0.42);line-height:1.7;margin-top:1rem;">Mismo tratamiento tipográfico. Color #060908. El peso ExtraBold sostiene la firma sin necesitar acento cromático adicional.</p>
+    </div>
+
+  </div>
+
+  <div class="g2" style="margin-top:1px;">
+
+    <!-- IMAGOTIPO HORIZONTAL DARK -->
+    <div class="cell s2">
+      <div class="lbl">3.5 · Imagotipo horizontal · Dark · <span style="color:var(--acc);opacity:0.9;">Versión principal</span></div>
+      <div style="display:flex;align-items:center;gap:1.4rem;padding:1.5rem 0;flex:1;">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.8" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="3.8" fill="#2CB978"/>
+        </svg>
+        <div class="wm-lg wm-dk" style="font-size:2.8rem;">ORQO</div>
+      </div>
+      <p class="bdy" style="font-size:0.74rem;">Versión de uso primario en todos los contextos donde hay espacio horizontal. Altura del isotipo = cap-height del wordmark. Separación entre elementos = 1× el diámetro del punto verde.</p>
+    </div>
+
+    <!-- IMAGOTIPO HORIZONTAL LIGHT -->
+    <div class="cell lbg">
+      <div class="lbl lbl-inv">3.6 · Imagotipo horizontal · Light</div>
+      <div style="display:flex;align-items:center;gap:1.4rem;padding:1.5rem 0;flex:1;">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#0B100D" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#1A8A55" stroke-width="2.8" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="3.8" fill="#1A8A55"/>
+        </svg>
+        <div class="wm-lg wm-lt" style="font-size:2.8rem;">ORQO</div>
+      </div>
+      <p style="font-family:var(--f-body);font-size:0.74rem;color:rgba(11,16,13,0.42);line-height:1.7;">Landing pages, documentación, materiales impresos. El verde oscurece a #1A8A55 para accesibilidad.</p>
+    </div>
+
+    <!-- IMAGOTIPO VERTICAL -->
+    <div class="cell">
+      <div class="lbl">3.7 · Imagotipo vertical · Dark · Pitch decks / Splash</div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:1rem;padding:1.5rem 0;flex:1;justify-content:center;">
+        <svg width="64" height="64" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.8" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="3.8" fill="#2CB978"/>
+        </svg>
+        <div class="wm-lg wm-dk" style="font-size:1.9rem;letter-spacing:0.06em;">ORQO</div>
+      </div>
+      <p class="bdy" style="font-size:0.74rem;">Tracking ajustado a +60 en versión vertical (0.06em) para compensar el ancho del isotipo. Alineación centrada. Solo en formatos donde el espacio horizontal es limitado.</p>
+    </div>
+
+    <!-- MONOCROMÁTICO -->
+    <div class="cell w">
+      <div class="lbl">3.8 · Sistema monocromático · Una tinta</div>
+      <div style="display:flex;align-items:center;gap:1.3rem;padding:1.5rem 0;flex:1;">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="white" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="white" stroke-width="2.8" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="66" cy="58" r="3.8" fill="white"/>
+        </svg>
+        <div class="wm-lg" style="font-size:2.8rem;color:white;">ORQO</div>
+      </div>
+      <p class="bdy" style="font-size:0.74rem;">Bordado, grabado láser, serigrafía una tinta. El vector al 50% de opacidad mantiene la distinción entre el arco y el gesto de salida incluso en una sola tinta.</p>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- APP ICON & FAVICON                -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter">
+  <span class="ch-num">§03 · App icon y favicon</span>
+  <h1 class="ch-title">Icono de aplicación<br>y favicon</h1>
+
+  <div class="g2">
+    <div class="cell s1">
+      <div class="lbl">App icon · Todas las resoluciones</div>
+      <div class="icon-grid" style="margin-top:1rem;">
+        <div class="icon-item">
+          <div class="icon-box" style="width:96px;height:96px;border-radius:22px;">
+            <svg width="62" height="62" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.8" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">1024px · App Store</div>
+        </div>
+        <div class="icon-item">
+          <div class="icon-box" style="width:72px;height:72px;border-radius:16px;">
+            <svg width="46" height="46" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="4.5" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">512px · Play Store</div>
+        </div>
+        <div class="icon-item">
+          <div class="icon-box" style="width:52px;height:52px;border-radius:11px;">
+            <svg width="32" height="32" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="5.5" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">192px · PWA</div>
+        </div>
+        <div class="icon-item">
+          <div class="icon-box" style="width:40px;height:40px;border-radius:9px;">
+            <svg width="26" height="26" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="6" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">128px · Desktop</div>
+        </div>
+        <div class="icon-item">
+          <div class="icon-box" style="width:28px;height:28px;border-radius:6px;">
+            <svg width="18" height="18" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="5.5" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="7.5" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">64px · Pequeño</div>
+        </div>
+      </div>
+      <p class="bdy" style="margin-top:1.5rem;font-size:0.74rem;">El fondo del app icon es siempre #111812. El radio de esquina sigue las guías de iOS (22% del tamaño) y Android (adaptative icon). Nunca se usa gradiente en el fondo del app icon.</p>
+    </div>
+    <div class="cell">
+      <div class="lbl">Favicon · Sistema completo</div>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1rem;margin-bottom:1.5rem;">
+        <div class="icon-item">
+          <div style="width:32px;height:32px;background:var(--ink-02);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+            <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="7" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">32×32</div>
+        </div>
+        <div class="icon-item">
+          <div style="width:20px;height:20px;background:var(--ink-02);border-radius:4px;display:flex;align-items:center;justify-content:center;">
+            <svg width="13" height="13" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <circle cx="66" cy="58" r="9" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">20×20</div>
+        </div>
+        <div class="icon-item">
+          <div style="width:16px;height:16px;background:var(--ink-02);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+            <svg width="11" height="11" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="9" stroke-linecap="round" fill="none"/>
+              <circle cx="66" cy="58" r="11" fill="#2CB978"/>
+            </svg>
+          </div>
+          <div class="icon-lbl">16×16</div>
+        </div>
+        <!-- Simulado en pestaña -->
+        <div class="icon-item">
+          <div style="background:var(--ink-01);border-radius:6px 6px 0 0;padding:0.4rem 0.8rem;display:flex;align-items:center;gap:0.4rem;border:1px solid rgba(233,237,233,0.06);">
+            <svg width="12" height="12" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="7" stroke-linecap="round" fill="none"/>
+              <circle cx="66" cy="58" r="9" fill="#2CB978"/>
+            </svg>
+            <span style="font-family:var(--f-mono);font-size:0.5rem;color:var(--mid-05);">ORQO</span>
+          </div>
+          <div class="icon-lbl">Pestaña navegador</div>
+        </div>
+      </div>
+      <p class="bdy" style="font-size:0.74rem;margin-bottom:1rem;">A 16px y 20px el vector de salida se suprime. Solo el arco y el punto verde. La distinción entre los dos elementos es suficiente para comunicar la identidad en el contexto de un favicon.</p>
+      <div class="cell s1" style="border-radius:8px;padding:1rem 1.5rem;margin:0;">
+        <div class="lbl lbl-acc">Avatar de redes sociales</div>
+        <div style="display:flex;align-items:center;gap:1rem;margin-top:0.5rem;">
+          <div style="width:44px;height:44px;background:var(--ink-02);border-radius:50%;display:flex;align-items:center;justify-content:center;">
+            <svg width="28" height="28" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="5.5" fill="#2CB978"/>
+            </svg>
+          </div>
+          <p class="bdy" style="font-size:0.72rem;">El avatar circular usa el isotipo centrado sobre #111812. Nunca el wordmark. Nunca el imagotipo completo en formato cuadrado de avatar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 04 · PALETA                       -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s04">
+  <span class="ch-num">§04 · Paleta cromática</span>
+  <h1 class="ch-title">Sistema<br>de color</h1>
+  <p class="ch-sub">Nueve valores. Cada uno con un rol único y no intercambiable. El sistema no tiene colores libres.</p>
+
+  <div class="pal-strip">
+    <div class="pal-chip" style="background:#060908;"><div class="pal-chip-lbl">#060908</div></div>
+    <div class="pal-chip" style="background:#0B100D;"><div class="pal-chip-lbl">#0B100D</div></div>
+    <div class="pal-chip" style="background:#111812;"><div class="pal-chip-lbl">#111812</div></div>
+    <div class="pal-chip" style="background:#1D2920;"><div class="pal-chip-lbl">#1D2920</div></div>
+    <div class="pal-chip" style="background:#2E4038;"><div class="pal-chip-lbl">#2E4038</div></div>
+    <div class="pal-chip" style="background:#7A9488;"><div class="pal-chip-lbl">#7A9488</div></div>
+    <div class="pal-chip" style="background:#2CB978;"><div class="pal-chip-lbl">#2CB978</div></div>
+    <div class="pal-chip" style="background:#1A8A55;"><div class="pal-chip-lbl">#1A8A55</div></div>
+    <div class="pal-chip li" style="background:#F5F5F2;"><div class="pal-chip-lbl inv">#F5F5F2</div></div>
+  </div>
+
+  <div class="g2" style="margin-top:2rem;">
+    <div class="cell s1 full">
+      <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:1.5rem;">
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#060908;margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Fondo 00</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#060908</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Fondo de pantalla principal dark</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#0B100D;margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Fondo 01</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#0B100D</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Fondo secundario, modales, drawers</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#111812;margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Superficie</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#111812</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Cards, paneles, sidebar</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#1D2920;margin-bottom:0.6rem;border:1px solid rgba(233,237,233,0.05);"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Borde oscuro</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#1D2920</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Bordes de cards y separadores</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#2E4038;margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Borde medio</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#2E4038</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Bordes interactivos, hover states</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#7A9488;margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Texto secundario</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#7A9488</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Labels, metadatos, subtítulos UI</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#2CB978;margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Acento dark</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#2CB978</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Isotipo, CTA, estado activo, dato clave</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#1A8A55;margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Acento light</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#1A8A55</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Acento sobre fondos claros. WCAG AA 4.8:1</div>
+        </div>
+        <div>
+          <div style="width:32px;height:32px;border-radius:8px;background:#F5F5F2;border:1px solid rgba(0,0,0,0.06);margin-bottom:0.6rem;"></div>
+          <div class="lbl" style="margin:0 0 0.2rem;">Claro</div>
+          <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--acc);">#F5F5F2</div>
+          <div class="bdy" style="font-size:0.68rem;margin-top:0.4rem;">Fondo light mode, texto sobre dark</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="lbl">Regla del acento</div>
+      <p class="bdy" style="margin-bottom:1rem;">El acento #2CB978 es el único color no-neutro del sistema. Su poder viene de su escasez. Aparece en exactamente cuatro contextos:</p>
+      <div style="display:flex;flex-direction:column;gap:0.6rem;">
+        <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:var(--ink-01);border-radius:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--acc);flex-shrink:0;"></div>
+          <span class="bdy" style="font-size:0.8rem;">El isotipo (siempre)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:var(--ink-01);border-radius:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--acc);flex-shrink:0;"></div>
+          <span class="bdy" style="font-size:0.8rem;">El CTA primario de cada pantalla o pieza (uno por pieza)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:var(--ink-01);border-radius:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--acc);flex-shrink:0;"></div>
+          <span class="bdy" style="font-size:0.8rem;">El estado activo de elementos interactivos en UI</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.8rem;padding:0.6rem;background:var(--ink-01);border-radius:6px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--acc);flex-shrink:0;"></div>
+          <span class="bdy" style="font-size:0.8rem;">El dato más importante en gráficas o KPIs (uno por gráfica)</span>
+        </div>
+      </div>
+      <p class="bdy" style="margin-top:1rem;font-size:0.74rem;opacity:0.7;">Si hay duda sobre si usar el acento en un elemento, la respuesta es no usarlo.</p>
+    </div>
+
+    <div class="cell s1">
+      <div class="lbl">Accesibilidad · Ratios de contraste</div>
+      <div style="display:flex;flex-direction:column;gap:0.8rem;margin-top:0.5rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 1rem;background:var(--ink-00);border-radius:8px;">
+          <div style="display:flex;align-items:center;gap:0.8rem;">
+            <div style="width:28px;height:20px;background:#F5F5F2;border-radius:4px;display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--f-mono);font-size:0.42rem;color:#060908;">Aa</span></div>
+            <span class="bdy" style="font-size:0.76rem;">#F5F5F2 sobre #060908</span>
+          </div>
+          <div><span class="badge b-acc">18.6:1 · AAA</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 1rem;background:var(--ink-00);border-radius:8px;">
+          <div style="display:flex;align-items:center;gap:0.8rem;">
+            <div style="width:28px;height:20px;background:#2CB978;border-radius:4px;display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--f-mono);font-size:0.42rem;color:#060908;">Aa</span></div>
+            <span class="bdy" style="font-size:0.76rem;">#2CB978 sobre #060908</span>
+          </div>
+          <div><span class="badge b-acc">8.4:1 · AAA</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 1rem;background:var(--ink-00);border-radius:8px;">
+          <div style="display:flex;align-items:center;gap:0.8rem;">
+            <div style="width:28px;height:20px;background:#1A8A55;border-radius:4px;display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--f-mono);font-size:0.42rem;color:#F5F5F2;">Aa</span></div>
+            <span class="bdy" style="font-size:0.76rem;">#1A8A55 sobre #F5F5F2</span>
+          </div>
+          <div><span class="badge b-acc">4.8:1 · AA</span></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:0.7rem 1rem;background:var(--ink-00);border-radius:8px;">
+          <div style="display:flex;align-items:center;gap:0.8rem;">
+            <div style="width:28px;height:20px;background:#060908;border-radius:4px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(233,237,233,0.1);"><span style="font-family:var(--f-mono);font-size:0.42rem;color:#F5F5F2;">Aa</span></div>
+            <span class="bdy" style="font-size:0.76rem;">#060908 sobre #F5F5F2</span>
+          </div>
+          <div><span class="badge b-acc">18.6:1 · AAA</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 05 · TIPOGRAFÍA                   -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s05">
+  <span class="ch-num">§05 · Tipografía</span>
+  <h1 class="ch-title">Sistema<br>tipográfico</h1>
+  <p class="ch-sub">Cuatro familias con roles exactos. Ninguna se usa fuera de su contexto definido.</p>
+
+  <div class="g2">
+
+    <div class="cell s1">
+      <div class="lbl">Syne · Display y marca</div>
+      <div style="font-family:var(--f-disp);font-weight:800;font-size:4rem;letter-spacing:-0.055em;line-height:0.9;color:var(--lit-08);margin-bottom:1.2rem;">ORQO</div>
+      <div style="font-family:var(--f-disp);font-weight:700;font-size:1.5rem;letter-spacing:-0.035em;line-height:1.1;color:var(--lit-07);margin-bottom:0.8rem;">Orquestación<br>operativa.</div>
+      <div style="font-family:var(--f-disp);font-weight:600;font-size:1.1rem;letter-spacing:-0.02em;color:var(--mid-05);margin-bottom:1.5rem;">Subtítulo de sección</div>
+      <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">Syne (Google Fonts)</span></div>
+      <div class="typo-row"><span class="typo-role">Logotipo</span><span class="typo-val">ExtraBold 800 · −55 tracking</span></div>
+      <div class="typo-row"><span class="typo-role">H1</span><span class="typo-val">Bold 700 · −40 tracking</span></div>
+      <div class="typo-row"><span class="typo-role">H2</span><span class="typo-val">SemiBold 600 · −25 tracking</span></div>
+      <div class="typo-row"><span class="typo-role">Alternativa</span><span class="typo-val">Neue Haas Grotesk Display 75</span></div>
+      <div class="typo-row" style="border:none;"><span class="typo-role">Uso</span><span class="typo-val">Logotipo, headers, portadas deck</span></div>
+    </div>
+
+    <div class="cell">
+      <div class="lbl">Figtree · Producto y web</div>
+      <div style="font-family:var(--f-body);font-weight:400;font-size:1.15rem;color:var(--lit-07);line-height:1.6;margin-bottom:0.8rem;">Convierte conversaciones en acciones reales. Sin fricciones, sin intermediarios.</div>
+      <div style="font-family:var(--f-body);font-weight:300;font-size:0.88rem;color:var(--mid-05);line-height:1.75;margin-bottom:1.5rem;">ORQO coordina agentes de IA, conecta sistemas y ejecuta operaciones en WhatsApp, e-commerce y plataformas enterprise en tiempo real.</div>
+      <div style="font-family:var(--f-body);font-weight:500;font-size:0.82rem;color:var(--lit-07);">Solicitar demo →</div>
+      <div style="margin-top:1.5rem;">
+        <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">Figtree (Google Fonts)</span></div>
+        <div class="typo-row"><span class="typo-role">Body</span><span class="typo-val">Regular 400 · 16px · 1.75 lh</span></div>
+        <div class="typo-row"><span class="typo-role">Lead</span><span class="typo-val">Light 300 · 18px · 1.7 lh</span></div>
+        <div class="typo-row"><span class="typo-role">UI labels</span><span class="typo-val">Medium 500 · 14px · botones</span></div>
+        <div class="typo-row"><span class="typo-role">Alternativa</span><span class="typo-val">Geist / Plus Jakarta Sans</span></div>
+        <div class="typo-row" style="border:none;"><span class="typo-role">Uso</span><span class="typo-val">Cuerpo web, UI, botones, forms</span></div>
+      </div>
+    </div>
+
+    <div class="cell s1">
+      <div class="lbl">DM Mono · Datos e interfaz técnica</div>
+      <div style="font-family:var(--f-mono);font-size:0.95rem;color:var(--acc);letter-spacing:0.02em;margin-bottom:0.5rem;">canal.whatsapp → activo</div>
+      <div style="font-family:var(--f-mono);font-size:0.75rem;color:var(--mid-05);line-height:1.9;margin-bottom:1.5rem;">
+        01 · Agente de ventas<br>
+        02 · Agente de soporte<br>
+        03 · Agente de cobranza<br>
+        <span style="color:var(--acc);">→ 3,847 acciones · hoy</span>
+      </div>
+      <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--mid-05);opacity:0.4;letter-spacing:0.12em;text-transform:uppercase;">Última sincronización · 14:32 UTC</div>
+      <div style="margin-top:1.5rem;">
+        <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">DM Mono (Google Fonts)</span></div>
+        <div class="typo-row"><span class="typo-role">Datos</span><span class="typo-val">Regular 400 · 13px</span></div>
+        <div class="typo-row"><span class="typo-role">Labels</span><span class="typo-val">Light 300 · 11px · +14 tracking</span></div>
+        <div class="typo-row"><span class="typo-role">Alternativa</span><span class="typo-val">Geist Mono · IBM Plex Mono</span></div>
+        <div class="typo-row" style="border:none;"><span class="typo-role">Uso</span><span class="typo-val">Datos, metadata, código, timestamps</span></div>
+      </div>
+    </div>
+
+    <div class="cell">
+      <div class="lbl">Fraunces · Momentos editoriales</div>
+      <div style="font-family:var(--f-edit);font-weight:300;font-style:italic;font-size:1.45rem;line-height:1.35;color:var(--lit-08);margin-bottom:1.2rem;font-optical-sizing:auto;">"No automatización.<br>Orquestación."</div>
+      <div style="font-family:var(--f-body);font-size:0.8rem;color:var(--mid-05);line-height:1.7;margin-bottom:1.5rem;">Fraunces variable se usa exclusivamente en momentos de firma de marca: taglines en pitch decks, citas de autoridad en web, la frase de cierre en presentaciones comerciales. Una vez por pieza. Nunca en interfaz de producto.</div>
+      <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">Fraunces (óptica variable)</span></div>
+      <div class="typo-row"><span class="typo-role">Estilo</span><span class="typo-val">Light 300 · Italic · opsz 9–144</span></div>
+      <div class="typo-row"><span class="typo-role">Tamaño</span><span class="typo-val">1.2rem mínimo · nunca body text</span></div>
+      <div class="typo-row" style="border:none;"><span class="typo-role">Frecuencia</span><span class="typo-val">Selectivo · Máx. 1× por pieza</span></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 06 · ÁREA DE RESPETO              -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s06">
+  <span class="ch-num">§06 · Área de respeto</span>
+  <h1 class="ch-title">Espacio mínimo<br>y uso mínimo</h1>
+
+  <div class="g2">
+    <div class="cell s1">
+      <div class="lbl">Área de respeto del imagotipo</div>
+      <div style="display:flex;align-items:center;justify-content:center;padding:3rem 2rem;position:relative;">
+        <!-- Área de respeto visual -->
+        <div style="border:1px dashed rgba(44,185,120,0.25);padding:1.5rem 2rem;position:relative;display:inline-flex;align-items:center;gap:1.2rem;">
+          <svg width="36" height="36" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="4.5" fill="#2CB978"/>
+          </svg>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.8rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <!-- Indicadores de espacio -->
+          <div style="position:absolute;top:-1.2rem;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:0.42rem;color:var(--acc);opacity:0.55;white-space:nowrap;">x = altura de la O</div>
+          <div style="position:absolute;bottom:-1.2rem;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:0.42rem;color:var(--acc);opacity:0.55;white-space:nowrap;">zona de exclusión · x en todos los lados</div>
+        </div>
+      </div>
+      <p class="bdy" style="font-size:0.78rem;">El área de respeto es igual a la altura de la "O" del wordmark en todos los lados del imagotipo. Ningún otro elemento (texto, imagen, borde) puede entrar en esa zona.</p>
+    </div>
+    <div class="cell">
+      <div class="lbl">Tamaño mínimo de reproducción</div>
+      <div style="display:flex;flex-direction:column;gap:1rem;margin-top:0.5rem;">
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--ink-01);border-radius:8px;">
+          <svg width="24" height="24" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="6" fill="#2CB978"/>
+          </svg>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:0.9rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <span class="bdy" style="font-size:0.72rem;margin-left:auto;">Mín. digital: 24px altura</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--ink-01);border-radius:8px;">
+          <svg width="16" height="16" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="7" stroke-linecap="round" fill="none"/>
+            <circle cx="66" cy="58" r="9" fill="#2CB978"/>
+          </svg>
+          <span class="bdy" style="font-size:0.72rem;">Isotipo solo: 16px mínimo (favicon)</span>
+        </div>
+        <div style="padding:1rem;background:var(--ink-01);border-radius:8px;">
+          <div class="lbl" style="margin-bottom:0.4rem;">Impresión</div>
+          <p class="bdy" style="font-size:0.74rem;">Imagotipo: mínimo 20mm de ancho. Isotipo solo: mínimo 8mm. Por debajo de estos tamaños usar solo wordmark.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 07 · LÍNEA GRÁFICA                -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s07">
+  <span class="ch-num">§07 · Línea gráfica</span>
+  <h1 class="ch-title">Sistema<br>visual</h1>
+  <p class="ch-sub">Los principios que gobiernan todas las piezas de comunicación, desde una diapositiva hasta una pantalla de producto.</p>
+
+  <div class="g2">
+    <div class="cell s1">
+      <div class="lbl">01 · Retícula y espacio</div>
+      <p class="bdy" style="margin-bottom:1rem;">Retícula de 8pt como unidad base. Todos los márgenes, paddings y gaps son múltiplos de 8. El espacio en blanco no es vacío: es autoridad. Las piezas de ORQO son deliberadamente menos densas que sus competidores. Esa densidad reducida es parte del posicionamiento premium.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:1rem;">
+        <div style="height:32px;background:rgba(44,185,120,0.08);border:1px solid rgba(44,185,120,0.15);border-radius:4px;"></div>
+        <div style="height:32px;background:rgba(44,185,120,0.08);border:1px solid rgba(44,185,120,0.15);border-radius:4px;"></div>
+        <div style="height:32px;background:rgba(44,185,120,0.08);border:1px solid rgba(44,185,120,0.15);border-radius:4px;"></div>
+        <div style="height:32px;background:rgba(44,185,120,0.08);border:1px solid rgba(44,185,120,0.15);border-radius:4px;"></div>
+      </div>
+      <div style="font-family:var(--f-mono);font-size:0.48rem;color:var(--acc);opacity:0.45;margin-top:0.4rem;letter-spacing:0.1em;">Columnas con gutter de 8pt</div>
+    </div>
+    <div class="cell">
+      <div class="lbl">02 · Jerarquía visual</div>
+      <p class="bdy" style="margin-bottom:1rem;">Tres niveles jerárquicos por pieza, nunca más. Nivel 1: dato o mensaje principal (Syne, grande). Nivel 2: contexto y apoyo (Figtree, regular). Nivel 3: metadatos y labels (DM Mono, pequeño y opaco). El acento verde puede aparecer solo en nivel 1.</p>
+      <div style="display:flex;flex-direction:column;gap:0.4rem;padding:1rem;background:var(--ink-01);border-radius:8px;">
+        <div style="font-family:var(--f-disp);font-weight:800;font-size:1.2rem;letter-spacing:-0.03em;color:var(--acc);">3,847</div>
+        <div style="font-family:var(--f-body);font-size:0.82rem;color:var(--lit-07);">acciones ejecutadas hoy</div>
+        <div style="font-family:var(--f-mono);font-size:0.55rem;color:var(--mid-05);opacity:0.45;letter-spacing:0.1em;text-transform:uppercase;">↑ 23% vs ayer · 14:32 UTC</div>
+      </div>
+    </div>
+    <div class="cell">
+      <div class="lbl">03 · Fotografía e imagen</div>
+      <p class="bdy">La fotografía de personas y entornos se trata en duotono verde-oscuro (highlight: #2CB978, shadow: #060908). Sin filtros de Instagram, sin saturación artificial, sin fotos de stock genéricas. Las capturas de producto se muestran en dark mode siempre. Los diagramas de flujo y arquitecturas usan solo los colores del sistema.</p>
+    </div>
+    <div class="cell s1">
+      <div class="lbl">04 · Recursos gráficos</div>
+      <p class="bdy" style="margin-bottom:1rem;">El único recurso decorativo permitido son líneas rectas de 1px en colores del sistema (no diagonales). El isotipo puede usarse en grande y bajo opacidad (8–12%) como fondo de sección en piezas de marketing. Nunca el wordmark en versión de fondo. Sin gradientes, sin sombras decorativas, sin ilustraciones.</p>
+      <div style="position:relative;padding:1.5rem;background:var(--ink-02);border-radius:8px;overflow:hidden;">
+        <svg style="position:absolute;right:-10px;bottom:-10px;opacity:0.08;" width="80" height="80" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="3.2" fill="#2CB978"/>
+        </svg>
+        <div style="font-family:var(--f-mono);font-size:0.56rem;color:var(--acc);opacity:0.6;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.4rem;">Ejemplo · Isotipo como fondo</div>
+        <div style="font-family:var(--f-body);font-size:0.82rem;color:var(--lit-07);">Uso correcto del isotipo como elemento gráfico de fondo a 8% de opacidad.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 08 · USO CORRECTO E INCORRECTO    -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s08">
+  <span class="ch-num">§08 · Reglas de uso</span>
+  <h1 class="ch-title">Correcto<br>e incorrecto</h1>
+  <p class="ch-sub">Cada regla tiene una razón estratégica. No son preferencias estéticas — son decisiones que protegen el valor de la marca.</p>
+
+  <div class="rule-grid">
+
+    <div class="rule-card ok">
+      <div class="rule-card-hd ok"><span class="do-dot"></span>Correcto · Versiones autorizadas</div>
+      <p class="rule-body">El logo se usa solo en las 8 versiones documentadas en §03. Dark mode sobre fondos oscuros del sistema. Light mode sobre #F5F5F2 o blanco. Monocromático en contextos de una tinta.</p>
+      <div class="rule-ex ok-ex">
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <svg width="32" height="32" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="4.5" fill="#2CB978"/>
+          </svg>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.6rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-card no">
+      <div class="rule-card-hd no"><span class="dn-dot"></span>Incorrecto · Colores no autorizados</div>
+      <p class="rule-body">No se modifica el color del isotipo ni del wordmark fuera de las versiones documentadas. No se usan gradientes sobre el logo. No se aplica el logo sobre fondos de color que no sean del sistema.</p>
+      <div class="rule-ex no-ex">
+        <div style="display:flex;align-items:center;gap:1rem;opacity:0.7;">
+          <svg width="32" height="32" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#FF6B6B" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#FFD93D" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="4.5" fill="#FFD93D"/>
+          </svg>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.6rem;letter-spacing:-0.055em;background:linear-gradient(90deg,#FF6B6B,#FFD93D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ORQO</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-card ok">
+      <div class="rule-card-hd ok"><span class="do-dot"></span>Correcto · Área de respeto respetada</div>
+      <p class="rule-body">El logo siempre tiene el área de exclusión definida en §06. En interfaces de producto el espacio mínimo es de 16px alrededor del imagotipo.</p>
+      <div class="rule-ex ok-ex">
+        <div style="padding:1.5rem;border:1px dashed rgba(44,185,120,0.2);border-radius:4px;">
+          <div style="display:flex;align-items:center;gap:0.8rem;">
+            <svg width="22" height="22" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="6" fill="#2CB978"/>
+            </svg>
+            <div style="font-family:var(--f-disp);font-weight:800;font-size:1.1rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-card no">
+      <div class="rule-card-hd no"><span class="dn-dot"></span>Incorrecto · Distorsión o rotación</div>
+      <p class="rule-body">El logo nunca se estira, comprime, rota ni se modifica en sus proporciones. El isotipo nunca aparece sin el arco completo (recortado o parcial).</p>
+      <div class="rule-ex no-ex">
+        <div style="display:flex;align-items:center;gap:0.8rem;transform:scaleX(1.4);opacity:0.65;">
+          <svg width="22" height="22" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="4" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="6" fill="#2CB978"/>
+          </svg>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.1rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-card ok">
+      <div class="rule-card-hd ok"><span class="do-dot"></span>Correcto · Tamaño mínimo</div>
+      <p class="rule-body">El imagotipo horizontal se usa a partir de 24px de altura. A tamaños menores, solo el isotipo. A 16px, solo isotipo en versión simplificada (sin vector).</p>
+      <div class="rule-ex ok-ex">
+        <div style="display:flex;align-items:flex-end;gap:1.5rem;">
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <svg width="32" height="32" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="5" fill="#2CB978"/>
+            </svg>
+            <div style="font-family:var(--f-disp);font-weight:800;font-size:1.4rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:0.4rem;">
+            <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5" stroke-linecap="round" fill="none"/>
+              <circle cx="66" cy="58" r="8" fill="#2CB978"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-card no">
+      <div class="rule-card-hd no"><span class="dn-dot"></span>Incorrecto · Efectos visuales</div>
+      <p class="rule-body">Sin sombras (box-shadow, drop-shadow), sin contornos (stroke sobre el logo), sin brillos, sin efectos de desenfoque, sin glassmorphism sobre el logo.</p>
+      <div class="rule-ex no-ex">
+        <div style="display:flex;align-items:center;gap:0.8rem;filter:drop-shadow(0 0 8px #2CB978);opacity:0.65;">
+          <svg width="28" height="28" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="5" fill="#2CB978"/>
+          </svg>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.4rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-card no" style="grid-column:1/-1;">
+      <div class="rule-card-hd no"><span class="dn-dot"></span>Incorrecto · Lo que nunca se hace</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:0.5rem;">
+        <div>
+          <div style="font-family:var(--f-mono);font-size:0.56rem;color:#DC3C3C;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Nunca</div>
+          <p class="rule-body">Añadir ™ ® © al logo en materiales de comunicación de marca (solo en documentos legales)</p>
+        </div>
+        <div>
+          <div style="font-family:var(--f-mono);font-size:0.56rem;color:#DC3C3C;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Nunca</div>
+          <p class="rule-body">Reproducir el isotipo solo en el wordmark (dentro de la "O" de ORQO u otras letras)</p>
+        </div>
+        <div>
+          <div style="font-family:var(--f-mono);font-size:0.56rem;color:#DC3C3C;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Nunca</div>
+          <p class="rule-body">Usar el verde #2CB978 como color de fondo de elementos grandes (bloques, heroes, backgrounds)</p>
+        </div>
+        <div>
+          <div style="font-family:var(--f-mono);font-size:0.56rem;color:#DC3C3C;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.4rem;">Nunca</div>
+          <p class="rule-body">Crear versiones del isotipo con elementos adicionales: texto integrado, decoraciones o modificaciones al arco</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 09 · APLICACIONES REALES          -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s09">
+  <span class="ch-num">§09 · Aplicaciones reales</span>
+  <h1 class="ch-title">La marca en<br>su hábitat.</h1>
+
+  <div class="g3">
+
+    <!-- DASHBOARD -->
+    <div class="cell s1">
+      <div class="lbl">Dashboard SaaS · Dark mode</div>
+      <div class="dash-mock">
+        <div class="dash-sb">
+          <svg width="18" height="18" viewBox="0 0 72 72" fill="none" style="margin-bottom:0.4rem;">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="5.5" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="5.5" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="7.5" fill="#2CB978"/>
+          </svg>
+          <div class="dash-dot a"></div>
+          <div class="dash-dot"></div>
+          <div class="dash-dot"></div>
+          <div class="dash-dot"></div>
+          <div class="dash-dot" style="margin-top:auto;"></div>
+        </div>
+        <div class="dash-main">
+          <div class="dash-top"></div>
+          <div class="dash-body">
+            <div class="dash-panel">
+              <div style="height:3px;background:rgba(44,185,120,0.18);border-radius:3px;width:40%;margin-bottom:0.3rem;"></div>
+              <div class="dash-bar-row"><div class="dash-bl"></div><div class="dash-bf" style="width:78%;"></div></div>
+              <div class="dash-bar-row"><div class="dash-bl"></div><div class="dash-bf" style="width:55%;opacity:.6;"></div></div>
+              <div class="dash-bar-row"><div class="dash-bl"></div><div class="dash-bf" style="width:90%;opacity:.8;"></div></div>
+              <div class="dash-bar-row"><div class="dash-bl"></div><div class="dash-bf" style="width:42%;opacity:.5;"></div></div>
+              <div class="dash-bar-row"><div class="dash-bl"></div><div class="dash-bf" style="width:67%;opacity:.7;"></div></div>
+            </div>
+            <div class="dash-panel dash-stat">
+              <div style="font-family:var(--f-mono);font-size:0.5rem;color:var(--acc);opacity:0.8;text-align:center;line-height:1.6;">1,240<br>acciones</div>
+            </div>
+            <div class="dash-panel dash-stat">
+              <div style="font-family:var(--f-mono);font-size:0.46rem;color:var(--mid-05);opacity:0.55;text-align:center;line-height:1.6;">3 agentes<br>activos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="bdy" style="font-size:0.72rem;margin-top:1rem;">Sidebar #111812. Fondo #060908. Isotipo 18px en top sidebar. Solo el verde para el dato principal. Datos secundarios en #7A9488.</p>
+    </div>
+
+    <!-- LANDING -->
+    <div class="cell">
+      <div class="lbl">Landing page · Light mode</div>
+      <div class="land-mock">
+        <div class="land-nav">
+          <div class="land-logo">
+            <svg width="13" height="13" viewBox="0 0 72 72" fill="none">
+              <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#0B100D" stroke-width="6" stroke-linecap="round" fill="none"/>
+              <line x1="59.5" y1="52" x2="66" y2="58" stroke="#1A8A55" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="66" cy="58" r="8.5" fill="#1A8A55"/>
+            </svg>
+            <div class="land-wm">ORQO</div>
+          </div>
+          <div style="display:flex;gap:0.4rem;">
+            <div style="height:4px;width:20px;background:rgba(11,16,13,0.1);border-radius:2px;"></div>
+            <div style="height:4px;width:20px;background:rgba(11,16,13,0.1);border-radius:2px;"></div>
+            <div style="height:9px;width:28px;background:#060908;border-radius:3px;"></div>
+          </div>
+        </div>
+        <div class="land-hero">
+          <div class="land-h1">Transforma conversaciones<br>en acciones reales.</div>
+          <div class="land-bar"></div>
+          <div class="land-bar" style="width:60%;"></div>
+          <div class="land-cta"></div>
+        </div>
+        <div class="land-cards">
+          <div class="land-card"></div>
+          <div class="land-card"></div>
+          <div class="land-card"></div>
+        </div>
+      </div>
+      <p class="bdy" style="font-size:0.72rem;margin-top:1rem;">Fondo #F5F5F2. Nav con imagotipo light. H1 Syne 800. CTA en #060908. Sin gradientes. Sección de proof points con bordes #1D2920 muy suaves.</p>
+    </div>
+
+    <!-- PITCH DECK -->
+    <div class="cell s1">
+      <div class="lbl">Pitch deck · Dos slides</div>
+      <div style="display:flex;flex-direction:column;gap:1px;border-radius:10px;overflow:hidden;background:rgba(233,237,233,0.05);">
+        <!-- Portada -->
+        <div class="deck-mock" style="border-radius:0;min-height:100px;">
+          <svg width="40" height="40" viewBox="0 0 72 72" fill="none">
+            <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="66" cy="58" r="3.5" fill="#2CB978"/>
+          </svg>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.3rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <div style="font-family:var(--f-mono);font-size:0.4rem;letter-spacing:0.14em;color:var(--mid-05);opacity:0.4;text-transform:uppercase;">Orquestación de Agentes IA</div>
+        </div>
+        <!-- Slide de dato -->
+        <div style="background:var(--ink-01);padding:1.2rem;display:flex;flex-direction:column;gap:0.5rem;min-height:80px;">
+          <div style="font-family:var(--f-mono);font-size:0.4rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--mid-05);opacity:0.4;">Tracción</div>
+          <div style="display:flex;gap:1.5rem;align-items:baseline;">
+            <div>
+              <div style="font-family:var(--f-disp);font-weight:800;font-size:1.3rem;letter-spacing:-0.03em;color:var(--acc);line-height:1;">1.2M</div>
+              <div style="font-family:var(--f-mono);font-size:0.4rem;color:var(--mid-05);opacity:0.4;">acciones/mes</div>
+            </div>
+            <div>
+              <div style="font-family:var(--f-disp);font-weight:800;font-size:1rem;letter-spacing:-0.03em;color:var(--lit-07);line-height:1;">340%</div>
+              <div style="font-family:var(--f-mono);font-size:0.4rem;color:var(--mid-05);opacity:0.4;">crecimiento YoY</div>
+            </div>
+          </div>
+          <div style="font-family:var(--f-edit);font-style:italic;font-weight:300;font-size:0.6rem;color:var(--lit-07);line-height:1.5;margin-top:auto;font-optical-sizing:auto;">"No automatización. Orquestación."</div>
+        </div>
+      </div>
+      <p class="bdy" style="font-size:0.72rem;margin-top:1rem;">Portada: isotipo + wordmark centrado. Slides de dato: número en verde, contexto en blanco, cita en Fraunces italic. Máx. 4 elementos por slide.</p>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="div"></div>
+
+<!-- ══════════════════════════════════ -->
+<!-- 10 · LISTA DE ARCHIVOS            -->
+<!-- ══════════════════════════════════ -->
+<div class="pg">
+<div class="chapter" id="s10">
+  <span class="ch-num">§10 · Archivos de producción</span>
+  <h1 class="ch-title">Lista completa<br>de entregables</h1>
+  <p class="ch-sub">Todos los archivos necesarios para la implementación completa de la identidad ORQO en producto, marketing y comunicación.</p>
+
+  <!-- MASTER FILES -->
+  <div class="file-section">
+    <div class="file-section-title">Archivos master editables</div>
+    <div class="file-row">
+      <div class="fn">ORQO_Master_Brand.fig</div>
+      <div class="ft">Figma</div>
+      <div class="fd">Archivo maestro con todas las versiones de logo, componentes, paleta y tipografía como variables. Fuente de verdad del sistema.</div>
+      <div class="fs">~12 MB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_Master_Logo.ai</div>
+      <div class="ft">Illustrator</div>
+      <div class="fd">Todas las versiones del logo en vectores editables, organizadas en artboards. Compatible CS6+. Incluye guías de construcción.</div>
+      <div class="fs">~2.4 MB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_Icons_System.fig</div>
+      <div class="ft">Figma</div>
+      <div class="fd">Sistema de íconos de producto (24 íconos base) en el mismo lenguaje visual que el isotipo. Dark y light mode.</div>
+      <div class="fs">~3.8 MB</div>
+    </div>
+  </div>
+
+  <!-- SVG -->
+  <div class="file-section">
+    <div class="file-section-title">SVG · Vectores escalables</div>
+    <div class="file-row">
+      <div class="fn">orqo-isotipo-dark.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Isotipo NOTCH · Arco #E9EDE9, vector+punto #2CB978 · viewBox 72×72</div>
+      <div class="fs">~800 B</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-isotipo-light.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Isotipo NOTCH · Arco #0B100D, vector+punto #1A8A55 · viewBox 72×72</div>
+      <div class="fs">~800 B</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-isotipo-mono.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Isotipo monocromático · Solo stroke blanco, punto blanco · Para una tinta</div>
+      <div class="fs">~650 B</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-logotipo-dark.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Wordmark ORQO solo · #E9EDE9 · Syne 800 outline · Para dark mode</div>
+      <div class="fs">~4.2 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-logotipo-light.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Wordmark ORQO solo · #060908 · Syne 800 outline · Para light mode</div>
+      <div class="fs">~4.2 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-imagotipo-h-dark.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Imagotipo horizontal completo · Isotipo + wordmark · Dark mode · Versión principal</div>
+      <div class="fs">~6.8 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-imagotipo-h-light.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Imagotipo horizontal completo · Isotipo + wordmark · Light mode</div>
+      <div class="fs">~6.8 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-imagotipo-v-dark.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Imagotipo vertical · Isotipo sobre wordmark · Dark mode · Pitch decks y splash</div>
+      <div class="fs">~6.8 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-imagotipo-mono.svg</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Sistema completo monocromático · Para serigrafía, bordado, grabado</div>
+      <div class="fs">~6.5 KB</div>
+    </div>
+  </div>
+
+  <!-- PNG -->
+  <div class="file-section">
+    <div class="file-section-title">PNG · Rasterizados con transparencia</div>
+    <div class="file-row">
+      <div class="fn">orqo-isotipo-dark@2x.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">Isotipo dark · Fondo transparente · 400×400px @2x · Para web y email</div>
+      <div class="fs">~18 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-isotipo-light@2x.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">Isotipo light · Fondo transparente · 400×400px @2x</div>
+      <div class="fs">~18 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-imagotipo-h-dark@2x.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">Imagotipo horizontal dark · Fondo transparente · 1200×400px @2x</div>
+      <div class="fs">~35 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-imagotipo-h-light@2x.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">Imagotipo horizontal light · Fondo transparente · 1200×400px @2x</div>
+      <div class="fs">~35 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-imagotipo-v-dark@2x.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">Imagotipo vertical dark · Fondo transparente · 600×800px @2x</div>
+      <div class="fs">~28 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-logotipo-dark@2x.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">Wordmark solo dark · Fondo transparente · 1200×300px @2x</div>
+      <div class="fs">~22 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-logotipo-light@2x.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">Wordmark solo light · Fondo transparente · 1200×300px @2x</div>
+      <div class="fs">~22 KB</div>
+    </div>
+  </div>
+
+  <!-- FAVICON Y APP ICON -->
+  <div class="file-section">
+    <div class="file-section-title">Favicon y App Icon</div>
+    <div class="file-row">
+      <div class="fn">favicon.ico</div>
+      <div class="ft">ICO</div>
+      <div class="fd">Multi-size: 16×16, 32×32, 48×48 embebidos · Para navegadores legacy</div>
+      <div class="fs">~15 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">favicon-16.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">16×16px · Versión simplificada sin vector · Solo arco + punto</div>
+      <div class="fs">~1 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">favicon-32.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">32×32px · Con vector de salida visible</div>
+      <div class="fs">~2 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">apple-touch-icon.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">180×180px · Fondo #111812 · Radio de esquina aplicado · Para iOS Safari</div>
+      <div class="fs">~8 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">app-icon-1024.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">1024×1024px · App Store iOS · Fondo #111812 · Sin transparencia · Esquinas cuadradas (Apple las redondea)</div>
+      <div class="fs">~95 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">app-icon-512.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">512×512px · Google Play Store · Con esquinas redondeadas aplicadas</div>
+      <div class="fs">~48 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">app-icon-192.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">192×192px · PWA manifest · Fondo #111812</div>
+      <div class="fs">~22 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">og-image.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">1200×630px · Open Graph / Twitter Card · Imagotipo centrado sobre #060908 · Para link previews</div>
+      <div class="fs">~85 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">avatar-social.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">800×800px · Para Twitter/X, LinkedIn, WhatsApp Business · Isotipo sobre #111812 circular</div>
+      <div class="fs">~35 KB</div>
+    </div>
+  </div>
+
+  <!-- PDF -->
+  <div class="file-section">
+    <div class="file-section-title">PDF · Impresión y documentos</div>
+    <div class="file-row">
+      <div class="fn">ORQO_BrandBook_v1.pdf</div>
+      <div class="ft">PDF</div>
+      <div class="fd">Este manual completo en formato PDF vectorial, alta resolución, CMYK, listo para impresión y distribución digital</div>
+      <div class="fs">~4.5 MB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_Logo_Pack_Print.pdf</div>
+      <div class="ft">PDF</div>
+      <div class="fd">Todas las versiones de logo en una sola hoja · Vectorial · CMYK · Para proveedores de impresión</div>
+      <div class="fs">~1.8 MB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_PitchDeck_Template.pdf</div>
+      <div class="ft">PDF</div>
+      <div class="fd">Plantilla de pitch deck 10 slides · Versión PDF no editable para referencia visual</div>
+      <div class="fs">~3.2 MB</div>
+    </div>
+  </div>
+
+  <!-- PRODUCTO DIGITAL -->
+  <div class="file-section">
+    <div class="file-section-title">Assets de producto digital</div>
+    <div class="file-row">
+      <div class="fn">ORQO_Design_Tokens.json</div>
+      <div class="ft">JSON</div>
+      <div class="fd">Tokens de design system: colores, tipografía, espaciado, radios. Compatible con Style Dictionary para exportar a CSS, iOS, Android</div>
+      <div class="fs">~8 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_Colors.css</div>
+      <div class="ft">CSS</div>
+      <div class="fd">Variables CSS con los 9 valores cromáticos en dark y light mode. Lista para importar en cualquier proyecto web</div>
+      <div class="fs">~2 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">orqo-isotipo-dark.svg (inline-ready)</div>
+      <div class="ft">SVG</div>
+      <div class="fd">Versión optimizada con SVGO para uso inline en HTML/React. Sin viewBox redundante. Sin atributos innecesarios</div>
+      <div class="fs">~600 B</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_Figma_Variables.fig</div>
+      <div class="ft">Figma</div>
+      <div class="fd">Librería de variables Figma con los 9 colores en dark/light, estilos tipográficos y componentes base del sistema</div>
+      <div class="fs">~5 MB</div>
+    </div>
+  </div>
+
+  <!-- MARKETING -->
+  <div class="file-section">
+    <div class="file-section-title">Assets de marketing</div>
+    <div class="file-row">
+      <div class="fn">ORQO_PitchDeck_Template.pptx</div>
+      <div class="ft">PPTX</div>
+      <div class="fd">Plantilla de pitch deck editable · 12 slides · Tipografía embebida · Dark mode · Listos para personalizar</div>
+      <div class="fs">~6 MB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_LinkedInBanner.png</div>
+      <div class="ft">PNG</div>
+      <div class="fd">1584×396px · Banner de empresa LinkedIn · Dark mode · Imagotipo centrado</div>
+      <div class="fs">~120 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_EmailSignature.html</div>
+      <div class="ft">HTML</div>
+      <div class="fd">Firma de email HTML responsive · Logo embebido como URL · Compatible Gmail, Outlook, Apple Mail</div>
+      <div class="fs">~4 KB</div>
+    </div>
+    <div class="file-row">
+      <div class="fn">ORQO_SocialTemplates.fig</div>
+      <div class="ft">Figma</div>
+      <div class="fd">10 plantillas para posts de LinkedIn e Instagram · Feed 1:1, Stories 9:16, LinkedIn 1.91:1</div>
+      <div class="fs">~8 MB</div>
+    </div>
+  </div>
+
+  <!-- CSS TOKENS (incluido como bonus) -->
+  <div class="cell s1" style="border-radius:12px;padding:2rem;margin-top:1rem;">
+    <div class="lbl lbl-acc" style="margin-bottom:1rem;">Design Tokens CSS · Listo para producción</div>
+    <div style="font-family:var(--f-mono);font-size:0.62rem;color:var(--acc);line-height:2;opacity:0.85;">
+      :root {<br>
+      &nbsp;&nbsp;/* Fondos dark */<br>
+      &nbsp;&nbsp;--orqo-bg-00: #060908;<br>
+      &nbsp;&nbsp;--orqo-bg-01: #0B100D;<br>
+      &nbsp;&nbsp;--orqo-surface: #111812;<br>
+      &nbsp;&nbsp;--orqo-border-dark: #1D2920;<br>
+      &nbsp;&nbsp;--orqo-border-mid: #2E4038;<br>
+      &nbsp;&nbsp;/* Texto */<br>
+      &nbsp;&nbsp;--orqo-text-primary: #F5F5F2;<br>
+      &nbsp;&nbsp;--orqo-text-secondary: #7A9488;<br>
+      &nbsp;&nbsp;/* Acento */<br>
+      &nbsp;&nbsp;--orqo-accent: #2CB978;<br>
+      &nbsp;&nbsp;--orqo-accent-light: #1A8A55;<br>
+      &nbsp;&nbsp;--orqo-accent-ghost: rgba(44,185,120,0.10);<br>
+      &nbsp;&nbsp;/* Fuentes */<br>
+      &nbsp;&nbsp;--orqo-font-display: 'Syne', sans-serif;<br>
+      &nbsp;&nbsp;--orqo-font-body: 'Figtree', sans-serif;<br>
+      &nbsp;&nbsp;--orqo-font-mono: 'DM Mono', monospace;<br>
+      &nbsp;&nbsp;--orqo-font-editorial: 'Fraunces', serif;<br>
+      }
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- CIERRE -->
+<div class="pg">
+<div style="padding:6rem 0 4rem;border-top:1px solid rgba(233,237,233,0.05);">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+    <div>
+      <div style="display:flex;align-items:center;gap:1.2rem;margin-bottom:1rem;">
+        <svg width="36" height="36" viewBox="0 0 72 72" fill="none">
+          <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+          <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="66" cy="58" r="3.5" fill="#2CB978"/>
+        </svg>
+        <div style="font-family:var(--f-disp);font-weight:800;font-size:2rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+      </div>
+      <div style="font-family:var(--f-edit);font-style:italic;font-weight:300;font-size:1rem;color:var(--mid-05);font-optical-sizing:auto;">"El gesto mínimo que lo ordena todo."</div>
+    </div>
+    <div style="text-align:right;">
+      <div style="font-family:var(--f-mono);font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(233,237,233,0.15);">Manual de Marca</div>
+      <div style="font-family:var(--f-mono);font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(233,237,233,0.1);">Versión 1.0 · Identidad NOTCH</div>
+      <div style="font-family:var(--f-mono);font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(233,237,233,0.08);margin-top:0.2rem;">Entrega Final · Producción</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="m-footer-outer">
+  <footer class="m-footer">
+    <a href="https://orqo.io" class="m-footer-logo">
+      <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+        <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="#E9EDE9" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+        <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+      </svg>
+      <span class="m-footer-logo-text">ORQO</span>
+    </a>
+    <ul class="m-footer-links">
+      <li><a href="https://orqo.io">Inicio</a></li>
+      <li><a href="https://dashboard.orqo.io">Dashboard</a></li>
+      <li><a href="https://orqo.io/#marca">Identidad de marca</a></li>
+      <li><a href="https://orqo.io/privacy">Privacidad</a></li>
+      <li><a href="mailto:hola@orqo.io">hola@orqo.io</a></li>
+    </ul>
+    <div class="m-footer-copy">© 2026 ORQO · orqo.io</div>
+    <div class="m-footer-bacata">
+      Un producto de <a href="https://bacatadm.com" target="_blank" rel="noopener">Bacata Digital Media</a>
+      &nbsp;·&nbsp;
+      <a href="https://wa.me/573013211669" target="_blank" rel="noopener">+57 301 321 1669</a>
+      &nbsp;·&nbsp;
+      🇨🇴 Orgullosamente colombiano
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>
