@@ -111,8 +111,8 @@
 [data-theme="light"] .m-tok-lbl,
 [data-theme="light"] .d-tok-lbl,
 [data-theme="light"] .help-sec-lbl,
-[data-theme="light"] .d-sugg-lbl,
-[data-theme="light"] .tab-lbl { opacity: 1; color: var(--g05); }
+[data-theme="light"] .d-sugg-lbl { opacity: 1; color: var(--g05); }
+[data-theme="light"] .tab-lbl { opacity: 1; color: var(--g05); font-size: 0.55rem; }
 [data-theme="light"] .m-item-prev { color: var(--g05); }
 [data-theme="light"] .d-sub { color: var(--g06); }
 [data-theme="light"] .h-sub { color: var(--g06); }
@@ -959,7 +959,7 @@ footer {
   display: flex; align-items: center; justify-content: center;
 }
 #orqo-window {
-  width: 385px; height: 590px;
+  width: 385px; height: 649px;
   background: var(--g01);
   border: 1px solid rgba(233,237,233,0.08);
   border-radius: 20px; overflow: hidden;
@@ -1060,26 +1060,51 @@ footer {
   background: var(--g02); flex-shrink: 0;
 }
 .w-tab {
-  flex: 1; padding: 0.8rem 0 0.65rem;
+  flex: 1; padding: 0.84rem 0 0.68rem;
   background: none; border: none; cursor: pointer;
-  display: flex; flex-direction: column; align-items: center; gap: 0.28rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
   color: rgba(233,237,233,0.22);
   transition: color 0.18s;
   position: relative;
 }
+.w-tab svg { width: 20px; height: 20px; }
 .w-tab:hover { color: rgba(233,237,233,0.5); }
 .w-tab.active { color: var(--acc); }
 .w-tab.active::before {
   content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
   width: 22px; height: 2px; border-radius: 0 0 3px 3px; background: var(--acc);
 }
-.tab-lbl { font-family: var(--f-mono); font-size: 0.43rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.tab-lbl { font-family: var(--f-mono); font-size: 0.55rem; letter-spacing: 0.1em; text-transform: uppercase; }
 .tab-dot {
   position: absolute; top: 0.55rem; right: calc(50% - 16px);
   width: 7px; height: 7px; border-radius: 50%;
   background: var(--acc); border: 1.5px solid var(--g02);
 }
-.h-hero { padding: 2rem 1.5rem 1.25rem; text-align: center; }
+.h-hero {
+  padding: 2rem 1.5rem 1.25rem; text-align: center;
+  background: linear-gradient(145deg, #2E4535 0%, #1E2D20 100%);
+  margin-bottom: 0;
+}
+/* Dark mode: light top, dark bottom */
+.h-actions, .h-divider, .h-section-lbl, .h-recent, .h-empty {
+  background: var(--g01);
+}
+/* Light mode: dark top, light bottom */
+[data-theme="light"] .h-hero {
+  background: linear-gradient(145deg, #0D1A12 0%, #152018 100%);
+}
+[data-theme="light"] #screen-home .h-title { color: #E9EDE9; }
+[data-theme="light"] #screen-home .h-sub { color: rgba(233,237,233,0.6); }
+[data-theme="light"] #screen-home .h-iso-ring {
+  background: rgba(44,185,120,0.25);
+  border-color: rgba(44,185,120,0.45);
+}
+[data-theme="light"] #screen-home .h-iso-ring::before { border-color: rgba(44,185,120,0.12); }
+[data-theme="light"] .h-actions,
+[data-theme="light"] .h-divider,
+[data-theme="light"] .h-section-lbl,
+[data-theme="light"] .h-recent,
+[data-theme="light"] .h-empty { background: var(--g01); }
 .h-iso-ring {
   width: 62px; height: 62px; border-radius: 50%;
   background: var(--acc-g); border: 1px solid rgba(44,185,120,0.2);
@@ -1211,6 +1236,22 @@ footer {
 .help-art:last-child { border-bottom: none; }
 .help-art:hover .help-art-name { color: var(--acc); }
 .help-art-name { font-family: var(--f-body); font-size: 0.8rem; color: rgba(233,237,233,0.55); transition: color 0.15s; }
+/* ══ ARTICLE VIEW ══ */
+.art-view { padding: 1.4rem 1.4rem 2rem; }
+.art-view .help-title { margin-bottom: 0.35rem; }
+.art-date { font-family: var(--f-mono); font-size: 0.5rem; color: var(--g05); opacity: 0.5; letter-spacing: 0.08em; margin-bottom: 1.3rem; }
+.art-body { font-family: var(--f-body); font-size: 0.8rem; color: var(--g06); line-height: 1.8; }
+.art-body h3 { font-family: var(--f-disp); font-size: 0.9rem; color: var(--g08); font-weight: 700; margin: 1.2rem 0 0.5rem; letter-spacing: -0.02em; }
+.art-body p { margin-bottom: 0.85rem; }
+.art-body ul, .art-body ol { padding-left: 1.3rem; margin-bottom: 0.85rem; }
+.art-body li { margin-bottom: 0.3rem; }
+.art-body strong { color: var(--g07); font-weight: 600; }
+.art-note { background: var(--g02); border: 1px solid rgba(233,237,233,0.08); border-left: 3px solid var(--acc); border-radius: 8px; padding: 0.75rem 1rem; margin: 0.9rem 0; font-size: 0.75rem; color: var(--g06); line-height: 1.7; }
+[data-theme="light"] .art-date { color: var(--g05); opacity: 1; }
+[data-theme="light"] .art-body { color: var(--g06); }
+[data-theme="light"] .art-body h3 { color: var(--g08); }
+[data-theme="light"] .art-body strong { color: var(--g07); }
+[data-theme="light"] .art-note { background: var(--g02); border-color: var(--g03); border-left-color: var(--acc); color: var(--g06); }
 </style>
 </head>
 <body>
@@ -1793,18 +1834,25 @@ footer {
         </div>
         <div class="help-cats">
           <div class="help-sec-lbl">Categorías</div>
-          <div class="help-cat"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L2 4.5v7l6 3 6-3v-7L8 1.5z" stroke="rgba(233,237,233,0.45)" stroke-width="1.3" stroke-linejoin="round"/></svg></div><span class="help-cat-name">Primeros pasos</span><span class="help-cat-count">6 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="help-cat"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="9.5" y="1.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="1.5" y="9.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="9.5" y="9.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/></svg></div><span class="help-cat-name">Integraciones</span><span class="help-cat-count">12 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="help-cat" onclick="goToNewChat()"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><path d="M8 9V8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2" stroke="rgba(233,237,233,0.45)" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11" r="0.7" fill="rgba(233,237,233,0.45)"/></svg></div><span class="help-cat-name">Cómo obtener soporte</span><span class="help-cat-count">3 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-cat" onclick="goToArticle('plugin-install')"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L2 4.5v7l6 3 6-3v-7L8 1.5z" stroke="rgba(233,237,233,0.45)" stroke-width="1.3" stroke-linejoin="round"/></svg></div><span class="help-cat-name">Primeros pasos</span><span class="help-cat-count">6 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-cat" onclick="goToArticle('wp-connect')"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><rect x="1.5" y="1.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="9.5" y="1.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="1.5" y="9.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><rect x="9.5" y="9.5" width="5" height="5" rx="1.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/></svg></div><span class="help-cat-name">Integraciones</span><span class="help-cat-count">12 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-cat" onclick="goToArticle('tokens')"><div class="help-cat-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="5.5" stroke="rgba(233,237,233,0.45)" stroke-width="1.3"/><path d="M8 9V8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2" stroke="rgba(233,237,233,0.45)" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="11" r="0.7" fill="rgba(233,237,233,0.45)"/></svg></div><span class="help-cat-name">Cómo obtener soporte</span><span class="help-cat-count">3 artículos</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;margin-left:0.5rem;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
         <div class="help-divider"></div>
         <div class="help-arts">
           <div class="help-sec-lbl">Artículos populares</div>
-          <div class="help-art"><span class="help-art-name">¿Cómo conectar ORQO con WordPress?</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="help-art"><span class="help-art-name">Configurar tu número de WhatsApp Business</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="help-art"><span class="help-art-name">Flujos y agentes disponibles</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="help-art"><span class="help-art-name">Límites de tokens e interacciones</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <div class="help-art"><span class="help-art-name">Instalar el plugin ORQO en WordPress</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art" onclick="goToArticle('wp-connect')"><span class="help-art-name">¿Cómo conectar ORQO con WordPress?</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art" onclick="goToArticle('whatsapp-setup')"><span class="help-art-name">Configurar tu número de WhatsApp Business</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art" onclick="goToArticle('agents')"><span class="help-art-name">Flujos y agentes disponibles</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art" onclick="goToArticle('tokens')"><span class="help-art-name">Límites de tokens e interacciones</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="help-art" onclick="goToArticle('plugin-install')"><span class="help-art-name">Instalar el plugin ORQO en WordPress</span><svg width="11" height="11" viewBox="0 0 16 16" fill="none" style="opacity:0.18;flex-shrink:0;"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+      </div>
+      <div id="screen-article" class="w-screen">
+        <div class="art-view">
+          <div class="help-title" id="art-title"></div>
+          <div class="art-date" id="art-date"></div>
+          <div class="art-body" id="art-body"></div>
         </div>
       </div>
     </div>
@@ -2163,6 +2211,120 @@ function updateTokenUI() {
   const r = S.remaining(), pct = (r / TOTAL_INT) * 100;
   [['tok-display', `${r} / ${TOTAL_INT}`], ['d-tok-num', `${r}`]].forEach(([id, v]) => { const e = document.getElementById(id); if (e) e.textContent = v; });
   ['tok-fill','d-tok-fill'].forEach(id => { const e = document.getElementById(id); if (e) e.style.width = pct + '%'; });
+}
+
+// ══ ARTICLES ══
+const ARTICLES = {
+  'wp-connect': {
+    title: '¿Cómo conectar ORQO con WordPress?',
+    date: 'Actualizado hace 3 días',
+    body: `<p>ORQO se conecta a tu WordPress a través de nuestra <strong>API REST</strong> y el protocolo <strong>MCP (Model Context Protocol)</strong>. La conexión permite a ORQO leer y ejecutar acciones directamente sobre tu sitio.</p>
+<h3>Requisitos previos</h3>
+<ul>
+  <li>WordPress 6.0 o superior</li>
+  <li>Plugin ORQO instalado y activado</li>
+  <li>API REST de WordPress habilitada (activa por defecto)</li>
+  <li>Cuenta activa en dashboard.orqo.io</li>
+</ul>
+<h3>Pasos de conexión</h3>
+<ol>
+  <li>Entra a tu dashboard en <strong>dashboard.orqo.io</strong></li>
+  <li>Ve a <strong>Integraciones → WordPress</strong></li>
+  <li>Ingresa la URL de tu sitio (ej: https://mitienda.com)</li>
+  <li>Copia el token generado y pégalo en el plugin de WordPress</li>
+  <li>Haz clic en <strong>Verificar conexión</strong></li>
+</ol>
+<div class="art-note">La conexión se establece en segundos. Una vez verificada, ORQO puede leer productos, pedidos, formularios y ejecutar acciones en tu sitio en tiempo real.</div>
+<h3>¿Qué puede hacer ORQO en WordPress?</h3>
+<p>Con la conexión activa, ORQO puede: consultar inventario de WooCommerce, crear pedidos, registrar usuarios, leer y enviar respuestas de formularios (WPForms, Gravity Forms), y ejecutar cualquier endpoint de tu API REST personalizada.</p>`
+  },
+  'whatsapp-setup': {
+    title: 'Configurar tu número de WhatsApp Business',
+    date: 'Actualizado hace 5 días',
+    body: `<p>ORQO usa la <strong>API oficial de WhatsApp Business</strong> para gestionar conversaciones. Puedes conectar el número de tu empresa en pocos minutos.</p>
+<h3>Requisitos</h3>
+<ul>
+  <li>Número de teléfono dedicado para tu negocio (puede ser fijo o móvil)</li>
+  <li>Cuenta de Meta Business verificada</li>
+  <li>Acceso al dashboard de ORQO</li>
+</ul>
+<h3>Proceso de configuración</h3>
+<ol>
+  <li>En el dashboard, ve a <strong>Integraciones → WhatsApp</strong></li>
+  <li>Haz clic en <strong>Conectar número</strong></li>
+  <li>Inicia sesión con tu cuenta de Meta Business</li>
+  <li>Selecciona el número o registra uno nuevo</li>
+  <li>Verifica el número con el código SMS o llamada</li>
+  <li>Configura el nombre del agente y el mensaje de bienvenida</li>
+</ol>
+<div class="art-note"><strong>Nota:</strong> Si ya usas WhatsApp Business App en ese número, deberás desvincularlo antes de conectarlo a la API. Los mensajes anteriores no se migran.</div>
+<h3>Prueba de la integración</h3>
+<p>Una vez conectado, envía un mensaje de prueba desde otro número. ORQO responderá automáticamente. Puedes ver la conversación en tiempo real desde la sección <strong>Conversaciones</strong> del dashboard.</p>`
+  },
+  'agents': {
+    title: 'Flujos y agentes disponibles',
+    date: 'Actualizado hace 1 semana',
+    body: `<p>ORQO incluye agentes pre-configurados para los flujos más comunes de e-commerce y servicios. Cada agente puede personalizarse desde el dashboard.</p>
+<h3>Agentes incluidos</h3>
+<ul>
+  <li><strong>Agente de Pedidos:</strong> Consulta estado de pedidos WooCommerce, rastrea envíos y gestiona devoluciones.</li>
+  <li><strong>Agente de Soporte:</strong> Responde preguntas frecuentes, escala a humano cuando es necesario.</li>
+  <li><strong>Agente de Reservas:</strong> Integrado con Bookly y Calendly para agendar citas directamente por WhatsApp.</li>
+  <li><strong>Agente de Catálogo:</strong> Muestra productos, precios, disponibilidad y permite agregar al carrito.</li>
+  <li><strong>Agente de Captación:</strong> Registra leads desde WhatsApp hacia tu CRM o WPForms.</li>
+</ul>
+<h3>Crear un agente personalizado</h3>
+<p>En el dashboard ve a <strong>Agentes → Nuevo agente</strong>. Define el objetivo, las instrucciones de comportamiento, los datos que puede consultar y las acciones que puede ejecutar. Puedes usar lenguaje natural para configurarlo.</p>
+<div class="art-note">Los agentes son independientes entre sí. Puedes tener múltiples agentes activos para diferentes números de WhatsApp o para diferentes secciones de tu WordPress.</div>`
+  },
+  'tokens': {
+    title: 'Límites de tokens e interacciones',
+    date: 'Actualizado hace 2 semanas',
+    body: `<p>ORQO mide el uso en <strong>interacciones</strong>. Una interacción equivale a un mensaje de usuario más la respuesta del agente.</p>
+<h3>Límites por plan</h3>
+<ul>
+  <li><strong>Demo:</strong> 20 interacciones (esta versión de prueba del widget)</li>
+  <li><strong>Starter:</strong> 500 interacciones / mes</li>
+  <li><strong>Pro:</strong> 2.000 interacciones / mes</li>
+  <li><strong>Business:</strong> 10.000 interacciones / mes + soporte prioritario</li>
+</ul>
+<h3>¿Qué cuenta como interacción?</h3>
+<p>Cada mensaje que envía un usuario a cualquiera de tus agentes conectados (WhatsApp o widget web) cuenta como una interacción. Los mensajes internos del sistema, las notificaciones y los mensajes de error no cuentan.</p>
+<div class="art-note"><strong>¿Llegaste al límite?</strong> Escríbenos al +57 301 321 1669 o a hola@orqo.io. Podemos ampliar tu límite de forma inmediata mientras gestionas el cambio de plan.</div>
+<h3>Cómo revisar tu consumo</h3>
+<p>En el dashboard, la sección <strong>Resumen</strong> muestra en tiempo real cuántas interacciones has usado y cuántas te quedan en el mes en curso. También recibirás un email cuando llegues al 80% del límite.</p>`
+  },
+  'plugin-install': {
+    title: 'Instalar el plugin ORQO en WordPress',
+    date: 'Actualizado hace 4 días',
+    body: `<p>El plugin de ORQO es el puente entre tu WordPress y la plataforma. Se instala en menos de 10 minutos y no requiere código.</p>
+<h3>Método 1: Desde el dashboard de WordPress</h3>
+<ol>
+  <li>Entra al panel de administración de tu WordPress</li>
+  <li>Ve a <strong>Plugins → Añadir nuevo</strong></li>
+  <li>Busca <strong>"ORQO"</strong> en el buscador</li>
+  <li>Haz clic en <strong>Instalar ahora</strong> y luego en <strong>Activar</strong></li>
+</ol>
+<h3>Método 2: Subir el archivo .zip</h3>
+<ol>
+  <li>Descarga el plugin desde tu dashboard en <strong>Integraciones → WordPress → Descargar plugin</strong></li>
+  <li>En WordPress ve a <strong>Plugins → Añadir nuevo → Subir plugin</strong></li>
+  <li>Selecciona el archivo <strong>orqo-connector.zip</strong></li>
+  <li>Instala y activa</li>
+</ol>
+<h3>Configuración inicial</h3>
+<p>Después de activar, ve a <strong>Ajustes → ORQO</strong> en tu WordPress. Pega el <strong>token de conexión</strong> que encontrarás en tu dashboard y guarda los cambios.</p>
+<div class="art-note">El plugin requiere WordPress 6.0+ y PHP 7.4+. Verifica que tu hosting cumpla estos requisitos antes de instalarlo.</div>`
+  }
+};
+
+function goToArticle(id) {
+  const art = ARTICLES[id];
+  if (!art) return;
+  document.getElementById('art-title').textContent = art.title;
+  document.getElementById('art-date').textContent = art.date;
+  document.getElementById('art-body').innerHTML = art.body;
+  showScreen('article', true, 'Centro de ayuda');
 }
 
 function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
