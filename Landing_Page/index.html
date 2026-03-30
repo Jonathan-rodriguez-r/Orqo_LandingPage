@@ -1738,6 +1738,7 @@ footer {
   <ul class="footer-links">
     <li><a href="https://dashboard.orqo.io">Dashboard</a></li>
     <li><a href="/Marca/orqo-manual-marca-final.html" target="_blank">Identidad de marca</a></li>
+    <li><a href="/Landing_Page/changelog.html">Changelog</a></li>
     <li><a href="/privacy">Privacidad</a></li>
     <li><a href="mailto:hello@orqo.io">hello@orqo.io</a></li>
   </ul>
@@ -2549,16 +2550,16 @@ if (S.convs().length > 0) {
       if (widgetEl) {
         const isTop = cfg.position.includes('top');
         const isLeft = cfg.position.includes('left');
-        const isCenter = cfg.position === 'center';
+        const isCenter = cfg.position.includes('center');
         widgetEl.style.bottom = isTop ? 'auto' : '2rem';
         widgetEl.style.top = isTop ? '2rem' : 'auto';
         widgetEl.style.right = (isLeft || isCenter) ? 'auto' : '2rem';
         widgetEl.style.left = isLeft ? '2rem' : isCenter ? '50%' : 'auto';
-        widgetEl.style.alignItems = isLeft ? 'flex-start' : 'flex-end';
-        if (isCenter) widgetEl.style.transform = 'translateX(-50%)';
+        widgetEl.style.alignItems = isLeft ? 'flex-start' : isCenter ? 'center' : 'flex-end';
+        widgetEl.style.transform = isCenter ? 'translateX(-50%)' : '';
         if (windowEl) {
           const vOrig = isTop ? 'top' : 'bottom';
-          const hOrig = isLeft ? 'left' : 'right';
+          const hOrig = isLeft ? 'left' : isCenter ? 'center' : 'right';
           windowEl.style.transformOrigin = `${vOrig} ${hOrig}`;
         }
       }
