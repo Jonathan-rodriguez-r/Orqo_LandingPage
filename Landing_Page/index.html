@@ -2446,6 +2446,90 @@ if (S.convs().length > 0) {
   document.getElementById('t-badge').style.display = 'flex';
   document.getElementById('tab-msgs-dot').style.display = 'block';
 }
+
+// ══ WIDGET CONFIG — cargar desde dashboard API ══════════════════════════════
+(async function loadWidgetConfig() {
+  try {
+    const res = await fetch('https://dashboard.orqo.io/api/public/widget', { cache: 'no-store' });
+    if (!res.ok) return;
+    const cfg = await res.json();
+
+    // 1. Activo / inactivo
+    if (cfg.active === false) {
+      const w = document.getElementById('orqo-widget');
+      if (w) w.style.display = 'none';
+      return;
+    }
+
+    // 2. Textos
+    if (cfg.title) {
+      document.querySelectorAll('.h-title').forEach(el => { el.textContent = cfg.title; });
+    }
+    if (cfg.subtitle) {
+      document.querySelectorAll('.h-sub').forEach(el => { el.innerHTML = cfg.subtitle; });
+    }
+    if (cfg.placeholder) {
+      const ta = document.getElementById('chat-ta');
+      if (ta) ta.placeholder = cfg.placeholder;
+    }
+
+    // 3. Colores CSS
+    const root = document.documentElement;
+    if (cfg.accentColor) root.style.setProperty('--acc', cfg.accentColor);
+    if (cfg.darkBg)      root.style.setProperty('--g00', cfg.darkBg);
+    if (cfg.darkSurface) root.style.setProperty('--g01', cfg.darkSurface);
+
+    // 4. Opacidad ventana y botón
+    if (cfg.windowOpacity != null && cfg.windowOpacity < 1) {
+      const win = document.getElementById('orqo-window');
+      if (win) win.style.opacity = cfg.windowOpacity;
+    }
+    if (cfg.buttonOpacity != null && cfg.buttonOpacity < 1) {
+      const btn = document.getElementById('orqo-trigger');
+      if (btn) btn.style.opacity = cfg.buttonOpacity;
+    }
+
+    // 5. Icono / avatar en el botón trigger
+    if (cfg.iconMode === 'favicon' && cfg.faviconUrl) {
+      const btn = document.getElementById('orqo-trigger');
+      if (btn) btn.innerHTML = `<img src="${cfg.faviconUrl}" width="32" height="32" style="border-radius:50%;object-fit:cover;" alt=""/>`;
+    } else if (cfg.iconMode === 'photo' && cfg.agentPhoto) {
+      const photoUrl = cfg.agentPhoto.startsWith('g')
+        ? `https://api.dicebear.com/7.x/avataaars/svg?seed=orqo-${cfg.agentPhoto}&radius=50`
+        : cfg.agentPhoto;
+      const btn = document.getElementById('orqo-trigger');
+      if (btn) btn.innerHTML = `<img src="${photoUrl}" width="48" height="48" style="border-radius:50%;object-fit:cover;" alt=""/>`;
+    }
+
+    // 6. Artículos desde API (override ARTICLES y WIDGET_CONFIG)
+    if (Array.isArray(cfg.articles) && cfg.articles.length > 0) {
+      cfg.articles.forEach(a => {
+        ARTICLES[a.id] = { title: a.title, date: a.date, body: a.body };
+      });
+    }
+    if (Array.isArray(cfg.homeArticles) && cfg.homeArticles.length > 0) {
+      WIDGET_CONFIG.homeArticles = cfg.homeArticles.map(id => {
+        const art = ARTICLES[id];
+        return { id, label: art ? art.title : id };
+      });
+      renderHomeArticles();
+    }
+
+    // 7. Límite de interacciones
+    if (cfg.interactionLimit) {
+      window._ORQO_INT_LIMIT = cfg.interactionLimit;
+    }
+
+    // 8. Auto-abrir en modo preview (?preview=1)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('preview') === '1' && !isOpen) {
+      setTimeout(toggleWidget, 600);
+    }
+
+  } catch (e) {
+    // Si falla (sin conexión al dashboard), el widget funciona con defaults
+  }
+})();
 </script>
 </body>
 </html>
