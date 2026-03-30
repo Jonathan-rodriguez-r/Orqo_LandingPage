@@ -2286,6 +2286,29 @@ function appendBubble(role, content, ts, anim) {
   if (anim) scrollMsgs();
 }
 
+// ── Notification sound (Web Audio API — no external file needed) ──
+function playNotificationSound() {
+  if (window._ORQO_SOUND === false) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    function note(freq, start, dur, vol) {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0, start);
+      gain.gain.linearRampToValueAtTime(vol, start + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+      osc.start(start); osc.stop(start + dur);
+    }
+    const t = ctx.currentTime;
+    note(880,     t,        0.28, 0.18); // A5
+    note(1174.66, t + 0.11, 0.32, 0.13); // D6
+    setTimeout(() => ctx.close(), 700);
+  } catch {}
+}
+
 function addBotMsg(convId, text) {
   const convs = S.convs();
   const conv = convs.find(c => c.id === convId);
@@ -2293,6 +2316,7 @@ function addBotMsg(convId, text) {
   const m = { role: 'bot', content: text, timestamp: new Date().toISOString() };
   conv.messages.push(m); S.saveConvs(convs);
   appendBubble('bot', text, m.timestamp, true);
+  playNotificationSound();
 }
 
 function showTyping() {
@@ -2681,7 +2705,10 @@ if (S.convs().length > 0) {
       updateTokenUI();
     }
 
-    // 8. Auto-abrir en modo preview (?preview=1)
+    // 8. Sonido de respuesta (default true si no está definido)
+    window._ORQO_SOUND = cfg.soundEnabled !== false;
+
+    // 9. Auto-abrir en modo preview (?preview=1)
     const params = new URLSearchParams(window.location.search);
     if (params.get('preview') === '1' && !isOpen) {
       setTimeout(toggleWidget, 600);
