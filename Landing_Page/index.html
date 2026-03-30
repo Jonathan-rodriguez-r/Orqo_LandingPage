@@ -1182,6 +1182,10 @@ footer {
 .d-disclaimer strong { color: rgba(233,237,233,0.58); font-weight: 500; }
 .d-accept { width: 100%; padding: 0.88rem; background: var(--acc); color: var(--g00); border: none; border-radius: 11px; cursor: pointer; font-family: var(--f-body); font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.45rem; transition: opacity 0.2s, transform 0.18s; }
 .d-accept:hover { opacity: 0.88; transform: translateY(-1px); }
+.d-decline { padding: 0.88rem 1rem; background: transparent; color: var(--g05); border: 1.5px solid rgba(233,237,233,0.12); border-radius: 11px; cursor: pointer; font-family: var(--f-body); font-weight: 500; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 0.45rem; transition: border-color 0.2s, color 0.2s; white-space: nowrap; }
+.d-decline:hover { border-color: rgba(233,237,233,0.28); color: var(--g07); }
+[data-theme="light"] .d-decline { border-color: var(--g03); color: var(--g05); }
+[data-theme="light"] .d-decline:hover { border-color: var(--g04); color: var(--g07); }
 .d-sugg { margin-top: 1.5rem; }
 .d-sugg-lbl { font-family: var(--f-mono); font-size: 0.5rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--g05); opacity: 0.45; margin-bottom: 0.7rem; }
 .d-chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
@@ -1683,7 +1687,7 @@ footer {
     <span class="logo-text" style="font-size:1.2rem;color:rgba(245,245,242,0.7);">ORQO</span>
   </a>
   <ul class="footer-links">
-    <li><a href="#">Privacidad</a></li>
+    <li><a href="/privacy">Privacidad</a></li>
     <li><a href="#">Términos</a></li>
     <li><a href="mailto:hola@orqo.io">hola@orqo.io</a></li>
   </ul>
@@ -1790,12 +1794,19 @@ footer {
             <div class="d-tok-track"><div class="d-tok-fill" id="d-tok-fill" style="width:100%"></div></div>
           </div>
           <div class="d-disclaimer">
-            <strong>Aviso de uso:</strong> ORQO Agent es un asistente de inteligencia artificial. Las respuestas se generan automáticamente y pueden contener errores. No sustituyen asesoría profesional. Al continuar, aceptas que tus mensajes sean procesados para generar respuestas. No compartas información confidencial ni datos personales sensibles. Bacata Digital Media no se responsabiliza por decisiones tomadas con base en las respuestas del asistente. Para soporte directo escríbenos al +57 301 321 1669.
+            <strong>Política de datos y uso:</strong> ORQO Agent es un asistente de inteligencia artificial operado por Bacata Digital Media S.A.S. Al continuar, autorizas el procesamiento de tus mensajes para generar respuestas. No compartas información confidencial, datos bancarios ni documentos de identidad. Las respuestas son automáticas y no sustituyen asesoría profesional.<br><br>
+            Tus conversaciones de demostración se almacenan únicamente en tu dispositivo (localStorage). Para más información consulta nuestra <a href="/privacy" target="_blank" style="color:var(--acc);">Política de Privacidad</a>.
           </div>
-          <button class="d-accept" onclick="acceptDisclaimer()">
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Entiendo y acepto
-          </button>
+          <div style="display:flex;gap:0.6rem;margin-top:0.2rem;">
+            <button class="d-decline" onclick="declineDisclaimer()">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M1 1l14 14M15 1L1 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              Rechazar
+            </button>
+            <button class="d-accept" onclick="acceptDisclaimer()" style="flex:1;">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Aceptar política
+            </button>
+          </div>
           <div class="d-sugg">
             <div class="d-sugg-lbl">Preguntas frecuentes</div>
             <div class="d-chips">
@@ -2073,6 +2084,16 @@ function acceptDisclaimer() {
   S.acceptDisclaimer();
   startNewConv(pendingSugg || '');
   pendingSugg = '';
+}
+
+function declineDisclaimer() {
+  pendingSugg = '';
+  // Close the widget entirely
+  isOpen = false;
+  document.getElementById('orqo-window').classList.add('w-hidden');
+  document.getElementById('orqo-trigger').classList.remove('open');
+  // Go back to home tab for next open
+  setTimeout(() => { switchTab('home'); }, 350);
 }
 
 function startWithSugg(el) {
