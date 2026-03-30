@@ -1737,8 +1737,8 @@ footer {
   </a>
   <ul class="footer-links">
     <li><a href="https://dashboard.orqo.io">Dashboard</a></li>
-    <li><a href="/Marca/orqo-manual-marca-final.html" target="_blank">Identidad de marca</a></li>
-    <li><a href="/Landing_Page/changelog.html">Changelog</a></li>
+    <li><a href="/marca" target="_blank">Identidad de marca</a></li>
+    <li><a href="/changelog">Changelog</a></li>
     <li><a href="/privacy">Privacidad</a></li>
     <li><a href="mailto:hello@orqo.io">hello@orqo.io</a></li>
   </ul>
@@ -2056,7 +2056,7 @@ document.addEventListener('click', e => {
 });
 
 // ══ CHAT WIDGET ══
-const TOTAL_INT = 20;
+let TOTAL_INT = 20;
 const STORAGE_KEY = 'orqo_wgt';
 let isOpen = false, isMax = false;
 let curTab = 'home', curScreen = 'home';
@@ -2470,6 +2470,7 @@ if (S.convs().length > 0) {
     const res = await fetch('https://dashboard.orqo.io/api/public/widget', { cache: 'no-store' });
     if (!res.ok) { showWidget(); return; }
     const cfg = await res.json();
+    console.log('[ORQO] config:', JSON.stringify({ active: cfg.active, title: cfg.title, position: cfg.position, interactionLimit: cfg.interactionLimit }));
 
     // 1. Activo / inactivo
     if (cfg.active === false) {
@@ -2587,7 +2588,8 @@ if (S.convs().length > 0) {
 
     // 7. Límite de interacciones
     if (cfg.interactionLimit) {
-      window._ORQO_INT_LIMIT = cfg.interactionLimit;
+      TOTAL_INT = cfg.interactionLimit;
+      updateTokenUI();
     }
 
     // 8. Auto-abrir en modo preview (?preview=1)
@@ -2597,7 +2599,7 @@ if (S.convs().length > 0) {
     }
 
   } catch (e) {
-    // Si falla la API, mostrar el widget con defaults
+    console.error('[ORQO] loadWidgetConfig error:', e);
     showWidget();
   }
 })();
