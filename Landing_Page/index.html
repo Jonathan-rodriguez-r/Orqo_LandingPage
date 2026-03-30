@@ -2494,8 +2494,16 @@ if (S.convs().length > 0) {
     // 3. Colores CSS
     const root = document.documentElement;
     if (cfg.accentColor) root.style.setProperty('--acc', cfg.accentColor);
-    if (cfg.darkBg)      root.style.setProperty('--g00', cfg.darkBg);
-    if (cfg.darkSurface) root.style.setProperty('--g01', cfg.darkSurface);
+    // Theme-sensitive colors: inject <style> so [data-theme="light"] overrides still work
+    {
+      const darkBg      = cfg.darkBg      || '#0B100D';
+      const darkSurface = cfg.darkSurface || '#111812';
+      const lightBg     = cfg.lightBg     || '#F4F7F4';
+      const lightSurface= cfg.lightSurface|| '#FFFFFF';
+      let styleEl = document.getElementById('orqo-theme-vars');
+      if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'orqo-theme-vars'; document.head.appendChild(styleEl); }
+      styleEl.textContent = `:root{--g00:${darkBg};--g01:${darkSurface}}[data-theme="light"]{--g00:${lightBg};--g01:${lightSurface}}`;
+    }
 
     // 4. Opacidad ventana y botón
     if (cfg.windowOpacity != null && cfg.windowOpacity < 1) {
