@@ -1850,6 +1850,11 @@ footer {
         <span class="w-online"><span class="w-online-dot"></span>En línea</span>
       </div>
       <div class="w-hd-right">
+        <button class="w-hbtn" id="btn-clear" title="Borrar chats">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+            <path d="M3 4h10M6 4V2h4v2M5 4l.6 9h4.8L11 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
         <button class="w-hbtn" id="btn-min" title="Minimizar">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         </button>
@@ -2172,8 +2177,38 @@ function toggleWidget() {
   }
 }
 
+function clearAllChats() {
+  const convs = S.convs();
+  if (!convs.length) return;
+
+  const ok = window.confirm('¿Borrar todos los chats guardados en este dispositivo?');
+  if (!ok) return;
+
+  const data = S.load();
+  data.conversations = [];
+  S.save(data);
+
+  activeConvId = null;
+  pendingSugg = '';
+
+  const chatMsgs = document.getElementById('chat-msgs');
+  if (chatMsgs) chatMsgs.innerHTML = '';
+
+  const badge = document.getElementById('t-badge');
+  if (badge) badge.style.display = 'none';
+  const dot = document.getElementById('tab-msgs-dot');
+  if (dot) dot.style.display = 'none';
+
+  renderHome();
+  renderMsgsList();
+  updateTokenUI();
+  showScreen('messages', false);
+  hlTab('messages');
+}
+
 document.getElementById('btn-close').onclick = () => { isOpen = false; document.getElementById('orqo-window').classList.add('w-hidden'); document.getElementById('orqo-trigger').classList.remove('open'); };
 document.getElementById('btn-min').onclick  = () => { isOpen = false; document.getElementById('orqo-window').classList.add('w-hidden'); document.getElementById('orqo-trigger').classList.remove('open'); };
+document.getElementById('btn-clear').onclick = () => { clearAllChats(); };
 document.getElementById('btn-max').onclick  = () => {
   isMax = !isMax;
   document.getElementById('orqo-window').classList.toggle('w-max', isMax);
