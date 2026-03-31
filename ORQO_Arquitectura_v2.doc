@@ -1,0 +1,503 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<meta name=ProgId content=Word.Document>
+<style>
+  body { font-family: Calibri, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 2.5cm; line-height: 1.5; }
+  h1 { font-size: 26pt; color: #2CB978; font-weight: bold; border-bottom: 2pt solid #2CB978; padding-bottom: 6pt; margin-top: 0; }
+  h2 { font-size: 14pt; color: #1a1a1a; font-weight: bold; margin-top: 20pt; margin-bottom: 6pt; border-bottom: 0.5pt solid #ccc; padding-bottom: 3pt; }
+  h3 { font-size: 11pt; color: #2CB978; font-weight: bold; margin-top: 14pt; margin-bottom: 4pt; }
+  h4 { font-size: 11pt; color: #555; font-weight: bold; margin-top: 10pt; margin-bottom: 3pt; }
+  p { margin: 4pt 0; }
+  .meta { font-size: 10pt; color: #666; margin-bottom: 10pt; }
+  table { width: 100%; border-collapse: collapse; font-size: 10pt; margin: 8pt 0 14pt 0; }
+  th { background: #2CB978; color: white; padding: 6pt 8pt; text-align: left; font-weight: bold; }
+  td { padding: 5pt 8pt; border-bottom: 0.5pt solid #e0e0e0; vertical-align: top; }
+  tr:nth-child(even) td { background: #f7faf8; }
+  ul, ol { margin: 4pt 0 8pt 0; padding-left: 18pt; }
+  li { margin-bottom: 2pt; }
+  code { font-family: Consolas, monospace; font-size: 9.5pt; background: #f4f4f4; padding: 1pt 4pt; border-radius: 2pt; }
+  pre { font-family: Consolas, monospace; font-size: 9pt; background: #f4f4f4; border-left: 3pt solid #2CB978; padding: 8pt 12pt; margin: 8pt 0; line-height: 1.4; overflow: auto; }
+  .note { background: #f0faf5; border-left: 3pt solid #2CB978; padding: 6pt 12pt; margin: 8pt 0; font-size: 10pt; }
+  .warn { background: #fff8e1; border-left: 3pt solid #f5a623; padding: 6pt 12pt; margin: 8pt 0; font-size: 10pt; }
+  .cover { text-align: center; margin-bottom: 28pt; }
+  hr { border: none; border-top: 0.5pt solid #ddd; margin: 18pt 0; }
+  .badge-new { background: #d4f4e5; color: #1a7a4a; padding: 1pt 5pt; border-radius: 3pt; font-size: 9pt; font-weight: bold; }
+  .badge-arch { background: #dce8ff; color: #2255aa; padding: 1pt 5pt; border-radius: 3pt; font-size: 9pt; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1 style="font-size:32pt; border:none; text-align:center;">ORQO</h1>
+  <p style="font-size:16pt; color:#2CB978; margin:0; font-weight:bold;">Documento de Arquitectura</p>
+  <p style="font-size:13pt; color:#555; margin-top:6pt;">Motor Core Desacoplado — Clean Architecture + DDD + CQRS</p>
+  <p class="meta" style="margin-top:14pt;">
+    <strong>Versión 2.0</strong> &nbsp;|&nbsp; 30 de marzo de 2026 &nbsp;|&nbsp; Bacata Digital Media<br>
+    Actualización sobre documento v0.9 — Secciones nuevas: §6, §7, §8, §9
+  </p>
+</div>
+<hr>
+
+<!-- INDICE -->
+<h2>Índice de Contenidos</h2>
+<ol>
+  <li>Qué es ORQO — resumen ejecutivo</li>
+  <li>Topología del sistema (visión general)</li>
+  <li>Stack tecnológico</li>
+  <li>Estructura del repositorio</li>
+  <li>Módulos del Dashboard (v0.9)</li>
+  <li><strong>Motor Core Desacoplado — Clean Architecture <span class="badge-new">NUEVO</span></strong></li>
+  <li><strong>Árbol de directorios del core <span class="badge-new">NUEVO</span></strong></li>
+  <li><strong>Flujo CQRS — ciclo de vida de un mensaje <span class="badge-new">NUEVO</span></strong></li>
+  <li><strong>Ciclo de vida de una Skill o MCP <span class="badge-new">NUEVO</span></strong></li>
+  <li>MongoDB — colecciones</li>
+  <li>Estado actual y roadmap</li>
+</ol>
+<hr>
+
+<!-- 1. QUE ES ORQO -->
+<h2>1. ¿Qué es ORQO?</h2>
+<p>ORQO es un <strong>orquestador multi-agente B2B</strong> que conecta cualquier negocio con sus clientes a través de WhatsApp, ejecutando acciones reales sobre sistemas externos (WooCommerce, CRMs, calendarios, bases de conocimiento) mediante agentes de IA configurables.</p>
+<div class="note">
+  <strong>Sitio:</strong> orqo.io &nbsp;|&nbsp; <strong>Dashboard:</strong> dashboard.orqo.io &nbsp;|&nbsp; <strong>Soporte:</strong> hello@orqo.io
+</div>
+
+<!-- 2. TOPOLOGIA -->
+<h2>2. Topología del Sistema</h2>
+<table>
+  <tr><th>Capa</th><th>Tecnología</th><th>Dominio</th><th>Deploy</th></tr>
+  <tr><td>Landing Page</td><td>HTML5 / CSS3 / JS Vanilla</td><td>orqo.io</td><td>Vercel</td></tr>
+  <tr><td>Dashboard</td><td>Next.js 16, React 19, TypeScript</td><td>dashboard.orqo.io</td><td>Vercel</td></tr>
+  <tr><td><strong>Core Engine</strong> <span class="badge-new">NUEVO</span></td><td>Node.js 22, TypeScript, Clean Architecture</td><td>API interna</td><td>Railway / Fly.io</td></tr>
+  <tr><td>Base de datos</td><td>MongoDB Atlas</td><td>orqo-cluster-dev</td><td>MongoDB Cloud</td></tr>
+  <tr><td>Mensajería</td><td>Meta WhatsApp Cloud API</td><td>—</td><td>Meta</td></tr>
+  <tr><td>LLM</td><td>Anthropic Claude (claude-sonnet-4-6)</td><td>—</td><td>Anthropic API</td></tr>
+  <tr><td>Servidores MCP</td><td>Procesos Node.js / Python (stdio)</td><td>co-ubicados con Core</td><td>Con el Core</td></tr>
+</table>
+
+<!-- 3. STACK -->
+<h2>3. Stack Tecnológico</h2>
+
+<h3>Core Engine (<code>orqo-core/</code>) — nuevo</h3>
+<table>
+  <tr><th>Componente</th><th>Tecnología</th><th>Propósito</th></tr>
+  <tr><td>Runtime</td><td>Node.js 22 (ESM)</td><td>Ejecución del motor</td></tr>
+  <tr><td>Lenguaje</td><td>TypeScript 5 (strict)</td><td>Tipado estático fuerte</td></tr>
+  <tr><td>LLM SDK</td><td>@anthropic-ai/sdk</td><td>Llamadas a Claude</td></tr>
+  <tr><td>MCP SDK</td><td>@modelcontextprotocol/sdk</td><td>Conexión a servidores MCP</td></tr>
+  <tr><td>DB Driver</td><td>mongodb 7</td><td>Persistencia de conversaciones</td></tr>
+  <tr><td>Validación</td><td>Zod</td><td>Schemas en entrypoints</td></tr>
+  <tr><td>Testing</td><td>Jest + ts-jest</td><td>TDD — unit + integration</td></tr>
+  <tr><td>Patrón de errores</td><td>Result monad (Railway)</td><td>Sin try/catch en Application Layer</td></tr>
+</table>
+
+<!-- 4. ESTRUCTURA DEL REPO -->
+<h2>4. Estructura del Repositorio</h2>
+<pre>
+Orqo/
+├── Landing_Page/           ← HTML estático (orqo.io)
+│   ├── index.html
+│   ├── marca.html
+│   └── changelog.html
+├── orqo-dashboard/         ← Next.js (dashboard.orqo.io)
+│   ├── app/
+│   ├── components/
+│   └── lib/
+├── orqo-core/              ← Motor core (NUEVO) ← ver §7
+│   ├── src/
+│   └── package.json
+└── vercel.json
+</pre>
+
+<!-- 5. DASHBOARD -->
+<h2>5. Módulos del Dashboard (v0.9 — sin cambios)</h2>
+<table>
+  <tr><th>Módulo</th><th>Ruta</th><th>Descripción</th></tr>
+  <tr><td>Autenticación</td><td>/login + /api/auth/*</td><td>Magic Links via Resend + JWT</td></tr>
+  <tr><td>Configuración Widget</td><td>/dashboard/widget</td><td>UI para personalizar el widget embebido</td></tr>
+  <tr><td>Conversaciones</td><td>/dashboard/conversations</td><td>Historial paginado con búsqueda</td></tr>
+  <tr><td>Agentes</td><td>/dashboard/agents</td><td>5 agentes predefinidos configurables</td></tr>
+  <tr><td>Centro de Ayuda</td><td>/dashboard/docs</td><td>Manual / FAQ / Diagnóstico / Logs / Changelog</td></tr>
+  <tr><td>Activity Logs</td><td>/api/admin/logs</td><td>Logs MongoDB (ts/level/source/msg)</td></tr>
+  <tr><td>API Pública</td><td>/api/public/widget</td><td>Config del widget (CORS abierto, no-store)</td></tr>
+</table>
+
+<!-- 6. MOTOR CORE DESACOPLADO -->
+<h2>6. Motor Core Desacoplado — Clean Architecture <span class="badge-new">NUEVO</span></h2>
+
+<h3>6.1 Principios Rectores</h3>
+<table>
+  <tr><th>Principio</th><th>Aplicación en ORQO Core</th></tr>
+  <tr><td><strong>S</strong>ingle Responsibility</td><td>Cada clase tiene una sola razón para cambiar. Handler solo orquesta; Aggregate solo contiene lógica de dominio; Gateway solo habla con APIs externas.</td></tr>
+  <tr><td><strong>O</strong>pen/Closed</td><td>Agregar una Skill = crear 1 archivo + 1 línea en Container. El core nunca se modifica. Ver §9.</td></tr>
+  <tr><td><strong>L</strong>iskov Substitution</td><td>ClaudeLlmGateway, OpenAILlmGateway, MockLlmGateway son intercambiables porque todas implementan ILlmGateway.</td></tr>
+  <tr><td><strong>I</strong>nterface Segregation</td><td>ISkill, ILlmGateway, IMcpGateway, IWhatsAppGateway son interfaces pequeñas y focalizadas.</td></tr>
+  <tr><td><strong>D</strong>ependency Inversion</td><td>Application Layer depende de interfaces. Implementaciones concretas solo en Infrastructure. El Container (Composition Root) es el único lugar de acoplamiento.</td></tr>
+</table>
+
+<h3>6.2 Capas de la Arquitectura</h3>
+<div class="note">
+  <strong>Regla de dependencia:</strong> Las flechas van siempre hacia adentro. Domain no depende de nadie. Application depende solo de Domain. Infrastructure implementa los puertos definidos por Application y Domain.
+</div>
+
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│                    INFRASTRUCTURE                           │
+│  ClaudeLlmGateway │ StdioMcpGateway │ MetaWhatsAppGateway  │
+│  MongoConversationRepository │ SkillRegistry               │
+│  Skills/catalog/* │ Container (Composition Root)           │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │                   APPLICATION                         │  │
+│  │  ProcessIncomingMessageHandler (comando central)      │  │
+│  │  AgentOrchestrationService                            │  │
+│  │  CommandBus │ QueryBus │ EventBus                     │  │
+│  │  Ports: ILlmGateway │ IMcpGateway │ ISkillRegistry    │  │
+│  │  ┌─────────────────────────────────────────────────┐  │  │
+│  │  │                  DOMAIN                         │  │  │
+│  │  │  Conversation (Aggregate Root)                  │  │  │
+│  │  │  Message, Agent, Workspace (Entities)           │  │  │
+│  │  │  PhoneNumber (Value Object)                     │  │  │
+│  │  │  MessageReceived, AgentResponseGenerated        │  │  │
+│  │  │  (Domain Events)                                │  │  │
+│  │  │  ISkill, SkillManifest (contratos de Skill)     │  │  │
+│  │  │  IConversationRepository (puerto de repo)       │  │  │
+│  │  └─────────────────────────────────────────────────┘  │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+         ▲ entrypoints/webhook.ts (HTTP → CommandBus)
+</pre>
+
+<h3>6.3 Dominio (Domain Layer)</h3>
+<p>El dominio es el núcleo del sistema. No tiene dependencias externas — solo TypeScript puro.</p>
+<table>
+  <tr><th>Concepto DDD</th><th>Clase</th><th>Responsabilidad</th></tr>
+  <tr><td>Aggregate Root</td><td><code>Conversation</code></td><td>Gestiona el ciclo de vida de una conversación. Genera Domain Events. Encapsula invariantes de negocio.</td></tr>
+  <tr><td>Entity</td><td><code>Message</code>, <code>Agent</code>, <code>Workspace</code></td><td>Identidad por ID. Mutan a lo largo de su ciclo de vida.</td></tr>
+  <tr><td>Value Object</td><td><code>PhoneNumber</code></td><td>Inmutable. Igualdad por valor. Valida y normaliza al construirse.</td></tr>
+  <tr><td>Domain Event</td><td><code>MessageReceived</code>, <code>AgentResponseGenerated</code></td><td>Hechos inmutables del dominio. Se publican DESPUÉS de persistir.</td></tr>
+  <tr><td>Repository Port</td><td><code>IConversationRepository</code></td><td>Interfaz definida en dominio, implementada en Infrastructure.</td></tr>
+  <tr><td>Skill Contract</td><td><code>ISkill</code>, <code>SkillManifest</code></td><td>THE abstracción central para extensibilidad.</td></tr>
+</table>
+
+<h3>6.4 Aplicación (Application Layer)</h3>
+<p>Orquesta el dominio. No tiene lógica de negocio. Depende solo de interfaces (puertos).</p>
+<table>
+  <tr><th>Componente</th><th>Tipo</th><th>Responsabilidad</th></tr>
+  <tr><td><code>ProcessIncomingMessageHandler</code></td><td>Command Handler</td><td>Caso de uso central. Orquesta: validar → cargar conversación → orquestar → persistir → enviar → publicar eventos.</td></tr>
+  <tr><td><code>AgentOrchestrationService</code></td><td>Application Service</td><td>Loop de razonamiento: pre-filtrar Skills → llamar LLM → ejecutar tools → síntesis.</td></tr>
+  <tr><td><code>CommandBus</code> / <code>QueryBus</code></td><td>CQRS Infrastructure</td><td>Desacopla emisores de comandos/queries de sus handlers.</td></tr>
+  <tr><td><code>ILlmGateway</code> / <code>IMcpGateway</code> / <code>IWhatsAppGateway</code></td><td>Puertos (Ports)</td><td>Abstracciones de las dependencias externas. Nunca se importan implementaciones concretas aquí.</td></tr>
+  <tr><td><code>ISkillRegistry</code></td><td>Puerto</td><td>Catálogo de Skills disponibles. El handler nunca sabe qué Skills existen.</td></tr>
+</table>
+
+<h3>6.5 Infraestructura (Infrastructure Layer)</h3>
+<p>Implementa los puertos. Único lugar con dependencias externas (npm packages, APIs, DBs).</p>
+<table>
+  <tr><th>Adaptador</th><th>Puerto que implementa</th><th>Tecnología</th></tr>
+  <tr><td><code>ClaudeLlmGateway</code></td><td><code>ILlmGateway</code></td><td>@anthropic-ai/sdk</td></tr>
+  <tr><td><code>StdioMcpGateway</code></td><td><code>IMcpGateway</code></td><td>@modelcontextprotocol/sdk</td></tr>
+  <tr><td><code>MetaWhatsAppGateway</code></td><td><code>IWhatsAppGateway</code></td><td>Meta Graph API (fetch)</td></tr>
+  <tr><td><code>MongoConversationRepository</code></td><td><code>IConversationRepository</code></td><td>mongodb driver</td></tr>
+  <tr><td><code>MongoAgentRepository</code></td><td><code>IAgentRepository</code></td><td>mongodb driver</td></tr>
+  <tr><td><code>SkillRegistry</code></td><td><code>ISkillRegistry</code></td><td>TypeScript puro (Map)</td></tr>
+  <tr><td><code>Container</code></td><td>Composition Root</td><td>DI manual — instancia y conecta todo</td></tr>
+</table>
+
+<!-- 7. ARBOL DE DIRECTORIOS -->
+<h2>7. Árbol de Directorios — orqo-core/ <span class="badge-new">NUEVO</span></h2>
+
+<pre>
+orqo-core/
+├── package.json
+├── tsconfig.json
+├── jest.config.ts
+└── src/
+    ├── shared/                        ← Primitivas compartidas por todas las capas
+    │   ├── Result.ts                  ← Monad Result (Ok/Err) — Railway-Oriented
+    │   ├── DomainEvent.ts             ← Base abstract de Domain Events
+    │   ├── EventBus.ts                ← IEventBus + InMemoryEventBus
+    │   ├── CommandBus.ts              ← ICommandBus + InMemoryCommandBus
+    │   └── QueryBus.ts               ← IQueryBus + InMemoryQueryBus
+    │
+    ├── domain/                        ← NÚCLEO — cero dependencias externas
+    │   ├── conversation/
+    │   │   ├── entities/
+    │   │   │   ├── Conversation.ts    ← Aggregate Root ★
+    │   │   │   └── Message.ts
+    │   │   ├── value-objects/
+    │   │   │   └── PhoneNumber.ts
+    │   │   ├── events/
+    │   │   │   ├── MessageReceived.ts
+    │   │   │   └── AgentResponseGenerated.ts
+    │   │   ├── repositories/
+    │   │   │   └── IConversationRepository.ts
+    │   │   └── __tests__/
+    │   │       └── Conversation.test.ts
+    │   ├── skill/
+    │   │   ├── ISkill.ts              ← THE contrato de extensibilidad ★★
+    │   │   └── SkillManifest.ts       ← Descriptor de una Skill (incluye MCP config)
+    │   ├── agent/
+    │   │   └── entities/Agent.ts
+    │   └── workspace/
+    │       └── entities/Workspace.ts
+    │
+    ├── application/                   ← Casos de uso — solo interfaces, sin I/O
+    │   ├── commands/
+    │   │   └── process-message/       ← Caso de uso central ★
+    │   │       ├── ProcessIncomingMessageCommand.ts
+    │   │       ├── ProcessIncomingMessageHandler.ts
+    │   │       └── __tests__/
+    │   │           └── ProcessIncomingMessageHandler.test.ts
+    │   ├── queries/
+    │   │   └── get-conversation/
+    │   │       ├── GetConversationQuery.ts
+    │   │       └── GetConversationHandler.ts
+    │   ├── ports/                     ← Interfaces de dependencias externas
+    │   │   ├── ISkillRegistry.ts
+    │   │   ├── ILlmGateway.ts
+    │   │   ├── IMcpGateway.ts
+    │   │   ├── IWhatsAppGateway.ts
+    │   │   └── IAgentRepository.ts
+    │   └── services/
+    │       └── AgentOrchestrationService.ts   ← Loop de razonamiento ★
+    │
+    ├── infrastructure/                ← Implementaciones concretas
+    │   ├── skills/
+    │   │   ├── SkillRegistry.ts
+    │   │   └── catalog/               ← Cada Skill en su propio directorio
+    │   │       ├── woocommerce-orders/
+    │   │       │   └── WooCommerceOrderSkill.ts
+    │   │       ├── support-faq/
+    │   │       │   └── SupportFaqSkill.ts
+    │   │       ├── booking-calendly/  ← próxima
+    │   │       └── lead-capture/      ← próxima
+    │   ├── mcp/
+    │   │   └── StdioMcpGateway.ts     ← Transporte stdio para MCP
+    │   ├── llm/
+    │   │   └── ClaudeLlmGateway.ts    ← Anthropic SDK
+    │   ├── persistence/
+    │   │   ├── MongoConversationRepository.ts
+    │   │   └── MongoAgentRepository.ts
+    │   ├── messaging/
+    │   │   └── MetaWhatsAppGateway.ts ← Meta Graph API
+    │   └── container/
+    │       └── Container.ts           ← Composition Root (DI manual)
+    │
+    └── entrypoints/
+        └── webhook.ts                 ← HTTP server: convierte payload → Command
+</pre>
+
+<!-- 8. FLUJO CQRS -->
+<h2>8. Flujo CQRS — Ciclo de vida de un mensaje entrante <span class="badge-new">NUEVO</span></h2>
+
+<h3>8.1 Lado de Escritura (Command Side)</h3>
+<pre>
+WhatsApp (usuario)
+    │  POST /webhook/whatsapp  {from, body, id, timestamp}
+    ▼
+entrypoints/webhook.ts
+    │  createProcessIncomingMessageCommand(workspaceId, from, body, ...)
+    ▼
+CommandBus.dispatch(command)
+    │
+    ▼
+ProcessIncomingMessageHandler.handle(command)
+    │
+    ├─ 1. PhoneNumber.create(from)            ← Value Object valida E.164
+    │
+    ├─ 2. agentRepo.findActiveByWorkspace()   ← ¿hay agente configurado?
+    │
+    ├─ 3. conversationRepo.findByPhone()      ← cargar historial existente
+    │      └── si null → Conversation.create()   ← nuevo aggregate
+    │
+    ├─ 4. conversation.receiveUserMessage()   ← muta aggregate + emite evento
+    │
+    ├─ 5. AgentOrchestrationService.generateResponse(conversation, agent)
+    │      │
+    │      ├─ skillRegistry.findCapable(context)   ← pre-filtro sin LLM
+    │      │
+    │      ├─ llmGateway.complete(history, tools)  ← 1ª llamada: ¿qué tool usar?
+    │      │
+    │      ├─ [sin tool calls] → devolver content directamente
+    │      │
+    │      └─ [con tool calls] →
+    │           ├─ skill.manifest.mcpServer?
+    │           │    ├─ sí → mcpGateway.connect() → callTool() → disconnect()
+    │           │    └─ no → skill.execute(context)
+    │           │
+    │           └─ llmGateway.complete(history + tool_results)  ← 2ª llamada: síntesis
+    │
+    ├─ 6. conversation.addAgentResponse()     ← muta aggregate + emite evento
+    │
+    ├─ 7. conversationRepo.save(conversation) ← persistir ANTES de enviar
+    │
+    ├─ 8. whatsappGateway.sendMessage()       ← enviar al canal
+    │
+    └─ 9. eventBus.publishAll(events)         ← MessageReceived + AgentResponseGenerated
+</pre>
+
+<h3>8.2 Lado de Lectura (Query Side)</h3>
+<pre>
+Dashboard / Analytics
+    │  GET /conversations?workspaceId=...
+    ▼
+QueryBus.ask(GetConversationQuery)
+    │
+    ▼
+GetConversationHandler.handle(query)
+    │
+    ▼
+conversationRepo.findRecent(workspaceId, limit)
+    │
+    ▼
+ConversationDTO[]  ←  sin Domain Events, sin side effects
+</pre>
+
+<div class="note">
+  <strong>CQRS en ORQO:</strong> Los Commands mutan estado y emiten Domain Events. Las Queries solo leen — sin efectos. Los modelos de lectura pueden ser proyecciones optimizadas de MongoDB independientes del Aggregate.
+</div>
+
+<!-- 9. CICLO DE VIDA SKILL/MCP -->
+<h2>9. Ciclo de Vida de una Skill o Servidor MCP <span class="badge-new">NUEVO</span></h2>
+
+<h3>9.1 Principio Open/Closed en la práctica</h3>
+<div class="note">
+  <strong>Regla:</strong> Agregar nueva funcionalidad = crear archivo(s) nuevo(s). Nunca modificar el core (AgentOrchestrationService, ProcessIncomingMessageHandler, SkillRegistry).
+</div>
+
+<h3>9.2 Cómo agregar una Skill pura (sin MCP)</h3>
+<p><strong>Caso:</strong> Queremos que ORQO consulte disponibilidad de citas en Calendly.</p>
+<ol>
+  <li>Crear <code>src/infrastructure/skills/catalog/booking-calendly/CalendlyBookingSkill.ts</code></li>
+  <li>Implementar la interfaz <code>ISkill</code>:
+<pre>
+export class CalendlyBookingSkill implements ISkill {
+  readonly manifest: SkillManifest = {
+    id: 'booking-calendly',
+    name: 'Reservas Calendly',
+    description: 'Consulta disponibilidad y agenda citas en Calendly...',
+    version: '1.0.0',
+    triggers: [
+      { type: 'keyword', value: 'cita' },
+      { type: 'keyword', value: 'reserva' },
+      { type: 'keyword', value: 'agendar' },
+    ],
+    // Sin mcpServer → lógica en execute()
+  };
+
+  canHandle(ctx: SkillContext): boolean { /* check keywords */ }
+
+  async execute(ctx: SkillContext): Promise&lt;Result&lt;SkillResult&gt;&gt; {
+    const slots = await calendlyApi.getAvailability(...);
+    return Ok({ content: formatSlots(slots) });
+  }
+}
+</pre>
+  </li>
+  <li>En <code>Container.ts</code>, añadir <strong>una línea</strong>:
+<pre>
+skillRegistry.register(new CalendlyBookingSkill(process.env.CALENDLY_TOKEN));
+</pre>
+  </li>
+</ol>
+<div class="note"><strong>Resultado:</strong> El LLM ahora ofrece esta herramienta cuando detecta intención de reserva. El handler, el servicio de orquestación y el registry no cambiaron.</div>
+
+<h3>9.3 Cómo agregar una Skill respaldada por MCP</h3>
+<p><strong>Caso:</strong> Queremos conectar un servidor MCP de WooCommerce ya existente.</p>
+<ol>
+  <li>El servidor MCP es un proceso independiente (Node.js / Python) que expone tools via stdio.</li>
+  <li>Crear <code>WooCommerceInventorySkill.ts</code> con <code>mcpServer</code> en el manifest:
+<pre>
+mcpServer: {
+  transport: 'stdio',
+  command: 'node',
+  args: ['./mcp-servers/woocommerce-inventory/index.js'],
+  env: { WC_URL: process.env.WC_URL, WC_KEY: process.env.WC_KEY }
+}
+</pre>
+  </li>
+  <li>Registrar en Container. La <code>AgentOrchestrationService</code> detecta <code>mcpServer</code> y delega automáticamente al <code>StdioMcpGateway</code>.</li>
+</ol>
+
+<h3>9.4 Cómo agregar un nuevo transporte MCP (SSE / HTTP)</h3>
+<ol>
+  <li>Crear <code>SseMcpGateway.ts</code> que implemente <code>IMcpGateway</code>.</li>
+  <li>En <code>Container.ts</code>: reemplazar <code>new StdioMcpGateway()</code> por <code>new SseMcpGateway()</code>.</li>
+  <li>Las Skills con <code>transport: 'sse'</code> funcionan automáticamente.</li>
+</ol>
+
+<h3>9.5 Cómo cambiar de Claude a otro LLM</h3>
+<ol>
+  <li>Crear <code>OpenAILlmGateway.ts</code> que implemente <code>ILlmGateway</code>.</li>
+  <li>En Container: <code>const llmGateway = new OpenAILlmGateway();</code></li>
+  <li>Cero cambios en Application Layer o Domain.</li>
+</ol>
+
+<h3>9.6 Tabla resumen de puntos de extensión</h3>
+<table>
+  <tr><th>Qué agregar</th><th>Dónde</th><th>Qué cambia en el core</th></tr>
+  <tr><td>Nueva Skill (pura)</td><td><code>skills/catalog/&lt;nombre&gt;/</code> + Container.ts (1 línea)</td><td>Nada</td></tr>
+  <tr><td>Nueva Skill (MCP-backed)</td><td>Lo mismo + proceso MCP separado</td><td>Nada</td></tr>
+  <tr><td>Nuevo servidor MCP</td><td>Solo en la Skill que lo usa (manifest.mcpServer)</td><td>Nada</td></tr>
+  <tr><td>Nuevo transporte MCP</td><td>Nueva clase que implementa IMcpGateway</td><td>Nada</td></tr>
+  <tr><td>Nuevo LLM</td><td>Nueva clase que implementa ILlmGateway</td><td>Nada</td></tr>
+  <tr><td>Nuevo canal (Telegram, Instagram)</td><td>Nueva clase que implementa IWhatsAppGateway</td><td>Nada</td></tr>
+  <tr><td>Nueva base de datos</td><td>Nuevos repositorios que implementan IXxxRepository</td><td>Nada</td></tr>
+</table>
+
+<!-- 10. MONGODB -->
+<h2>10. Colecciones MongoDB</h2>
+<table>
+  <tr><th>Colección</th><th>Propósito</th><th>Campos clave</th></tr>
+  <tr><td><code>conversations</code></td><td>Historial de conversaciones (aggregate)</td><td>_id, workspaceId, phoneNumber, agentId, messages[], createdAt</td></tr>
+  <tr><td><code>agents</code></td><td>Configuración de agentes por workspace</td><td>_id, workspaceId, systemPrompt, enabledSkillIds[], active</td></tr>
+  <tr><td><code>widget_config</code></td><td>Config del widget embebido (singleton)</td><td>widgetId, accentColor, soundEnabled, interactionLimit, ...</td></tr>
+  <tr><td><code>activity_logs</code></td><td>Logs del sistema</td><td>ts, level, source, msg, detail</td></tr>
+  <tr><td><code>users</code></td><td>Usuarios del dashboard</td><td>email, name, createdAt</td></tr>
+  <tr><td><code>auth_tokens</code></td><td>Magic link tokens pendientes</td><td>email, token, expiresAt</td></tr>
+</table>
+
+<!-- 11. ESTADO Y ROADMAP -->
+<h2>11. Estado Actual y Roadmap</h2>
+
+<h3>v0.9 — completado (30 marzo 2026)</h3>
+<ul>
+  <li>Landing page + widget embebido (orqo.io)</li>
+  <li>Dashboard completo (autenticación, widget config, agentes, conversaciones, logs)</li>
+  <li>CORS resuelto (proxy.ts whitelist)</li>
+  <li>Tema claro/oscuro funcional (inyección de style tag)</li>
+  <li>Sonido de notificación (Web Audio API)</li>
+  <li>Centro de ayuda con diagnóstico en tiempo real</li>
+</ul>
+
+<h3>v1.0 — en diseño (este documento)</h3>
+<ul>
+  <li>Core engine desacoplado (Clean Architecture + DDD + CQRS)</li>
+  <li>ISkill + SkillRegistry (sistema de extensibilidad)</li>
+  <li>MCP Gateway (stdio transport)</li>
+  <li>TDD: ProcessIncomingMessageHandler + Conversation aggregate</li>
+  <li>Container (Composition Root + DI manual)</li>
+</ul>
+
+<h3>v1.1 — próximas iteraciones</h3>
+<ul>
+  <li>Plugin WordPress (conector MCP al sitio)</li>
+  <li>Integración WhatsApp Business API real</li>
+  <li>Skills: Calendly, WooCommerce Inventory, Lead Capture</li>
+  <li>Multi-tenant (workspaces aislados)</li>
+  <li>Panel de conversaciones en tiempo real (SSE)</li>
+  <li>Billing y planes</li>
+</ul>
+
+<hr>
+<p class="meta" style="text-align:center;">
+  ORQO v2.0 Architecture Document &nbsp;|&nbsp; Bacata Digital Media &nbsp;|&nbsp; hello@orqo.io<br>
+  30 de marzo de 2026 — Confidencial
+</p>
+
+</body>
+</html>

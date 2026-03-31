@@ -2350,13 +2350,40 @@ function sendMessage(override) {
   appendBubble('user', text, m.timestamp, true);
   ta.value = ''; ta.style.height = 'auto';
   updateTokenUI(); showTyping();
-  setTimeout(() => {
+  (async () => {
+    const reply = await getBotReplyFromApi(activeConvId, text, conv.messages);
     removeTyping();
-    addBotMsg(activeConvId, getBotReply(text));
+    addBotMsg(activeConvId, reply || getBotReply(text));
     updateTokenUI(); renderHome();
     const dot = document.getElementById('tab-msgs-dot');
     if (dot) dot.style.display = 'none';
-  }, 900 + Math.random() * 700);
+  })();
+}
+
+async function getBotReplyFromApi(convId, userText, messages) {
+  try {
+    const history = (messages || [])
+      .slice(0, -1)
+      .filter(m => m.role === 'user' || m.role === 'bot')
+      .map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.content }))
+      .slice(-12);
+
+    const res = await fetch('https://dashboard.orqo.io/api/widget/reply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        visitorId: convId || `v_${Date.now()}`,
+        message: userText,
+        history,
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+    return String(data?.reply || '').trim();
+  } catch (e) {
+    console.warn('[ORQO] widget reply fallback local:', e?.message || e);
+    return '';
+  }
 }
 
 function getBotReply(txt) {
@@ -2598,21 +2625,23 @@ if (S.convs().length > 0) {
       if (ta) ta.placeholder = cfg.placeholder;
     }
 
-    // 3. Colores CSS
-    const root = document.documentElement;
-    if (cfg.accentColor) root.style.setProperty('--acc', cfg.accentColor);
-    // Theme-sensitive widget colors: scope to widget only to avoid breaking landing light background.
+    // 3. Colores y tema del widget (scope local al widget)
+    const widgetEl = document.getElementById('orqo-widget');
+    if (cfg.accentColor && widgetEl) widgetEl.style.setProperty('--acc', cfg.accentColor);
+    // Theme-sensitive colors scoped to widget so landing theme is not forced
     {
       const darkBg      = cfg.darkBg      || '#0B100D';
       const darkSurface = cfg.darkSurface || '#111812';
       const lightBg     = cfg.lightBg     || '#F4F7F4';
       const lightSurface= cfg.lightSurface|| '#FFFFFF';
-      const widgetRoot = document.getElementById('orqo-widget');
+      let styleEl = document.getElementById('orqo-theme-vars');
+      if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'orqo-theme-vars'; document.head.appendChild(styleEl); }
+      styleEl.textContent = `#orqo-widget{--g00:${darkBg};--g01:${darkSurface}}#orqo-widget[data-theme="light"]{--g00:${lightBg};--g01:${lightSurface}}`;
       const applyWidgetThemeVars = (theme) => {
-        if (!widgetRoot) return;
-        const isLight = theme === 'light';
-        widgetRoot.style.setProperty('--g00', isLight ? lightBg : darkBg);
-        widgetRoot.style.setProperty('--g01', isLight ? lightSurface : darkSurface);
+        if (!widgetEl) return;
+        const mode = String(cfg.themeMode || 'auto').toLowerCase();
+        const resolved = (mode === 'light' || mode === 'dark') ? mode : (theme === 'light' ? 'light' : 'dark');
+        widgetEl.setAttribute('data-theme', resolved);
       };
       window.__orqoApplyWidgetThemeVars = applyWidgetThemeVars;
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
