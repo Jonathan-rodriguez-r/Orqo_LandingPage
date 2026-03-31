@@ -4,6 +4,25 @@ Todos los cambios notables de este proyecto estÃ¡n documentados aquÃ­.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
+## [0.5.0] - 2026-03-31
+
+### Landing + Centro de Ayuda Enterprise
+
+**Agregado**
+- `Landing_Page/index.html`: nueva seccion `#centro-ayuda` con manual interactivo por pasos y FAQ util orientado a operacion real.
+- Navegacion de landing actualizada para incluir acceso directo a Centro de ayuda.
+- Animacion visual tipo pantallazo operativo para mejorar onboarding comercial y tecnico.
+
+**Cambiado**
+- `Landing_Page/changelog.html`: nueva release `v1.6` documentando mejoras de manual/FAQ y experiencia de ayuda.
+- `orqo-dashboard/app/dashboard/docs/page.tsx`: Centro de ayuda redisenado con:
+  - Manual en formato guiado (selector de pasos + panel principal).
+  - FAQ con buscador y filtros por rol.
+  - Diagnostico enriquecido con checks locales del navegador + checks de servidor.
+  - Vista de changelog en layout de tarjetas para lectura ejecutiva.
+- `orqo-dashboard/CHANGELOG.md`: nueva version `1.7.0` con historial formal del upgrade de ayuda.
+
+---
 ## [0.4.0] - 2026-03-31
 
 ### Dashboard - Orquestacion real y vinculacion por agente

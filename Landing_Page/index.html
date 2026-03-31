@@ -927,6 +927,140 @@ footer {
   .cta-block { padding: 3rem 1.5rem; }
 }
 
+/* HELP CENTER */
+.help-shell {
+  display: grid;
+  grid-template-columns: minmax(230px, 320px) minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 2.2rem;
+}
+.help-manual-nav {
+  background: var(--g01);
+  border: 1px solid var(--g03);
+  border-radius: var(--radius-lg);
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.help-manual-lbl {
+  font-family: var(--f-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.14em;
+  color: var(--g04);
+  text-transform: uppercase;
+  margin: 0.2rem 0 0.35rem;
+}
+.help-manual-btn {
+  width: 100%;
+  text-align: left;
+  background: var(--g00);
+  border: 1px solid var(--g03);
+  color: var(--g06);
+  border-radius: 10px;
+  padding: 0.65rem 0.7rem;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s, color 0.15s;
+}
+.help-manual-btn:hover { border-color: var(--g04); transform: translateX(2px); color: var(--g07); }
+.help-manual-btn.active {
+  border-color: rgba(44,185,120,0.45);
+  color: var(--acc);
+  background: rgba(44,185,120,0.08);
+}
+.help-manual-card {
+  background: var(--g01);
+  border: 1px solid var(--g03);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.help-manual-head {
+  border: 1px solid var(--g03);
+  border-radius: 12px;
+  padding: 0.95rem;
+  background: linear-gradient(180deg, rgba(44,185,120,0.1), rgba(44,185,120,0.02));
+}
+.help-manual-title {
+  font-family: var(--f-disp);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--g08);
+  margin-bottom: 0.35rem;
+}
+.help-manual-body {
+  color: var(--g05);
+  font-size: 0.84rem;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+.help-shot {
+  border: 1px solid var(--g03);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(17,24,18,0.96), rgba(11,16,13,0.96));
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 0.5rem;
+  min-height: 170px;
+}
+.help-shot-col { display: grid; gap: 0.45rem; }
+.help-shot-box {
+  border-radius: 8px;
+  border: 1px solid rgba(44,185,120,0.2);
+  background: rgba(44,185,120,0.08);
+}
+.help-shot-box.strong { background: rgba(44,185,120,0.18); }
+.help-shot-bars {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 6px;
+  align-items: end; height: 56px; margin-top: auto;
+}
+.help-shot-bars span {
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(44,185,120,0.3), rgba(44,185,120,0.92));
+}
+.help-faq-grid {
+  margin-top: 1.1rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(260px,1fr));
+  gap: 0.75rem;
+}
+.help-faq-item {
+  background: var(--g01);
+  border: 1px solid var(--g03);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.help-faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0.85rem 0.95rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--g07);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.help-faq-item summary::-webkit-details-marker { display: none; }
+.help-faq-item summary::after { content: '+'; color: var(--g05); font-weight: 700; }
+.help-faq-item[open] summary::after { content: '−'; color: var(--acc); }
+.help-faq-answer {
+  border-top: 1px solid var(--g03);
+  padding: 0.85rem 0.95rem;
+  color: var(--g05);
+  font-size: 0.82rem;
+  line-height: 1.7;
+}
+@media (max-width: 980px) {
+  .help-shell { grid-template-columns: 1fr; }
+}
+
 /* Widget styles now come from dashboard.orqo.io/widget.js */
 </style>
 </head>
@@ -948,6 +1082,7 @@ footer {
   <ul class="nav-links" id="nav-links">
     <li><a href="#como-funciona" onclick="closeNav()">Cómo funciona</a></li>
     <li><a href="#wordpress" onclick="closeNav()">WordPress</a></li>
+    <li><a href="#centro-ayuda" onclick="closeNav()">Centro de ayuda</a></li>
     <li><a href="#casos" onclick="closeNav()">Casos de uso</a></li>
     <li><a href="#contacto" class="nav-cta" onclick="closeNav()">Agendar demo</a></li>
     <li><a href="https://dashboard.orqo.io" class="nav-cta" style="background:transparent;border:1px solid var(--g04);color:var(--g06)!important;">Ingresar →</a></li>
@@ -1410,6 +1545,75 @@ footer {
 
 <div class="divider"></div>
 
+<!-- ══ CENTRO DE AYUDA ══ -->
+<section id="centro-ayuda">
+  <span class="section-eyebrow">Centro de ayuda</span>
+  <h2 class="section-title reveal">Manual y FAQ listos para equipos de operacion.</h2>
+  <p class="section-sub reveal">Guia en pasos, respuestas por rol y recorrido visual para que cada cliente configure ORQO con criterio empresarial.</p>
+
+  <div class="help-shell reveal">
+    <div class="help-manual-nav">
+      <div class="help-manual-lbl">Ruta guiada</div>
+      <button class="help-manual-btn active" data-help-step="0">1. Activar cuenta y branding</button>
+      <button class="help-manual-btn" data-help-step="1">2. Configurar widget base</button>
+      <button class="help-manual-btn" data-help-step="2">3. Crear agentes con preview real</button>
+      <button class="help-manual-btn" data-help-step="3">4. Publicar script y validar logs</button>
+      <button class="help-manual-btn" data-help-step="4">5. Medir resultados en informes</button>
+    </div>
+
+    <div class="help-manual-card">
+      <div class="help-manual-head">
+        <div class="help-manual-title" id="help-step-title">1. Activar cuenta y branding</div>
+        <div class="help-manual-body" id="help-step-body">Configura nombre de la cuenta, logo y colores del portal. Define responsables operativos y destinatarios de alertas para iniciar con control desde el primer dia.</div>
+      </div>
+
+      <div class="help-shot" aria-hidden="true">
+        <div class="help-shot-col">
+          <div class="help-shot-box strong"></div>
+          <div class="help-shot-box"></div>
+        </div>
+        <div class="help-shot-col">
+          <div class="help-shot-box" style="height:22px;"></div>
+          <div class="help-shot-box" style="height:22px;"></div>
+          <div class="help-shot-box" style="height:22px;width:70%;"></div>
+          <div class="help-shot-bars">
+            <span style="height:42%;"></span>
+            <span style="height:58%;"></span>
+            <span style="height:36%;"></span>
+            <span style="height:69%;"></span>
+            <span style="height:52%;"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="help-faq-grid reveal">
+    <details class="help-faq-item">
+      <summary>Que validar antes de pegar el script del widget?</summary>
+      <div class="help-faq-answer">Confirma agente activo, canal Web Widget habilitado, token vigente y modelo con fallback. Luego valida que cada intento se refleje en Logs y Conversaciones.</div>
+    </details>
+    <details class="help-faq-item">
+      <summary>Como diferenciar error de API key vs error de cuota?</summary>
+      <div class="help-faq-answer">Clasifica por codigo: <strong>invalid_api_key</strong> indica credencial invalida; <strong>quota_exceeded</strong> indica limite de consumo. Ambos deben disparar alerta operativa.</div>
+    </details>
+    <details class="help-faq-item">
+      <summary>Se puede borrar una conversacion sin perder trazabilidad?</summary>
+      <div class="help-faq-answer">Si. El borrado debe ser por conversacion y dejar registro de auditoria con actor, fecha y motivo. El contador de interacciones del periodo no debe disminuir por ese borrado.</div>
+    </details>
+    <details class="help-faq-item">
+      <summary>Que informe mostrar a gerencia?</summary>
+      <div class="help-faq-answer">Combina reporte estadistico por rango (KPI exacto) con reporte asistido por IA para insights accionables. Exporta PDF con logo y colores de marca del cliente.</div>
+    </details>
+  </div>
+
+  <div style="text-align:center;margin-top:1.4rem;">
+    <a href="https://dashboard.orqo.io/dashboard/docs" class="btn-secondary" style="display:inline-flex;">Abrir centro de ayuda completo</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- ══ CTA ══ -->
 <section id="contacto" style="padding-bottom:6rem;">
   <div class="cta-block reveal">
@@ -1562,6 +1766,46 @@ function closeNav() {
 document.addEventListener('click', e => {
   const navEl = document.querySelector('nav');
   if (!navEl.contains(e.target)) closeNav();
+});
+
+// Help center mini-manual
+const HELP_STEPS = [
+  {
+    title: '1. Activar cuenta y branding',
+    body: 'Configura nombre de la cuenta, logo y colores del portal. Define responsables operativos y destinatarios de alertas para iniciar con control desde el primer dia.'
+  },
+  {
+    title: '2. Configurar widget base',
+    body: 'Ajusta tema claro/oscuro, posicion, textos de bienvenida, formulario prechat y FAQ de ayuda. Guarda y valida en preview antes de publicar.'
+  },
+  {
+    title: '3. Crear agentes con preview real',
+    body: 'Selecciona modelo principal y fallback. Prueba en preview real para confirmar respuesta dinamica y revisar trazas en logs por cada intento.'
+  },
+  {
+    title: '4. Publicar script y validar logs',
+    body: 'Copia el script generado por agente y pegalo en la web del cliente. Verifica eventos en conversaciones y logs para asegurar orquestacion activa.'
+  },
+  {
+    title: '5. Medir resultados en informes',
+    body: 'Usa reporte estadistico por rango para KPI exacto y reporte IA para resumen gerencial. Exporta PDF/XLS con identidad de marca del cliente.'
+  }
+];
+
+const helpButtons = Array.from(document.querySelectorAll('.help-manual-btn'));
+const helpTitle = document.getElementById('help-step-title');
+const helpBody = document.getElementById('help-step-body');
+
+function setHelpStep(index) {
+  const step = HELP_STEPS[index];
+  if (!step || !helpTitle || !helpBody) return;
+  helpButtons.forEach((btn, i) => btn.classList.toggle('active', i === index));
+  helpTitle.textContent = step.title;
+  helpBody.textContent = step.body;
+}
+
+helpButtons.forEach((btn, i) => {
+  btn.addEventListener('click', () => setHelpStep(i));
 });
 
 // Chat widget is now loaded from dashboard embed script.
