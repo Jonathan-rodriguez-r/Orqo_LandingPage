@@ -1,0 +1,371 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 15">
+<meta name=Originator content="Microsoft Word 15">
+<!--[if gte mso 9]>
+<xml><w:WordDocument><w:View>Print</w:View><w:Zoom>90</w:Zoom></w:WordDocument></xml>
+<![endif]-->
+<style>
+  body {
+    font-family: Calibri, sans-serif;
+    font-size: 11pt;
+    color: #1a1a1a;
+    margin: 2.5cm 2.5cm 2.5cm 2.5cm;
+    line-height: 1.5;
+  }
+  h1 {
+    font-size: 24pt;
+    color: #2CB978;
+    font-weight: bold;
+    margin-bottom: 4pt;
+    margin-top: 0;
+    border-bottom: 2pt solid #2CB978;
+    padding-bottom: 6pt;
+  }
+  h2 {
+    font-size: 14pt;
+    color: #1a1a1a;
+    font-weight: bold;
+    margin-top: 18pt;
+    margin-bottom: 6pt;
+    border-bottom: 0.5pt solid #cccccc;
+    padding-bottom: 3pt;
+  }
+  h3 {
+    font-size: 11pt;
+    color: #2CB978;
+    font-weight: bold;
+    margin-top: 12pt;
+    margin-bottom: 4pt;
+  }
+  p {
+    margin: 4pt 0;
+    font-size: 11pt;
+  }
+  .meta {
+    font-size: 10pt;
+    color: #666666;
+    margin-bottom: 12pt;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin: 8pt 0 12pt 0;
+  }
+  th {
+    background-color: #2CB978;
+    color: white;
+    padding: 6pt 8pt;
+    text-align: left;
+    font-weight: bold;
+  }
+  td {
+    padding: 5pt 8pt;
+    border-bottom: 0.5pt solid #e0e0e0;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td {
+    background-color: #f7f7f7;
+  }
+  .badge {
+    display: inline;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    font-size: 9pt;
+  }
+  .badge-green { background-color: #d4f4e5; color: #1a7a4a; }
+  .badge-blue  { background-color: #dce8ff; color: #2255aa; }
+  .badge-gray  { background-color: #eeeeee; color: #555555; }
+  ul, ol {
+    margin: 4pt 0 8pt 0;
+    padding-left: 18pt;
+  }
+  li { margin-bottom: 2pt; }
+  code {
+    font-family: Consolas, monospace;
+    font-size: 9.5pt;
+    background-color: #f4f4f4;
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+  }
+  .section-note {
+    background-color: #f0faf5;
+    border-left: 3pt solid #2CB978;
+    padding: 6pt 10pt;
+    margin: 8pt 0;
+    font-size: 10pt;
+  }
+  .cover {
+    text-align: center;
+    margin-bottom: 30pt;
+  }
+  .cover img { margin-bottom: 10pt; }
+  .divider {
+    border: none;
+    border-top: 0.5pt solid #e0e0e0;
+    margin: 16pt 0;
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <h1 style="font-size:32pt; border:none; text-align:center;">ORQO</h1>
+  <p style="font-size:14pt; color:#555555; margin:0;">Documento de Arquitectura y Estado del Proyecto</p>
+  <p class="meta" style="margin-top:10pt;">Versión 0.9 &nbsp;|&nbsp; 30 de marzo de 2026 &nbsp;|&nbsp; Bacata Digital Media</p>
+  <p class="meta">Confidencial — uso interno</p>
+</div>
+
+<hr class="divider">
+
+<!-- 1. QUE ES ORQO -->
+<h2>1. ¿Qué es ORQO?</h2>
+<p>ORQO es un <strong>orquestador de agentes de inteligencia artificial</strong> diseñado para sitios WordPress/WooCommerce y páginas web en general, con canal principal de atención por <strong>WhatsApp</strong>. Permite que cualquier negocio conecte su tienda o sitio con un agente conversacional capaz de ejecutar acciones reales: consultar inventario, crear pedidos, gestionar reservas y atender soporte — sin intervención humana.</p>
+
+<div class="section-note">
+  <strong>Sitio web:</strong> orqo.io &nbsp;|&nbsp;
+  <strong>Dashboard:</strong> dashboard.orqo.io &nbsp;|&nbsp;
+  <strong>Soporte:</strong> hello@orqo.io &nbsp;|&nbsp;
+  <strong>WhatsApp:</strong> +57 301 321 1669
+</div>
+
+<!-- 2. ARQUITECTURA GENERAL -->
+<h2>2. Arquitectura General</h2>
+
+<table>
+  <tr><th>Capa</th><th>Tecnología</th><th>Dominio / Ubicación</th><th>Deploy</th></tr>
+  <tr><td>Landing Page</td><td>HTML5 / CSS3 / JavaScript Vanilla</td><td>orqo.io</td><td>Vercel (repo Orqo_LandingPage)</td></tr>
+  <tr><td>Dashboard</td><td>Next.js 16, React 19, TypeScript</td><td>dashboard.orqo.io</td><td>Vercel (repo orqo-dashboard)</td></tr>
+  <tr><td>Base de datos</td><td>MongoDB Atlas</td><td>Cluster: orqo-cluster-dev</td><td>MongoDB Cloud</td></tr>
+  <tr><td>Autenticación</td><td>Magic Links + JWT (jose)</td><td>—</td><td>Resend (email) + MongoDB</td></tr>
+  <tr><td>Widget embebido</td><td>JavaScript Vanilla (inline en index.html)</td><td>orqo.io</td><td>Junto con la landing</td></tr>
+</table>
+
+<h3>Flujo de datos principal</h3>
+<ol>
+  <li>Usuario visita <code>orqo.io</code> → landing carga y ejecuta <code>loadWidgetConfig()</code></li>
+  <li><code>loadWidgetConfig()</code> hace fetch a <code>dashboard.orqo.io/api/public/widget</code></li>
+  <li>API consulta MongoDB <code>widget_config</code> y devuelve configuración (colores, textos, límites)</li>
+  <li>Widget aplica configuración: colores via <code>&lt;style&gt;</code> tag, posición, íconos, sonido</li>
+  <li>Interacciones del usuario → motor de agente → respuesta → sonido de notificación</li>
+  <li>Errores y eventos → MongoDB <code>activity_logs</code> (consultable desde dashboard)</li>
+</ol>
+
+<!-- 3. STACK TECNICO -->
+<h2>3. Stack Tecnológico</h2>
+
+<h3>Landing Page (<code>Landing_Page/</code>)</h3>
+<table>
+  <tr><th>Componente</th><th>Detalle</th></tr>
+  <tr><td>Lenguaje</td><td>HTML5 / CSS3 / JavaScript ES2020 (sin framework)</td></tr>
+  <tr><td>Fuentes</td><td>Google Fonts — Inter</td></tr>
+  <tr><td>Íconos</td><td>SVG inline</td></tr>
+  <tr><td>Audio</td><td>Web Audio API (sin archivos externos)</td></tr>
+  <tr><td>Deploy</td><td>Vercel, <code>outputDirectory: "Landing_Page"</code>, <code>cleanUrls: true</code></td></tr>
+  <tr><td>Archivos principales</td><td><code>index.html</code>, <code>marca.html</code>, <code>changelog.html</code></td></tr>
+</table>
+
+<h3>Dashboard (<code>orqo-dashboard/</code>)</h3>
+<table>
+  <tr><th>Componente</th><th>Detalle</th></tr>
+  <tr><td>Framework</td><td>Next.js 16 (App Router)</td></tr>
+  <tr><td>UI</td><td>React 19 + TypeScript</td></tr>
+  <tr><td>Estilos</td><td>CSS Modules + globals.css (variables CSS)</td></tr>
+  <tr><td>Base de datos</td><td>MongoDB Atlas via driver nativo (<code>mongodb</code>)</td></tr>
+  <tr><td>Autenticación</td><td>Magic Links — Resend (email) + JWT firmado con <code>jose</code></td></tr>
+  <tr><td>Middleware</td><td><code>proxy.ts</code> — protege rutas, whitelist de rutas públicas</td></tr>
+  <tr><td>Variables de entorno</td><td><code>MONGODB_URI</code>, <code>JWT_SECRET</code>, <code>RESEND_API_KEY</code></td></tr>
+</table>
+
+<!-- 4. ESTRUCTURA DEL REPOSITORIO -->
+<h2>4. Estructura del Repositorio</h2>
+
+<table>
+  <tr><th>Ruta</th><th>Descripción</th></tr>
+  <tr><td><code>Landing_Page/index.html</code></td><td>Landing principal (~2.700 líneas). Widget embebido incluido.</td></tr>
+  <tr><td><code>Landing_Page/marca.html</code></td><td>Manual de identidad de marca ORQO.</td></tr>
+  <tr><td><code>Landing_Page/changelog.html</code></td><td>Historial de versiones con diseño timeline.</td></tr>
+  <tr><td><code>vercel.json</code></td><td>Config Vercel landing: outputDirectory + cleanUrls.</td></tr>
+  <tr><td><code>orqo-dashboard/app/dashboard/</code></td><td>Páginas del dashboard (widget, docs, home).</td></tr>
+  <tr><td><code>orqo-dashboard/app/api/</code></td><td>API Routes de Next.js.</td></tr>
+  <tr><td><code>orqo-dashboard/components/</code></td><td>Componentes reutilizables (Sidebar, etc.).</td></tr>
+  <tr><td><code>orqo-dashboard/lib/mongodb.ts</code></td><td>Singleton de conexión MongoDB.</td></tr>
+  <tr><td><code>orqo-dashboard/proxy.ts</code></td><td>Middleware de autenticación global.</td></tr>
+</table>
+
+<!-- 5. MODULOS DESARROLLADOS -->
+<h2>5. Módulos Desarrollados</h2>
+
+<h3>5.1 Autenticación — Magic Links</h3>
+<ul>
+  <li>Ruta: <code>/login</code> (página) + <code>/api/auth/send</code> + <code>/api/auth/verify</code></li>
+  <li>Flujo: usuario ingresa email → Resend envía link firmado con JWT → verify valida token → cookie <code>orqo_auth</code> establecida</li>
+  <li>Protección global via <code>proxy.ts</code>; rutas públicas: <code>/login</code>, <code>/api/auth/*</code>, <code>/api/public/*</code></li>
+</ul>
+
+<h3>5.2 Configuración del Widget</h3>
+<ul>
+  <li>Ruta dashboard: <code>/dashboard/widget</code></li>
+  <li>API privada: <code>/api/config/widget</code> (GET + POST, requiere auth)</li>
+  <li>API pública: <code>/api/public/widget</code> (GET, sin auth, CORS abierto)</li>
+  <li>Persistencia: colección MongoDB <code>widget_config</code></li>
+  <li>Parámetros configurables: título, subtítulo, placeholder, color accent, posición (6 opciones), tema claro/oscuro, opacidades, modo de ícono (ORQO / favicon / foto), límite de interacciones, branding, sonido</li>
+</ul>
+
+<h3>5.3 Widget Embebido (orqo.io)</h3>
+<ul>
+  <li>JavaScript vanilla inline en <code>index.html</code></li>
+  <li>Carga configuración desde API pública al iniciar</li>
+  <li>Aplicación de tema: inyección de <code>&lt;style id="orqo-theme-vars"&gt;</code> (evita conflictos con especificidad CSS inline)</li>
+  <li>Posición dinámica: 6 variantes (bottom-right, bottom-left, bottom-center, top-right, top-left, top-center)</li>
+  <li>Contador de interacciones: límite configurable desde dashboard</li>
+  <li>Sonido de notificación: Web Audio API — acorde dos notas (A5 880Hz + D6 1174.66Hz), sin archivos externos</li>
+  <li>Toggle de sonido: configurable desde dashboard, respetado en runtime</li>
+</ul>
+
+<h3>5.4 Activity Logs</h3>
+<ul>
+  <li>API: <code>/api/admin/logs</code> (GET paginado + DELETE para limpiar)</li>
+  <li>Colección MongoDB: <code>activity_logs</code></li>
+  <li>Schema: <code>{ ts, level: 'info'|'warn'|'error', source, msg, detail }</code></li>
+  <li>Fuentes que escriben logs: <code>/api/public/widget</code>, <code>/api/config/widget</code></li>
+  <li>Máximo 500 entradas (purga automática por antigüedad)</li>
+</ul>
+
+<h3>5.5 Centro de Ayuda (<code>/dashboard/docs</code>)</h3>
+<ul>
+  <li>5 pestañas: Manual de uso | FAQ | Diagnóstico | Logs | Changelog</li>
+  <li><strong>Manual:</strong> guía de inicio rápido en 5 pasos</li>
+  <li><strong>FAQ:</strong> 8 preguntas frecuentes con causas técnicas documentadas</li>
+  <li><strong>Diagnóstico:</strong> tests en tiempo real — CORS, MongoDB, widget activo, auth</li>
+  <li><strong>Logs:</strong> tabla de actividad con filtro por nivel, auto-refresh, botón limpiar</li>
+  <li><strong>Changelog:</strong> historial v0.5 → v0.9 embebido</li>
+</ul>
+
+<!-- 6. MONGODB COLLECTIONS -->
+<h2>6. Colecciones MongoDB</h2>
+
+<table>
+  <tr><th>Colección</th><th>Propósito</th><th>Campos principales</th></tr>
+  <tr><td><code>widget_config</code></td><td>Configuración del widget (singleton)</td><td>widgetId, title, accentColor, position, soundEnabled, interactionLimit, articles[], ...</td></tr>
+  <tr><td><code>activity_logs</code></td><td>Logs de actividad del sistema</td><td>ts, level, source, msg, detail</td></tr>
+  <tr><td><code>magic_links</code></td><td>Tokens de autenticación pendientes</td><td>email, token, expiresAt</td></tr>
+</table>
+
+<!-- 7. API ROUTES -->
+<h2>7. API Routes del Dashboard</h2>
+
+<table>
+  <tr><th>Ruta</th><th>Método</th><th>Auth</th><th>Descripción</th></tr>
+  <tr><td><code>/api/auth/send</code></td><td>POST</td><td>No</td><td>Envía magic link por email</td></tr>
+  <tr><td><code>/api/auth/verify</code></td><td>GET</td><td>No</td><td>Valida token y establece cookie</td></tr>
+  <tr><td><code>/api/public/widget</code></td><td>GET</td><td>No (CORS *)</td><td>Configuración pública del widget</td></tr>
+  <tr><td><code>/api/config/widget</code></td><td>GET / POST</td><td>Sí</td><td>Leer / guardar config del widget</td></tr>
+  <tr><td><code>/api/admin/logs</code></td><td>GET / DELETE</td><td>Sí</td><td>Consultar / limpiar activity logs</td></tr>
+</table>
+
+<!-- 8. PAGINAS DEL LANDING -->
+<h2>8. Secciones del Landing (index.html)</h2>
+
+<table>
+  <tr><th>Sección</th><th>Descripción</th></tr>
+  <tr><td>Hero</td><td>Headline principal + strip de prueba social + CTA</td></tr>
+  <tr><td>Ticker</td><td>Cinta animada con capabilities de ORQO</td></tr>
+  <tr><td>Cómo funciona</td><td>3 pasos: Conecta → ORQO actúa → Resultados</td></tr>
+  <tr><td>WordPress / tu web</td><td>Integración con WordPress y sitios en general</td></tr>
+  <tr><td>Implementación en 3 pasos</td><td>Instala plugin → configura agente → activa</td></tr>
+  <tr><td>Perfiles y skills</td><td>4 cards: E-commerce, Servicios, Restaurantes, SaaS</td></tr>
+  <tr><td>Precios</td><td>Demo / Starter / Pro / Business</td></tr>
+  <tr><td>CTA final</td><td>Llamada a acción + botón de acceso al dashboard</td></tr>
+  <tr><td>Footer</td><td>Links a /marca, /changelog, email, WhatsApp</td></tr>
+</table>
+
+<!-- 9. BUGS RESUELTOS -->
+<h2>9. Bugs Resueltos (sesión actual)</h2>
+
+<table>
+  <tr><th>Bug</th><th>Causa raíz</th><th>Solución</th></tr>
+  <tr>
+    <td>Config del widget no se aplicaba en orqo.io</td>
+    <td><code>proxy.ts</code> redirigía <code>/api/*</code> a login (307), sin cabeceras CORS</td>
+    <td>Agregar <code>/api/public</code> a lista whitelist de rutas públicas</td>
+  </tr>
+  <tr>
+    <td>Tema claro/oscuro no funcionaba</td>
+    <td>Inline styles (<code>element.style.setProperty</code>) superan especificidad CSS — <code>[data-theme="light"]</code> nunca se aplicaba</td>
+    <td>Inyectar <code>&lt;style id="orqo-theme-vars"&gt;</code> con reglas <code>:root</code> y <code>[data-theme="light"]</code></td>
+  </tr>
+  <tr>
+    <td>Footer links 404 (/marca, /changelog)</td>
+    <td><code>vercel.json outputDirectory: "Landing_Page"</code> — archivos fuera de esa carpeta no se sirven</td>
+    <td>Mover archivos a <code>Landing_Page/</code>; usar rutas <code>/marca</code> y <code>/changelog</code></td>
+  </tr>
+  <tr>
+    <td>Contador siempre mostraba 20/20</td>
+    <td><code>const TOTAL_INT = 20</code> hardcodeado — no se actualizaba desde config</td>
+    <td>Cambiar a <code>let TOTAL_INT = 20</code> y actualizar desde <code>cfg.interactionLimit</code></td>
+  </tr>
+  <tr>
+    <td>Config cacheada (cambios no se reflejaban)</td>
+    <td><code>Cache-Control: s-maxage=30</code> en API pública — Vercel CDN servía versión vieja</td>
+    <td>Cambiar a <code>Cache-Control: no-store</code></td>
+  </tr>
+  <tr>
+    <td>Centro de ayuda sin scroll</td>
+    <td>Div contenedor sin <code>flex:1 / overflow-y:auto</code>; <code>dash-main</code> tiene <code>overflow:hidden</code></td>
+    <td>Usar <code>className="dash-content"</code> (definido en globals.css)</td>
+  </tr>
+</table>
+
+<!-- 10. ESTADO ACTUAL -->
+<h2>10. Estado Actual — v0.9 (30 marzo 2026)</h2>
+
+<div class="section-note">
+  El producto está en <strong>fase de lanzamiento activo</strong>. Landing y dashboard son completamente funcionales. El foco de las próximas iteraciones será conectar el motor de agentes real y las integraciones con WordPress/WooCommerce.
+</div>
+
+<h3>Funcionalidades operativas</h3>
+<ul>
+  <li>Landing page completa y desplegada en orqo.io</li>
+  <li>Dashboard en dashboard.orqo.io con autenticación por magic link</li>
+  <li>Widget embebido en orqo.io carga config desde MongoDB via API</li>
+  <li>CORS resuelto entre orqo.io y dashboard.orqo.io</li>
+  <li>Tema claro/oscuro funcional con variables CSS dinámicas</li>
+  <li>Sonido de notificación en respuestas del agente (Web Audio API)</li>
+  <li>Toggle de sonido configurable desde dashboard</li>
+  <li>Centro de ayuda: Manual / FAQ / Diagnóstico / Logs / Changelog</li>
+  <li>Activity logs en MongoDB consultables en tiempo real</li>
+  <li>Manual de identidad de marca en <code>/marca</code></li>
+  <li>Changelog público en <code>/changelog</code></li>
+</ul>
+
+<h3>Pendiente (próximas iteraciones)</h3>
+<ul>
+  <li>Motor de agentes IA real (LLM + MCP)</li>
+  <li>Plugin de WordPress (conector ORQO)</li>
+  <li>Integración WhatsApp Business API</li>
+  <li>Panel de conversaciones en tiempo real</li>
+  <li>Sistema de planes y billing</li>
+  <li>Multi-tenant (múltiples clientes/workspaces)</li>
+</ul>
+
+<!-- 11. EQUIPO / EMPRESA -->
+<h2>11. Empresa</h2>
+<p><strong>Bacata Digital Media</strong> — desarrolladora de ORQO.</p>
+<p>Orgullosamente colombiano. Construido con Next.js, MongoDB y amor por la automatizacion inteligente.</p>
+
+<hr class="divider">
+
+<p class="meta" style="text-align:center;">
+  ORQO v0.9 &nbsp;|&nbsp; Bacata Digital Media &nbsp;|&nbsp; hello@orqo.io &nbsp;|&nbsp; orqo.io<br>
+  Documento generado el 30 de marzo de 2026 — Confidencial
+</p>
+
+</body>
+</html>
