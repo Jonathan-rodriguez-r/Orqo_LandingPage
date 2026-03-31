@@ -2066,6 +2066,8 @@ function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   document.getElementById('theme-ico').innerHTML = theme === 'light' ? MOON_ICO : SUN_ICO;
   localStorage.setItem('orqo_theme', theme);
+  // Keep widget theme vars scoped to the widget only (do not alter landing globals).
+  if (window.__orqoApplyWidgetThemeVars) window.__orqoApplyWidgetThemeVars(theme);
 }
 function toggleTheme() {
   const current = document.documentElement.getAttribute('data-theme') || 'dark';
@@ -2599,15 +2601,22 @@ if (S.convs().length > 0) {
     // 3. Colores CSS
     const root = document.documentElement;
     if (cfg.accentColor) root.style.setProperty('--acc', cfg.accentColor);
-    // Theme-sensitive colors: inject <style> so [data-theme="light"] overrides still work
+    // Theme-sensitive widget colors: scope to widget only to avoid breaking landing light background.
     {
       const darkBg      = cfg.darkBg      || '#0B100D';
       const darkSurface = cfg.darkSurface || '#111812';
       const lightBg     = cfg.lightBg     || '#F4F7F4';
       const lightSurface= cfg.lightSurface|| '#FFFFFF';
-      let styleEl = document.getElementById('orqo-theme-vars');
-      if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'orqo-theme-vars'; document.head.appendChild(styleEl); }
-      styleEl.textContent = `:root{--g00:${darkBg};--g01:${darkSurface}}[data-theme="light"]{--g00:${lightBg};--g01:${lightSurface}}`;
+      const widgetRoot = document.getElementById('orqo-widget');
+      const applyWidgetThemeVars = (theme) => {
+        if (!widgetRoot) return;
+        const isLight = theme === 'light';
+        widgetRoot.style.setProperty('--g00', isLight ? lightBg : darkBg);
+        widgetRoot.style.setProperty('--g01', isLight ? lightSurface : darkSurface);
+      };
+      window.__orqoApplyWidgetThemeVars = applyWidgetThemeVars;
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      applyWidgetThemeVars(currentTheme);
     }
 
     // 4. Opacidad ventana y botón
