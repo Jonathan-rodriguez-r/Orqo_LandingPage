@@ -2623,10 +2623,10 @@ if (S.convs().length > 0) {
       if (ta) ta.placeholder = cfg.placeholder;
     }
 
-    // 3. Colores CSS
-    const root = document.documentElement;
-    if (cfg.accentColor) root.style.setProperty('--acc', cfg.accentColor);
-    // Theme-sensitive colors: inject <style> so [data-theme="light"] overrides still work
+    // 3. Colores y tema del widget (scope local al widget)
+    const widgetEl = document.getElementById('orqo-widget');
+    if (cfg.accentColor && widgetEl) widgetEl.style.setProperty('--acc', cfg.accentColor);
+    // Theme-sensitive colors scoped to widget so landing theme is not forced
     {
       const darkBg      = cfg.darkBg      || '#0B100D';
       const darkSurface = cfg.darkSurface || '#111812';
@@ -2634,7 +2634,12 @@ if (S.convs().length > 0) {
       const lightSurface= cfg.lightSurface|| '#FFFFFF';
       let styleEl = document.getElementById('orqo-theme-vars');
       if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'orqo-theme-vars'; document.head.appendChild(styleEl); }
-      styleEl.textContent = `:root{--g00:${darkBg};--g01:${darkSurface}}[data-theme="light"]{--g00:${lightBg};--g01:${lightSurface}}`;
+      styleEl.textContent = `#orqo-widget{--g00:${darkBg};--g01:${darkSurface}}#orqo-widget[data-theme="light"]{--g00:${lightBg};--g01:${lightSurface}}`;
+      if (widgetEl) {
+        const mode = String(cfg.themeMode || 'auto').toLowerCase();
+        if (mode === 'light' || mode === 'dark') widgetEl.setAttribute('data-theme', mode);
+        else widgetEl.removeAttribute('data-theme');
+      }
     }
 
     // 4. Opacidad ventana y botón
