@@ -1105,13 +1105,40 @@ function sendMessage(override) {
   ta.value = ''; ta.style.height = 'auto';
   updateTokenUI();
   showTyping();
-  setTimeout(() => {
+  (async () => {
+    const reply = await getBotReplyFromApi(activeConvId, text, conv.messages);
     removeTyping();
-    addBotMsg(activeConvId, getBotReply(text));
+    addBotMsg(activeConvId, reply || getBotReply(text));
     updateTokenUI(); renderHome();
     const dot = document.getElementById('tab-msgs-dot');
     if (dot) dot.style.display = 'none';
-  }, 900 + Math.random() * 700);
+  })();
+}
+
+async function getBotReplyFromApi(convId, userText, messages) {
+  try {
+    const history = (messages || [])
+      .slice(0, -1)
+      .filter(m => m.role === 'user' || m.role === 'bot')
+      .map(m => ({ role: m.role === 'bot' ? 'assistant' : 'user', content: m.content }))
+      .slice(-12);
+
+    const res = await fetch('https://dashboard.orqo.io/api/widget/reply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        visitorId: convId || `v_${Date.now()}`,
+        message: userText,
+        history,
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data?.error || `HTTP ${res.status}`);
+    return String(data?.reply || '').trim();
+  } catch (e) {
+    console.warn('[ORQO] widget reply fallback local:', e?.message || e);
+    return '';
+  }
 }
 
 // Demo replies
