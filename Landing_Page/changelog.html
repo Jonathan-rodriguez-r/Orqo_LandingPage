@@ -136,6 +136,61 @@ nav {
   <p class="page-sub">Actualizaciones del sistema ORQO — plataforma web, dashboard y widget embebible.</p>
 
   <div class="timeline">
+    <!-- v1.5 - Marzo 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.5</span>
+        <span class="release-date">Marzo 2026</span>
+        <span class="release-tag tag-feat">Orquestacion IA</span>
+        <span class="release-tag tag-dash">Widget + Agentes</span>
+        <span class="release-tag" style="background:rgba(44,185,120,0.12);border:1px solid rgba(44,185,120,0.3);color:#2CB978;">En produccion</span>
+      </div>
+      <ul class="release-list">
+        <li><strong>Preview real de agente</strong> - la vista Preview en Dashboard ahora usa IA real y modelo activo de orquestacion.</li>
+        <li><strong>Widget conectado a IA real</strong> - el chat embebido deja respuestas estaticas y usa backend de orquestacion.</li>
+        <li><strong>Vinculacion por agente web</strong> - soporte de token por agente para script embebido (`data-agent-token`).</li>
+        <li><strong>Script de embebido guiado</strong> - modal de snippet en Agentes para desplegar en sitios productivos.</li>
+        <li><strong>Trazabilidad operativa</strong> - conversaciones del widget visibles en modulo de conversaciones del dashboard.</li>
+      </ul>
+    </div>
+
+    <!-- v1.4 — Marzo 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.4</span>
+        <span class="release-date">Marzo 2026</span>
+        <span class="release-tag tag-feat">Agentes IA</span>
+        <span class="release-tag tag-dash">Dashboard</span>
+        <span class="release-tag" style="background:rgba(44,185,120,0.12);border:1px solid rgba(44,185,120,0.3);color:#2CB978;">🟢 En producción</span>
+      </div>
+      <ul class="release-list">
+        <li><strong>Módulo de Agentes rediseñado</strong> — interfaz Master-Detail con lista lateral, panel de configuración por bloques (Identidad, Canales, Skills, Avanzado) y simulador de chat en tiempo real.</li>
+        <li><strong>Multi-Agente real</strong> — soporte completo para crear, editar y eliminar múltiples agentes por workspace, persistidos en MongoDB.</li>
+        <li><strong>Orquestación IA</strong> — nueva sección en Configuración para gestionar proveedores (OpenAI, Anthropic, Google, Grok), estrategia multi-modelo (Failover / Round Robin) y límites de tokens.</li>
+        <li><strong>Skills por agente</strong> — sistema de capacidades con 6 categorías y más de 30 skills seleccionables (máx. 8 por agente).</li>
+        <li><strong>Canales por agente</strong> — 6 canales configurables individualmente: WhatsApp, Instagram, Messenger, Web Widget, WooCommerce, Shopify.</li>
+        <li><strong>Configuración Avanzada</strong> — zona horaria, horarios de atención por día, geocercas por país y configuración de escalamiento a humano.</li>
+        <li><strong>API completa</strong> — endpoints REST para CRUD de agentes y configuración de workspace con autenticación multi-tenant.</li>
+      </ul>
+    </div>
+
+    <!-- v1.3 — Marzo 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.3</span>
+        <span class="release-date">Marzo 2026</span>
+        <span class="release-tag tag-feat">UX</span>
+        <span class="release-tag tag-dash">Dashboard</span>
+      </div>
+      <ul class="release-list">
+        <li><strong>Sidebar colapsable</strong> — modo compacto (64px solo íconos) con persistencia en localStorage y transición CSS fluida.</li>
+        <li><strong>Topbar</strong> — ribbon superior con campana de notificaciones (badge de no-leídas, dropdown, marcar leídas), menú de usuario (avatar, tema, logout) y botón de ayuda.</li>
+        <li><strong>Sistema de Feedback</strong> — página estilo MongoDB Ideas con votación, categorías, filtros por estado y gestión de admin.</li>
+        <li><strong>Sesiones</strong> — JWT reducido a 24h, auto-logout por inactividad (4h) con redirección al login.</li>
+        <li><strong>Branding personalizable</strong> — logo del cliente en sidebar (upload ≤512KB o URL), nombre del dashboard configurable.</li>
+        <li><strong>Logs Mobile</strong> — vista de tarjetas en dispositivos móviles; tabla solo en desktop.</li>
+      </ul>
+    </div>
 
     <!-- v1.2 — Marzo 2026 -->
     <div class="release">

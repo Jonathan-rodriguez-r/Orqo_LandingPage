@@ -4,6 +4,22 @@ Todos los cambios notables de este proyecto estÃ¡n documentados aquÃ­.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 
 ---
+## [0.4.0] - 2026-03-31
+
+### Dashboard - Orquestacion real y vinculacion por agente
+
+**Agregado**
+- Preview real de agentes con IA (/api/agents/preview) antes de publicar canales.
+- Endpoint de respuesta de widget real (/api/widget/reply) conectado a proveedores/modelos de orquestacion.
+- Token por agente web (webWidgetToken) para embebido controlado.
+- Modal de script embebible en UI de Agentes con snippet listo para produccion.
+- CHANGELOG.md propio del dashboard y README corporativo con arquitectura y wiki in-repo.
+
+**Cambiado**
+- public/widget.js pasa de respuestas estaticas a respuestas IA reales.
+- Conversaciones del widget se reflejan en conversations para visibilidad operativa.
+
+---
 ## [0.3.1] - 2026-03-31
 
 ### Landing + Widget runtime
