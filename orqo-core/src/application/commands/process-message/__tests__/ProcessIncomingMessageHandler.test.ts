@@ -7,8 +7,10 @@ import type { IEventBus } from '../../../../shared/EventBus.js';
 import type { AgentOrchestrationService } from '../../../services/AgentOrchestrationService.js';
 import { Agent } from '../../../../domain/agent/entities/Agent.js';
 import { Ok, Err } from '../../../../shared/Result.js';
-
-// ── Helpers de mock ───────────────────────────────────────────────────────────
+import type { IConversationLockManager } from '../../../ports/IConversationLockManager.js';
+import type { IConversationSnapshotRepository } from '../../../ports/IConversationSnapshotRepository.js';
+import type { IConversationAuditRepository } from '../../../ports/IConversationAuditRepository.js';
+import type { IOutboundMessageOutbox } from '../../../ports/IOutboundMessageOutbox.js';
 
 function makeConversationRepo(
   overrides: Partial<IConversationRepository> = {},
@@ -37,7 +39,7 @@ function makeOrchestration(
 ): Pick<AgentOrchestrationService, 'generateResponse'> {
   return {
     generateResponse: jest.fn().mockResolvedValue(
-      Ok({ responseText: response, skillUsed: undefined }),
+      Ok({ responseText: response }),
     ),
   } as any;
 }
@@ -58,7 +60,40 @@ function makeEventBus(): IEventBus {
   };
 }
 
-// ── Tests ─────────────────────────────────────────────────────────────────────
+function makeLockManager(): IConversationLockManager {
+  return {
+    acquire: jest.fn().mockResolvedValue(
+      Ok({
+        lockId: 'lock-1',
+        ownerId: 'owner-1',
+        workspaceId: 'ws-1',
+        key: 'phone:573001234567',
+        expiresAt: new Date('2026-03-31T22:00:00.000Z'),
+      }),
+    ),
+    release: jest.fn().mockResolvedValue(undefined),
+  };
+}
+
+function makeSnapshotRepository(): IConversationSnapshotRepository {
+  return {
+    save: jest.fn().mockResolvedValue(undefined),
+  };
+}
+
+function makeAuditRepository(): IConversationAuditRepository {
+  return {
+    append: jest.fn().mockResolvedValue(undefined),
+  };
+}
+
+function makeOutboundMessageOutbox(): IOutboundMessageOutbox {
+  return {
+    createPending: jest.fn().mockResolvedValue('outbox-1'),
+    markSent: jest.fn().mockResolvedValue(undefined),
+    markFailed: jest.fn().mockResolvedValue(undefined),
+  };
+}
 
 describe('ProcessIncomingMessageHandler', () => {
   it('retorna Ok con el messageId cuando todo es exitoso', async () => {
@@ -68,28 +103,38 @@ describe('ProcessIncomingMessageHandler', () => {
       makeOrchestration() as any,
       makeWhatsAppGateway(),
       makeEventBus(),
+      makeLockManager(),
+      makeSnapshotRepository(),
+      makeAuditRepository(),
+      makeOutboundMessageOutbox(),
     );
 
     const cmd = createProcessIncomingMessageCommand(
       'ws-1',
       '573001234567',
-      'Hola, ¿cuál es el estado de mi pedido?',
+      'Hola, cual es el estado de mi pedido?',
       'wamid.incoming.abc',
     );
 
     const result = await handler.handle(cmd);
 
     expect(result.ok).toBe(true);
-    if (result.ok) expect(result.value).toBe('wamid.123');
+    if (result.ok) {
+      expect(result.value).toBe('wamid.123');
+    }
   });
 
-  it('retorna Err si el número de teléfono es inválido', async () => {
+  it('retorna Err si el numero de telefono es invalido', async () => {
     const handler = new ProcessIncomingMessageHandler(
       makeConversationRepo(),
       makeAgentRepo(),
       makeOrchestration() as any,
       makeWhatsAppGateway(),
       makeEventBus(),
+      makeLockManager(),
+      makeSnapshotRepository(),
+      makeAuditRepository(),
+      makeOutboundMessageOutbox(),
     );
 
     const cmd = createProcessIncomingMessageCommand('ws-1', 'no-es-numero', 'Hola', 'wamid.x');
@@ -111,6 +156,10 @@ describe('ProcessIncomingMessageHandler', () => {
       makeOrchestration() as any,
       makeWhatsAppGateway(),
       makeEventBus(),
+      makeLockManager(),
+      makeSnapshotRepository(),
+      makeAuditRepository(),
+      makeOutboundMessageOutbox(),
     );
 
     const cmd = createProcessIncomingMessageCommand('ws-sin-agente', '573001234567', 'Hola', 'wamid.x');
@@ -119,8 +168,9 @@ describe('ProcessIncomingMessageHandler', () => {
     expect(result.ok).toBe(false);
   });
 
-  it('persiste la conversación aunque falle el envío por WhatsApp', async () => {
+  it('marca el outbox como fallido si falla el envio por WhatsApp', async () => {
     const conversationRepo = makeConversationRepo();
+    const outbox = makeOutboundMessageOutbox();
     const waGateway: IWhatsAppGateway = {
       sendMessage: jest.fn().mockResolvedValue(Err(new Error('WA timeout'))),
       markAsRead: jest.fn(),
@@ -132,18 +182,26 @@ describe('ProcessIncomingMessageHandler', () => {
       makeOrchestration() as any,
       waGateway,
       makeEventBus(),
+      makeLockManager(),
+      makeSnapshotRepository(),
+      makeAuditRepository(),
+      outbox,
     );
 
     const cmd = createProcessIncomingMessageCommand('ws-1', '573001234567', 'Test', 'wamid.x');
     const result = await handler.handle(cmd);
 
     expect(result.ok).toBe(false);
-    // La conversación debe haberse guardado aunque WA falle
     expect(conversationRepo.save).toHaveBeenCalled();
+    expect(outbox.markFailed).toHaveBeenCalledWith('outbox-1', 'WA timeout');
   });
 
-  it('publica domain events después de procesar el mensaje', async () => {
+  it('publica eventos, guarda snapshot y registra outbox cuando procesa el mensaje', async () => {
     const eventBus = makeEventBus();
+    const snapshotRepository = makeSnapshotRepository();
+    const auditRepository = makeAuditRepository();
+    const outbox = makeOutboundMessageOutbox();
+    const lockManager = makeLockManager();
 
     const handler = new ProcessIncomingMessageHandler(
       makeConversationRepo(),
@@ -151,11 +209,20 @@ describe('ProcessIncomingMessageHandler', () => {
       makeOrchestration() as any,
       makeWhatsAppGateway(),
       eventBus,
+      lockManager,
+      snapshotRepository,
+      auditRepository,
+      outbox,
     );
 
     const cmd = createProcessIncomingMessageCommand('ws-1', '573001234567', 'Hola', 'wamid.x');
     await handler.handle(cmd);
 
+    expect(outbox.createPending).toHaveBeenCalled();
+    expect(outbox.markSent).toHaveBeenCalledWith('outbox-1', 'wamid.123');
+    expect(auditRepository.append).toHaveBeenCalled();
     expect(eventBus.publishAll).toHaveBeenCalled();
+    expect(snapshotRepository.save).toHaveBeenCalled();
+    expect(lockManager.release).toHaveBeenCalled();
   });
 });

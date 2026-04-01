@@ -1,16 +1,17 @@
 {
   "name": "@orqo/core",
-  "version": "0.9.0",
-  "description": "ORQO — Motor core multi-agente (Clean Architecture + DDD + CQRS)",
+  "version": "0.1.0",
+  "description": "Core de orquestacion de ORQO",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "tsc --project tsconfig.json",
     "dev": "tsx watch src/entrypoints/webhook.ts",
-    "test": "jest --passWithNoTests",
+    "dev:health": "tsx watch src/entrypoints/health.ts",
+    "test": "jest --passWithNoTests --runInBand",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "lint": "eslint src --ext .ts"
+    "test:coverage": "jest --coverage --runInBand",
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.31.0",
@@ -25,5 +26,8 @@
     "ts-jest": "^29.2.3",
     "tsx": "^4.15.0",
     "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
