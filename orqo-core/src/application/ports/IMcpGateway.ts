@@ -16,7 +16,7 @@ export interface McpContentBlock {
 
 export interface McpToolResult {
   content: McpContentBlock[];
-  isError?: boolean;
+  isError?: boolean | undefined;
 }
 
 export interface McpSession {
@@ -24,13 +24,6 @@ export interface McpSession {
   readonly serverName: string;
 }
 
-/**
- * Puerto del MCP Gateway.
- * Abstrae el protocolo MCP (stdio / SSE / HTTP) de la lógica de negocio.
- *
- * Una Skill con `manifest.mcpServer` delega su ejecución aquí
- * sin conocer el protocolo de transporte.
- */
 export interface IMcpGateway {
   connect(config: McpServerConfig): Promise<Result<McpSession>>;
   listTools(session: McpSession): Promise<Result<McpTool[]>>;

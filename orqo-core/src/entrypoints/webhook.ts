@@ -1,26 +1,22 @@
-/**
- * Entrypoint HTTP — recibe webhooks de WhatsApp (Meta Cloud API).
- *
- * Este archivo es Infraestructura pura: convierte el payload HTTP en un Command
- * y lo despacha al CommandBus. No contiene lógica de negocio.
- *
- * En producción puede ser:
- *   - Un servidor Node.js standalone (este archivo)
- *   - Un Next.js Route Handler en orqo-dashboard/app/api/webhook/whatsapp/route.ts
- */
 import { createServer } from 'node:http';
+import { createIngestInboundMessageCommand } from '../application/commands/ingest-message/IngestInboundMessageCommand.js';
 import { Container } from '../infrastructure/container/Container.js';
-import { createProcessIncomingMessageCommand } from '../application/commands/process-message/ProcessIncomingMessageCommand.js';
+import {
+  normalizeWhatsAppWebhook,
+  type WhatsAppWebhookPayload,
+} from '../infrastructure/messaging/WhatsAppWebhookNormalizer.js';
 
 const VERIFY_TOKEN = process.env['WHATSAPP_VERIFY_TOKEN'] ?? 'orqo-dev-token';
 
 async function start() {
   const container = await Container.build();
+  container.inboundMessageWorker.startPolling(
+    Number(process.env['INBOUND_WORKER_POLL_MS'] ?? 250),
+  );
 
   const server = createServer(async (req, res) => {
     const url = new URL(req.url ?? '/', `http://${req.headers.host}`);
 
-    // ── GET: verificación del webhook por Meta ─────────────────────────────
     if (req.method === 'GET' && url.pathname === '/webhook/whatsapp') {
       const mode = url.searchParams.get('hub.mode');
       const token = url.searchParams.get('hub.verify_token');
@@ -34,42 +30,41 @@ async function start() {
       return;
     }
 
-    // ── POST: mensaje entrante de WhatsApp ─────────────────────────────────
+    if (req.method === 'GET' && url.pathname === '/healthz') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok', service: 'orqo-core' }));
+      return;
+    }
+
     if (req.method === 'POST' && url.pathname === '/webhook/whatsapp') {
       let body = '';
-      for await (const chunk of req) body += chunk;
+      for await (const chunk of req) {
+        body += chunk;
+      }
 
-      res.writeHead(200).end('OK'); // Ack inmediato a Meta (< 20s)
+      res.writeHead(200).end('OK');
 
       try {
         const payload = JSON.parse(body) as WhatsAppWebhookPayload;
-        const entries = payload.entry ?? [];
+        const normalizationResult = normalizeWhatsAppWebhook(payload);
+        if (!normalizationResult.ok) {
+          console.error(
+            '[Webhook] Error normalizando payload:',
+            normalizationResult.error.message,
+          );
+          return;
+        }
 
-        for (const entry of entries) {
-          for (const change of entry.changes ?? []) {
-            const messages = change.value?.messages ?? [];
-            const metadata = change.value?.metadata;
-
-            for (const msg of messages) {
-              if (msg.type !== 'text') continue; // solo texto por ahora
-
-              const command = createProcessIncomingMessageCommand(
-                metadata?.phone_number_id ?? 'default', // workspaceId = phoneNumberId del negocio
-                msg.from,
-                msg.text?.body ?? '',
-                msg.id,
-                new Date(Number(msg.timestamp) * 1000),
-              );
-
-              const result = await container.commandBus.dispatch(command);
-              if (!result.ok) {
-                console.error('[Webhook] Error procesando mensaje:', result.error.message);
-              }
-            }
+        for (const envelope of normalizationResult.value) {
+          const result = await container.commandBus.dispatch(
+            createIngestInboundMessageCommand(envelope),
+          );
+          if (!result.ok) {
+            console.error('[Webhook] Error encolando mensaje:', result.error.message);
           }
         }
-      } catch (e) {
-        console.error('[Webhook] Error parseando payload:', e);
+      } catch (error) {
+        console.error('[Webhook] Error parseando payload:', error);
       }
       return;
     }
@@ -77,32 +72,13 @@ async function start() {
     res.writeHead(404).end('Not Found');
   });
 
-  const port = process.env['PORT'] ?? 3001;
+  const port = Number(process.env['PORT'] ?? 3001);
   server.listen(port, () => {
-    console.info(`[ORQO Core] Webhook escuchando en http://localhost:${port}`);
+    console.info(`[ORQO Core] Escuchando en http://localhost:${port}`);
   });
 }
 
-// ── Tipos del payload de Meta ──────────────────────────────────────────────
-
-interface WhatsAppWebhookPayload {
-  entry?: Array<{
-    changes?: Array<{
-      value?: {
-        messages?: Array<{
-          id: string;
-          from: string;
-          timestamp: string;
-          type: string;
-          text?: { body: string };
-        }>;
-        metadata?: { phone_number_id: string };
-      };
-    }>;
-  }>;
-}
-
-start().catch(e => {
-  console.error('[ORQO Core] Error de arranque:', e);
+start().catch(error => {
+  console.error('[ORQO Core] Error de arranque:', error);
   process.exit(1);
 });

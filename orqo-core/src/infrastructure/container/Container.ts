@@ -2,57 +2,53 @@ import { MongoClient } from 'mongodb';
 import { InMemoryCommandBus, type ICommandBus } from '../../shared/CommandBus.js';
 import { InMemoryQueryBus, type IQueryBus } from '../../shared/QueryBus.js';
 import { InMemoryEventBus, type IEventBus } from '../../shared/EventBus.js';
-import { AgentOrchestrationService } from '../../application/services/AgentOrchestrationService.js';
+import { IngestInboundMessageHandler } from '../../application/commands/ingest-message/IngestInboundMessageHandler.js';
 import { ProcessIncomingMessageHandler } from '../../application/commands/process-message/ProcessIncomingMessageHandler.js';
-import { SkillRegistry } from '../skills/SkillRegistry.js';
+import type { IInboundMessageQueue } from '../../application/ports/IInboundMessageQueue.js';
+import { AgentOrchestrationService } from '../../application/services/AgentOrchestrationService.js';
 import { ClaudeLlmGateway } from '../llm/ClaudeLlmGateway.js';
-import { StdioMcpGateway } from '../mcp/StdioMcpGateway.js';
-import { MongoConversationRepository } from '../persistence/MongoConversationRepository.js';
-import { MongoAgentRepository } from '../persistence/MongoAgentRepository.js';
+import { InboundMessageWorker } from '../messaging/InboundMessageWorker.js';
+import { MongoInboundMessageQueue } from '../messaging/MongoInboundMessageQueue.js';
 import { MetaWhatsAppGateway } from '../messaging/MetaWhatsAppGateway.js';
-// ── Skills ────────────────────────────────────────────────────────────────────
-import { WooCommerceOrderSkill } from '../skills/catalog/woocommerce-orders/WooCommerceOrderSkill.js';
+import { StdioMcpGateway } from '../mcp/StdioMcpGateway.js';
+import { MongoAgentRepository } from '../persistence/MongoAgentRepository.js';
+import { MongoConversationAuditRepository } from '../persistence/MongoConversationAuditRepository.js';
+import { MongoConversationLockManager } from '../persistence/MongoConversationLockManager.js';
+import { MongoConversationRepository } from '../persistence/MongoConversationRepository.js';
+import { MongoConversationSnapshotRepository } from '../persistence/MongoConversationSnapshotRepository.js';
+import { MongoOutboundMessageOutbox } from '../persistence/MongoOutboundMessageOutbox.js';
+import { SkillRegistry } from '../skills/SkillRegistry.js';
 import { SupportFaqSkill } from '../skills/catalog/support-faq/SupportFaqSkill.js';
-// NUEVA SKILL → importar aquí y registrar en buildSkillRegistry()
+import { WooCommerceOrderSkill } from '../skills/catalog/woocommerce-orders/WooCommerceOrderSkill.js';
 
-/**
- * ─── Container — Composition Root ───────────────────────────────────────────
- *
- * Único lugar del sistema donde se instancian implementaciones concretas.
- * La Application Layer y el Domain solo ven abstracciones (interfaces).
- *
- * Para agregar una nueva Skill:
- *   1. Crear archivo en infrastructure/skills/catalog/<nombre>/<NombreSkill>.ts
- *   2. Importarla aquí (línea marcada con "NUEVA SKILL")
- *   3. Añadir: registry.register(new NombreSkill())
- *   ← Eso es todo. Cero cambios en el core.
- *
- * Para cambiar el LLM de Claude a GPT-4:
- *   1. Crear OpenAILlmGateway que implemente ILlmGateway
- *   2. Reemplazar ClaudeLlmGateway en buildInfrastructure()
- *   ← Cero cambios en la Application Layer.
- */
 export class Container {
   private static _instance: Container | undefined;
 
   readonly commandBus: ICommandBus;
   readonly queryBus: IQueryBus;
   readonly eventBus: IEventBus;
+  readonly inboundMessageQueue: IInboundMessageQueue;
+  readonly inboundMessageWorker: InboundMessageWorker;
 
   private constructor(
     commandBus: ICommandBus,
     queryBus: IQueryBus,
     eventBus: IEventBus,
+    inboundMessageQueue: IInboundMessageQueue,
+    inboundMessageWorker: InboundMessageWorker,
   ) {
     this.commandBus = commandBus;
     this.queryBus = queryBus;
     this.eventBus = eventBus;
+    this.inboundMessageQueue = inboundMessageQueue;
+    this.inboundMessageWorker = inboundMessageWorker;
   }
 
   static async build(): Promise<Container> {
-    if (Container._instance) return Container._instance;
+    if (Container._instance) {
+      return Container._instance;
+    }
 
-    // ── Infraestructura ──────────────────────────────────────────────────
     const mongoClient = await MongoClient.connect(
       process.env['MONGODB_URI'] ?? 'mongodb://localhost:27017',
     );
@@ -63,22 +59,27 @@ export class Container {
     const whatsAppGateway = new MetaWhatsAppGateway();
     const conversationRepo = new MongoConversationRepository(db);
     const agentRepo = new MongoAgentRepository(db);
+    const conversationLockManager = new MongoConversationLockManager(db);
+    const conversationSnapshotRepository = new MongoConversationSnapshotRepository(db);
+    const conversationAuditRepository = new MongoConversationAuditRepository(db);
+    const outboundMessageOutbox = new MongoOutboundMessageOutbox(db);
     const eventBus = new InMemoryEventBus();
+    const inboundMessageQueue = new MongoInboundMessageQueue(db, {
+      maxAttempts: Number(process.env['INBOUND_QUEUE_MAX_ATTEMPTS'] ?? 4),
+      leaseMs: Number(process.env['INBOUND_QUEUE_LEASE_MS'] ?? 30_000),
+      baseRetryDelayMs: Number(process.env['INBOUND_QUEUE_RETRY_BASE_MS'] ?? 1_000),
+    });
 
-    // ── Skills ────────────────────────────────────────────────────────────
     const skillRegistry = new SkillRegistry();
     skillRegistry.register(new WooCommerceOrderSkill());
     skillRegistry.register(new SupportFaqSkill());
-    // ↓ Agregar nuevas Skills aquí ↓
 
-    // ── Servicios de aplicación ───────────────────────────────────────────
     const orchestration = new AgentOrchestrationService(
       llmGateway,
       skillRegistry,
       mcpGateway,
     );
 
-    // ── Command Bus ────────────────────────────────────────────────────────
     const commandBus = new InMemoryCommandBus();
     commandBus.register(
       'ProcessIncomingMessage',
@@ -88,18 +89,34 @@ export class Container {
         orchestration,
         whatsAppGateway,
         eventBus,
+        conversationLockManager,
+        conversationSnapshotRepository,
+        conversationAuditRepository,
+        outboundMessageOutbox,
       ),
     );
+    commandBus.register(
+      'IngestInboundMessage',
+      new IngestInboundMessageHandler(inboundMessageQueue),
+    );
 
-    // ── Query Bus ──────────────────────────────────────────────────────────
     const queryBus = new InMemoryQueryBus();
-    // queryBus.register('GetConversation', new GetConversationHandler(conversationRepo));
+    const inboundMessageWorker = new InboundMessageWorker(
+      commandBus,
+      inboundMessageQueue,
+    );
 
-    Container._instance = new Container(commandBus, queryBus, eventBus);
+    Container._instance = new Container(
+      commandBus,
+      queryBus,
+      eventBus,
+      inboundMessageQueue,
+      inboundMessageWorker,
+    );
+
     return Container._instance;
   }
 
-  /** Solo para tests — permite inyectar mocks. */
   static reset(): void {
     Container._instance = undefined;
   }

@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import { Ok, Err, tryCatch, type Result } from '../../shared/Result.js';
+import { tryCatch, type Result } from '../../shared/Result.js';
 import type {
   ILlmGateway,
   LlmMessage,
@@ -7,13 +7,6 @@ import type {
   LlmResponse,
 } from '../../application/ports/ILlmGateway.js';
 
-/**
- * Implementación del LLM Gateway usando Claude (Anthropic).
- * La Application Layer no sabe qué modelo usa — solo habla con ILlmGateway.
- *
- * Para cambiar a GPT-4 / Gemini: crear OpenAILlmGateway que implemente ILlmGateway
- * y reemplazar en el Container. Cero cambios en el core.
- */
 export class ClaudeLlmGateway implements ILlmGateway {
   private readonly client: Anthropic;
   private readonly model: string;
@@ -31,34 +24,45 @@ export class ClaudeLlmGateway implements ILlmGateway {
     options: LlmOptions = {},
   ): Promise<Result<LlmResponse>> {
     return tryCatch(async () => {
-      const tools = options.tools?.map(t => ({
-        name: t.name,
-        description: t.description,
-        input_schema: t.inputSchema as Anthropic.Tool['input_schema'],
+      const tools = options.tools?.map(tool => ({
+        name: tool.name,
+        description: tool.description,
+        input_schema: tool.inputSchema as Anthropic.Tool['input_schema'],
       }));
 
-      const response = await this.client.messages.create({
+      const request: Anthropic.MessageCreateParamsNonStreaming = {
         model: this.model,
         max_tokens: options.maxTokens ?? 1024,
-        system: options.systemPrompt,
-        messages: messages.map(m => ({
-          role: m.role === 'system' ? 'user' : m.role,
-          content: m.content,
+        messages: messages.map(message => ({
+          role: message.role === 'system' ? 'user' : message.role,
+          content: message.content,
         })) as Anthropic.MessageParam[],
-        tools: tools && tools.length > 0 ? tools : undefined,
-        temperature: options.temperature,
-      });
+      };
+
+      if (options.systemPrompt) {
+        request.system = options.systemPrompt;
+      }
+
+      if (tools && tools.length > 0) {
+        request.tools = tools;
+      }
+
+      if (options.temperature !== undefined) {
+        request.temperature = options.temperature;
+      }
+
+      const response = await this.client.messages.create(request);
 
       const textContent = response.content
-        .filter((b): b is Anthropic.TextBlock => b.type === 'text')
-        .map(b => b.text)
+        .filter((block): block is Anthropic.TextBlock => block.type === 'text')
+        .map(block => block.text)
         .join('');
 
       const toolCalls = response.content
-        .filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use')
-        .map(b => ({
-          toolName: b.name,
-          toolInput: b.input as Record<string, unknown>,
+        .filter((block): block is Anthropic.ToolUseBlock => block.type === 'tool_use')
+        .map(block => ({
+          toolName: block.name,
+          toolInput: block.input as Record<string, unknown>,
         }));
 
       return {

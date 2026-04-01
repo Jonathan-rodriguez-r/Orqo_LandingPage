@@ -8,25 +8,12 @@ import { Conversation } from '../../../domain/conversation/entities/Conversation
 import type { IWhatsAppGateway } from '../../ports/IWhatsAppGateway.js';
 import type { AgentOrchestrationService } from '../../services/AgentOrchestrationService.js';
 import type { IAgentRepository } from '../../ports/IAgentRepository.js';
+import type { IConversationLockManager } from '../../ports/IConversationLockManager.js';
+import type { IConversationSnapshotRepository } from '../../ports/IConversationSnapshotRepository.js';
+import type { IConversationAuditRepository } from '../../ports/IConversationAuditRepository.js';
+import type { IOutboundMessageOutbox } from '../../ports/IOutboundMessageOutbox.js';
+import { buildConversationStateSnapshot } from '../../services/ConversationStateSnapshotFactory.js';
 
-/**
- * ─── ProcessIncomingMessageHandler ──────────────────────────────────────────
- *
- * CASO DE USO CENTRAL — enrutador del mensaje entrante.
- *
- * Responsabilidades (Single Responsibility por capa):
- *   1. Validar el número de teléfono (Value Object)
- *   2. Cargar o crear la Conversation (Aggregate)
- *   3. Delegar la orquestación al AgentOrchestrationService
- *   4. Persistir el estado de la conversación
- *   5. Enviar la respuesta por el canal de mensajería
- *   6. Publicar Domain Events
- *
- * Lo que NO hace este handler:
- *   - No sabe qué Skills existen (Open/Closed)
- *   - No llama directamente al LLM ni a MCP
- *   - No contiene lógica de retry (responsabilidad de la infraestructura)
- */
 export class ProcessIncomingMessageHandler
   implements ICommandHandler<ProcessIncomingMessageCommand, string>
 {
@@ -36,71 +23,112 @@ export class ProcessIncomingMessageHandler
     private readonly orchestration: AgentOrchestrationService,
     private readonly whatsappGateway: IWhatsAppGateway,
     private readonly eventBus: IEventBus,
+    private readonly lockManager: IConversationLockManager,
+    private readonly snapshotRepository: IConversationSnapshotRepository,
+    private readonly auditRepository: IConversationAuditRepository,
+    private readonly outboundMessageOutbox: IOutboundMessageOutbox,
   ) {}
 
   async handle(
     command: ProcessIncomingMessageCommand,
   ): Promise<Result<string>> {
-    // ── 1. Validar número de teléfono ─────────────────────────────────────
     const phoneResult = PhoneNumber.create(command.fromPhone);
-    if (!phoneResult.ok) return Err(phoneResult.error);
+    if (!phoneResult.ok) {
+      return Err(phoneResult.error);
+    }
     const phone = phoneResult.value;
 
-    // ── 2. Cargar agente del workspace ────────────────────────────────────
-    const agent = await this.agentRepo.findActiveByWorkspace(command.workspaceId);
-    if (!agent) {
-      return Err(new Error(`No hay agente activo para workspace: ${command.workspaceId}`));
-    }
-
-    // ── 3. Cargar o crear Conversation ────────────────────────────────────
-    let conversation = await this.conversationRepo.findByPhone(
+    const lockResult = await this.lockManager.acquire(
       command.workspaceId,
-      phone,
+      `phone:${phone.value}`,
     );
-
-    if (!conversation) {
-      conversation = Conversation.create(command.workspaceId, phone, agent.id);
+    if (!lockResult.ok) {
+      return Err(lockResult.error);
     }
 
-    // ── 4. Registrar mensaje del usuario en el Aggregate ──────────────────
-    conversation.receiveUserMessage(command.body, {
-      platformMessageId: command.platformMessageId,
-      timestamp: command.timestamp.toISOString(),
-    });
+    try {
+      const agent = await this.agentRepo.findActiveByWorkspace(command.workspaceId);
+      if (!agent) {
+        return Err(new Error(`No hay agente activo para workspace: ${command.workspaceId}`));
+      }
 
-    // ── 5. Orquestar respuesta del agente ─────────────────────────────────
-    const orchestrationResult = await this.orchestration.generateResponse(
-      conversation,
-      agent,
-    );
+      let conversation = await this.conversationRepo.findByPhone(
+        command.workspaceId,
+        phone,
+      );
 
-    if (!orchestrationResult.ok) {
-      // Persistimos el mensaje del usuario aunque la orquestación falle
+      if (!conversation) {
+        conversation = Conversation.create(command.workspaceId, phone, agent.id);
+      }
+
+      conversation.receiveUserMessage(command.body, {
+        platformMessageId: command.platformMessageId,
+        timestamp: command.timestamp.toISOString(),
+      });
+
+      const orchestrationResult = await this.orchestration.generateResponse(
+        conversation,
+        agent,
+      );
+
+      if (!orchestrationResult.ok) {
+        await this.conversationRepo.save(conversation);
+        await this.snapshotRepository.save(
+          buildConversationStateSnapshot(conversation),
+        );
+        return Err(orchestrationResult.error);
+      }
+
+      const { responseText, skillUsed } = orchestrationResult.value;
+      conversation.addAgentResponse(responseText, skillUsed);
+
       await this.conversationRepo.save(conversation);
-      return Err(orchestrationResult.error);
+
+      const outboxId = await this.outboundMessageOutbox.createPending({
+        workspaceId: conversation.workspaceId,
+        conversationId: conversation.id,
+        channel: 'whatsapp',
+        recipient: phone.value,
+        body: responseText,
+        correlationId: command.platformMessageId,
+      });
+
+      const sendResult = await this.whatsappGateway.sendMessage({
+        to: phone.value,
+        body: responseText,
+        type: 'text',
+      });
+
+      if (!sendResult.ok) {
+        await this.outboundMessageOutbox.markFailed(
+          outboxId,
+          sendResult.error.message,
+        );
+        await this.snapshotRepository.save(
+          buildConversationStateSnapshot(conversation, skillUsed),
+        );
+        return Err(sendResult.error);
+      }
+
+      await this.outboundMessageOutbox.markSent(
+        outboxId,
+        sendResult.value.messageId,
+      );
+
+      const events = conversation.pullDomainEvents();
+      await this.auditRepository.append(
+        conversation.workspaceId,
+        conversation.id,
+        events,
+      );
+      await this.eventBus.publishAll(events);
+      await this.snapshotRepository.save(
+        buildConversationStateSnapshot(conversation, skillUsed),
+      );
+
+      return Ok(sendResult.value.messageId);
+    } finally {
+      await this.lockManager.release(lockResult.value);
     }
-
-    const { responseText, skillUsed } = orchestrationResult.value;
-
-    // ── 6. Agregar respuesta al Aggregate ─────────────────────────────────
-    conversation.addAgentResponse(responseText, skillUsed);
-
-    // ── 7. Persistir (antes de enviar — evita pérdida de estado si WA falla)
-    await this.conversationRepo.save(conversation);
-
-    // ── 8. Enviar por WhatsApp ─────────────────────────────────────────────
-    const sendResult = await this.whatsappGateway.sendMessage({
-      to: phone.value,
-      body: responseText,
-      type: 'text',
-    });
-
-    if (!sendResult.ok) return Err(sendResult.error);
-
-    // ── 9. Publicar Domain Events ─────────────────────────────────────────
-    const events = conversation.pullDomainEvents();
-    await this.eventBus.publishAll(events);
-
-    return Ok(sendResult.value.messageId);
   }
 }
