@@ -628,6 +628,21 @@ section {
 }
 .case-card:hover { background: var(--g01); }
 
+.content-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.content-card-link .case-card {
+  height: 100%;
+  cursor: pointer;
+}
+
+.content-card-link:hover .case-card { background: var(--g01); }
+.content-card-link:hover .case-title { color: var(--acc); }
+.content-card-link:hover .case-desc { color: var(--g06); }
+
 .case-tag {
   display: inline-block;
   padding: 0.2rem 0.65rem;
@@ -1084,6 +1099,7 @@ footer {
     <li><a href="#integraciones" onclick="closeNav()">Integraciones</a></li>
     <li><a href="#diferenciales" onclick="closeNav()">Diferenciales</a></li>
     <li><a href="#casos" onclick="closeNav()">Casos de uso</a></li>
+    <li><a href="/blog" onclick="closeNav()">Blog</a></li>
     <li><a href="#contacto" class="nav-cta" onclick="closeNav()">Solicitar demo</a></li>
     <li><a href="https://dashboard.orqo.io" class="nav-cta" style="background:transparent;border:1px solid var(--g04);color:var(--g06)!important;">Ingresar →</a></li>
   </ul>
@@ -1174,6 +1190,9 @@ footer {
     </a>
     <a href="#casos" class="btn-secondary">
       Ver casos de uso
+    </a>
+    <a href="/blog" class="btn-secondary">
+      Explorar blog
     </a>
   </div>
 
@@ -1545,6 +1564,98 @@ footer {
 
 <div class="divider"></div>
 
+<section id="blog">
+  <span class="section-eyebrow">Blog y Radar IA</span>
+  <h2 class="section-title reveal">Contenido que atrae buyers, no trafico vacio.</h2>
+  <p class="section-sub reveal">Creamos un blog orientado a equipos que van a implementar agentes en ventas, soporte y operaciones. No es un bloque de noticias genericas: es una capa editorial para posicionamiento, autoridad y conversion, ahora con mas piezas sobre ROI, WhatsApp, CRM, ERP y despliegue operativo.</p>
+
+  <div class="cases reveal" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
+    <a class="content-card-link" href="/blog/agentes-ia-vs-chatbots-para-negocios">
+      <div class="case-card">
+        <div class="case-tag">Comparativa</div>
+        <div class="case-title">Agentes IA vs chatbots para negocios</div>
+        <div class="case-desc">Ideal para compradores que ya entienden que un FAQ bot no resuelve procesos reales.</div>
+        <ul class="case-list">
+          <li>Responder vs ejecutar</li>
+          <li>Cuando escalar de bot a agente</li>
+          <li>Senales de compra reales</li>
+        </ul>
+      </div>
+    </a>
+
+    <a class="content-card-link" href="/blog/como-calificar-leads-en-whatsapp-con-agentes-ia">
+      <div class="case-card">
+        <div class="case-tag">Ventas</div>
+        <div class="case-title">Calificar leads en WhatsApp con agentes IA</div>
+        <div class="case-desc">Pensado para equipos que quieren responder mas rapido, capturar contexto util y pasar mejores oportunidades al area comercial.</div>
+        <ul class="case-list">
+          <li>Lead scoring conversacional</li>
+          <li>Agenda automatizada</li>
+          <li>Handoff listo para venta</li>
+        </ul>
+      </div>
+    </a>
+
+    <a class="content-card-link" href="/blog/conectar-crm-whatsapp-y-agentes-ia">
+      <div class="case-card">
+        <div class="case-tag">Integraciones</div>
+        <div class="case-title">CRM, WhatsApp y agentes IA</div>
+        <div class="case-desc">Pensado para equipos comerciales que pierden seguimiento entre canal, CRM y atencion.</div>
+        <ul class="case-list">
+          <li>Reducir fuga comercial</li>
+          <li>Actualizar pipeline en tiempo real</li>
+          <li>Escalar mejor al vendedor</li>
+        </ul>
+      </div>
+    </a>
+
+    <a class="content-card-link" href="/blog/como-medir-roi-de-agentes-ia-en-ventas-y-soporte">
+      <div class="case-card">
+        <div class="case-tag">ROI</div>
+        <div class="case-title">Como medir el ROI de agentes IA</div>
+        <div class="case-desc">Una pieza para buyers que necesitan justificar inversion con ahorro operativo, resolucion automatizada y mas conversion.</div>
+        <ul class="case-list">
+          <li>Metricas de negocio utiles</li>
+          <li>Ahorro y conversion</li>
+          <li>Seguimiento por canal</li>
+        </ul>
+      </div>
+    </a>
+
+    <a class="content-card-link" href="/blog/automatizar-soporte-al-cliente-con-agentes-ia">
+      <div class="case-card">
+        <div class="case-tag">CX</div>
+        <div class="case-title">Automatizar soporte con agentes IA</div>
+        <div class="case-desc">Un articulo para buyers que quieren resolver mas casos sin crecer el equipo al mismo ritmo.</div>
+        <ul class="case-list">
+          <li>Automatizar el 80% util</li>
+          <li>Escalar con contexto</li>
+          <li>Medir impacto operativo</li>
+        </ul>
+      </div>
+    </a>
+
+    <a class="content-card-link" href="/blog/radar-ia-para-negocio">
+      <div class="case-card">
+        <div class="case-tag">Radar IA</div>
+        <div class="case-title">Noticias de IA que si importan al negocio</div>
+        <div class="case-desc">Curamos senales sobre agentes, WhatsApp, seguridad y despliegue enterprise. No cubrimos ruido generalista.</div>
+        <ul class="case-list">
+          <li>Releases de agentes</li>
+          <li>Cambios en canales</li>
+          <li>Riesgo y cumplimiento</li>
+        </ul>
+      </div>
+    </a>
+  </div>
+
+  <div style="text-align:center;margin-top:1.6rem;">
+    <a href="/blog" class="btn-secondary" style="display:inline-flex;">Abrir blog completo</a>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- ══ CENTRO DE AYUDA ══ -->
 <section id="diferenciales">
   <span class="section-eyebrow">Diferenciacion</span>
@@ -1644,6 +1755,7 @@ footer {
     <span class="logo-text" style="font-size:1.2rem;color:rgba(245,245,242,0.7);">ORQO</span>
   </a>
   <ul class="footer-links">
+    <li><a href="/blog">Blog</a></li>
     <li><a href="https://dashboard.orqo.io">Dashboard</a></li>
     <li><a href="/marca" target="_blank">Identidad de marca</a></li>
     <li><a href="/changelog">Changelog</a></li>

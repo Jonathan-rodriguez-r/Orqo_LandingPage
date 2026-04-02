@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook para implementar agentes IA en 90 dias | ORQO Blog</title>
+<meta name="description" content="Roadmap ejecutivo para implementar agentes IA en 90 dias: diagnostico, piloto, despliegue, KPIs, ownership y criterios de escalamiento.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><rect width='72' height='72' fill='%23111812' rx='14'/><path d='M52 59.5 A30 30 0 1 1 59.5 52' stroke='%23E9EDE9' stroke-width='4.5' stroke-linecap='round' fill='none'/><line x1='59.5' y1='52' x2='66' y2='58' stroke='%232CB978' stroke-width='4.5' stroke-linecap='round'/><circle cx='66' cy='58' r='5' fill='%232CB978'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Playbook para implementar agentes IA en 90 dias",
+  "description": "Roadmap para pasar de diagnostico a despliegue de agentes IA en 90 dias con foco en negocio.",
+  "datePublished": "2026-04-02",
+  "author": {
+    "@type": "Organization",
+    "name": "ORQO"
+  }
+}
+</script>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="bg-grain"></div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+    </svg>
+    <span class="nav-logo-text">ORQO</span>
+  </a>
+  <div class="nav-right">
+    <a href="/blog" class="nav-link">Volver al blog</a>
+    <a href="/#contacto" class="nav-link">Solicitar demo</a>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+      <svg id="theme-ico" width="16" height="16" viewBox="0 0 24 24" fill="none"></svg>
+    </button>
+  </div>
+</nav>
+
+<main class="page page-narrow">
+  <article class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta-row">
+        <span>Implementacion</span>
+        <span>2 abril 2026</span>
+        <span>Lectura 8 min</span>
+      </div>
+      <span class="eyebrow">Roadmap ejecutivo</span>
+      <h1 class="hero-title">Playbook para implementar agentes IA en 90 dias.</h1>
+      <p class="hero-sub">La mayoria de equipos no falla por falta de entusiasmo. Falla por intentar hacerlo todo al tiempo. Un roadmap de 90 dias obliga a priorizar, medir y desplegar con una logica que negocio si puede sostener.</p>
+    </header>
+
+    <div class="prose">
+      <p>Implementar agentes IA no deberia arrancar con una lluvia de ideas sobre prompts. Deberia arrancar con una decision de negocio: que flujo genera mas valor si se automatiza primero. Cuando esa prioridad es clara, el resto del plan se vuelve mucho mas manejable.</p>
+
+      <h2>Dias 1 a 30: diagnostico y definicion del primer caso</h2>
+      <p>La primera fase sirve para elegir bien. Que canal tiene mas volumen, donde se pierde mas conversion, que tickets saturan al equipo, que integraciones ya existen y que KPI importa mas. No conviene seleccionar un caso por moda. Conviene elegirlo por impacto y factibilidad.</p>
+
+      <ul>
+        <li>Elegir un flujo principal: leads, soporte, agenda, postventa o cobranza.</li>
+        <li>Definir la linea base de metricas actuales.</li>
+        <li>Mapear sistemas involucrados y limitaciones operativas.</li>
+        <li>Definir ownership entre negocio, operaciones y tecnologia.</li>
+      </ul>
+
+      <h2>Dias 31 a 60: piloto controlado</h2>
+      <p>En esta etapa no buscas escalar al maximo. Buscas validar que el agente entiende, consulta la informacion correcta, ejecuta lo necesario y escala bien cuando corresponde. Un piloto bueno no es el que parece impresionante; es el que te deja aprender sin poner en riesgo la operacion.</p>
+
+      <ul>
+        <li>Activar un alcance limitado por canal o tipo de caso.</li>
+        <li>Configurar handoff a humano con resumen.</li>
+        <li>Medir resolucion, tiempos, conversion o carga operativa.</li>
+        <li>Revisar errores reales y ajustar reglas de negocio.</li>
+      </ul>
+
+      <blockquote class="quote">El piloto ideal no demuestra que la IA puede hablar. Demuestra que puede operar dentro de limites claros y producir un resultado medible.</blockquote>
+
+      <h2>Dias 61 a 90: despliegue y gobernanza</h2>
+      <p>Si el piloto funciona, la siguiente pregunta no es solo "como abrir mas volumen". La pregunta correcta es "como escalar sin perder control". Eso incluye observabilidad, ownership, criterios de escalation, nuevas integraciones y una cadencia de mejora continua.</p>
+
+      <ul>
+        <li>Expandir a nuevos casos o canales solo despues de estabilizar el primero.</li>
+        <li>Definir un tablero regular de metricas y revisiones.</li>
+        <li>Documentar reglas, permisos y cambios operativos.</li>
+        <li>Priorizar el siguiente workflow con base en impacto probado.</li>
+      </ul>
+
+      <h2>Que equipo necesitas realmente</h2>
+      <p>No hace falta una gran area de IA. Pero si hace falta una combinacion minima: alguien que represente el proceso de negocio, alguien que defina la operacion y alguien que cuide la integracion. Cuando esas tres piezas no existen, el proyecto suele quedarse entre demo y promesa.</p>
+
+      <h2>Donde encaja ORQO</h2>
+      <p>ORQO es util precisamente en este tramo entre idea y despliegue. Ayuda a conectar canales, agentes y sistemas bajo una capa orquestada para que el piloto no sea una pieza aislada, sino la base de una operacion escalable. Eso acorta el camino entre "queremos probar IA" y "ya tenemos un flujo automatizado que negocio entiende".</p>
+    </div>
+
+    <section class="section">
+      <div class="cta-box">
+        <strong>Relacionados</strong>
+        <div class="related-grid">
+          <a class="card" href="/blog/como-medir-roi-de-agentes-ia-en-ventas-y-soporte">
+            <div class="card-kicker">ROI</div>
+            <div class="card-title">Como medir el ROI de agentes IA</div>
+          </a>
+          <a class="card" href="/blog/orquestacion-multiagente-para-canales-digitales">
+            <div class="card-kicker">Categoria</div>
+            <div class="card-title">Que es la orquestacion multiagente</div>
+          </a>
+          <a class="card" href="/blog/como-calificar-leads-en-whatsapp-con-agentes-ia">
+            <div class="card-kicker">Ventas</div>
+            <div class="card-title">Calificar leads en WhatsApp con agentes IA</div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <footer class="footer">
+    <div class="footer-copy">ORQO blog - playbook</div>
+    <div class="footer-links">
+      <a href="/blog">Blog</a>
+      <a href="/blog/radar-ia-para-negocio">Radar IA</a>
+      <a href="/#contacto">Solicitar demo</a>
+    </div>
+  </footer>
+</main>
+
+<script src="/blog-theme.js"></script>
+</body>
+</html>
