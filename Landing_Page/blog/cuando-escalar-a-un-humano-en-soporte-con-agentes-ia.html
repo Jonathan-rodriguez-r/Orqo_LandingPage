@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuando escalar a un humano en soporte con agentes IA | ORQO Blog</title>
+<meta name="description" content="Guia para definir cuando un agente IA debe escalar a humano en soporte y como hacer el handoff con contexto para proteger experiencia y operacion.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><rect width='72' height='72' fill='%23111812' rx='14'/><path d='M52 59.5 A30 30 0 1 1 59.5 52' stroke='%23E9EDE9' stroke-width='4.5' stroke-linecap='round' fill='none'/><line x1='59.5' y1='52' x2='66' y2='58' stroke='%232CB978' stroke-width='4.5' stroke-linecap='round'/><circle cx='66' cy='58' r='5' fill='%232CB978'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Cuando escalar a un humano en soporte con agentes IA",
+  "description": "Guia para definir triggers de escalamiento y handoff a humano en soporte con agentes IA.",
+  "datePublished": "2026-04-02",
+  "author": {
+    "@type": "Organization",
+    "name": "ORQO"
+  }
+}
+</script>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="bg-grain"></div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+    </svg>
+    <span class="nav-logo-text">ORQO</span>
+  </a>
+  <div class="nav-right">
+    <a href="/blog" class="nav-link">Volver al blog</a>
+    <a href="/#contacto" class="nav-link">Solicitar demo</a>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+      <svg id="theme-ico" width="16" height="16" viewBox="0 0 24 24" fill="none"></svg>
+    </button>
+  </div>
+</nav>
+
+<main class="page page-narrow">
+  <article class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta-row">
+        <span>Handoff</span>
+        <span>2 abril 2026</span>
+        <span>Lectura 6 min</span>
+      </div>
+      <span class="eyebrow">Soporte y CX</span>
+      <h1 class="hero-title">Cuando escalar a un humano en soporte con agentes IA.</h1>
+      <p class="hero-sub">Automatizar no significa atrapar al cliente dentro de un bot. Un agente bien disenado sabe cuando resolver por si mismo y cuando pasar el caso a una persona con el contexto correcto.</p>
+    </header>
+
+    <div class="prose">
+      <p>Una de las razones por las que muchos proyectos de soporte con IA fracasan no es la calidad del modelo. Es la falta de criterio para escalar. Cuando el sistema intenta resolver todo, incluso lo que no deberia, la experiencia empeora y el equipo pierde confianza.</p>
+
+      <p>El handoff a humano no es una excepcion. Es una parte central del diseno operativo.</p>
+
+      <h2>Que casos no deberias automatizar de punta a punta</h2>
+      <ul>
+        <li>Casos con alto impacto economico o riesgo reputacional.</li>
+        <li>Situaciones donde el cliente esta molesto y la contencion humana importa.</li>
+        <li>Excepciones que dependen de criterio comercial o politico.</li>
+        <li>Flujos que requieren aprobacion interna o multiples areas.</li>
+        <li>Conversaciones donde el agente ya fallo varias veces en entender o resolver.</li>
+      </ul>
+
+      <h2>Triggers de escalamiento utiles</h2>
+      <p>El error comun es escalar solo cuando el cliente escribe "quiero hablar con una persona". Eso es demasiado tarde. El sistema deberia detectar senales antes: lenguaje de frustracion, incertidumbre repetida, necesidad de excepcion, monto elevado, riesgo de cancelacion o incapacidad para validar informacion.</p>
+
+      <p>Tambien conviene escalar cuando el caso requiere acceso o accion que el agente no deberia ejecutar sin revision.</p>
+
+      <blockquote class="quote">El mejor handoff no se siente como fracaso de la automatizacion. Se siente como continuidad: el cliente pasa a la persona correcta sin repetir la historia.</blockquote>
+
+      <h2>Que debe recibir el humano</h2>
+      <p>Si el asesor abre la conversacion y no sabe que paso, el cliente lo percibe como retroceso. Por eso el resumen de handoff es tan importante como el disparador.</p>
+
+      <ul>
+        <li>Motivo del contacto.</li>
+        <li>Resumen corto de lo ya conversado.</li>
+        <li>Datos capturados y validaciones hechas.</li>
+        <li>Acciones ejecutadas o intentadas.</li>
+        <li>Riesgo, prioridad y recomendacion de siguiente paso.</li>
+      </ul>
+
+      <h2>Como medir si el handoff esta bien disenado</h2>
+      <ul>
+        <li>Tiempo hasta que el humano retoma el caso.</li>
+        <li>Porcentaje de conversaciones que el cliente debe repetir.</li>
+        <li>CSAT de casos escalados.</li>
+        <li>Tasa de resolucion despues del handoff.</li>
+        <li>Volumen de escalamiento innecesario o prematuro.</li>
+      </ul>
+
+      <h2>Donde entra ORQO</h2>
+      <p>ORQO encaja cuando el negocio necesita reglas claras para decidir quien responde, que herramientas se usan y en que momento la conversacion pasa a una persona. Esa capa de orquestacion es la que evita que cada canal invente su propia logica y que el cliente viva una experiencia inconsistente.</p>
+
+      <p>En soporte, automatizar bien no es resolver siempre con IA. Es resolver lo que conviene y escalar lo que exige criterio humano.</p>
+    </div>
+
+    <section class="section">
+      <div class="cta-box">
+        <strong>Relacionados</strong>
+        <div class="related-grid">
+          <a class="card" href="/blog/automatizar-soporte-al-cliente-con-agentes-ia">
+            <div class="card-kicker">Soporte</div>
+            <div class="card-title">Automatizar soporte con agentes IA</div>
+          </a>
+          <a class="card" href="/blog/agentes-ia-vs-chatbots-para-negocios">
+            <div class="card-kicker">Comparativa</div>
+            <div class="card-title">Agentes IA vs chatbots para negocios</div>
+          </a>
+          <a class="card" href="/blog/como-medir-roi-de-agentes-ia-en-ventas-y-soporte">
+            <div class="card-kicker">ROI</div>
+            <div class="card-title">Como medir el ROI de agentes IA</div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <footer class="footer">
+    <div class="footer-copy">ORQO blog - handoff</div>
+    <div class="footer-links">
+      <a href="/blog">Blog</a>
+      <a href="/blog/radar-ia-para-negocio">Radar IA</a>
+      <a href="/#contacto">Solicitar demo</a>
+    </div>
+  </footer>
+</main>
+
+<script src="/blog-theme.js"></script>
+</body>
+</html>

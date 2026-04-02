@@ -1,274 +1,231 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ORQO Blog | Agentes IA para ventas, soporte y operaciones</title>
-  <meta name="description" content="Blog de ORQO para empresas que quieren implementar agentes IA en WhatsApp, web y canales digitales. Guias de negocio, integraciones y Radar IA con foco operativo.">
-  <style>
-    :root {
-      --bg: #08110c;
-      --panel: #0f1913;
-      --panel-2: #132118;
-      --text: #ebf3ed;
-      --muted: #9fb5a6;
-      --accent: #30c97f;
-      --line: rgba(235,243,237,0.08);
-      --max: 1080px;
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: radial-gradient(circle at top right, rgba(48,201,127,0.12), transparent 30%), var(--bg);
-      color: var(--text);
-      line-height: 1.65;
-    }
-    a { color: inherit; }
-    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px; }
-    .nav {
-      position: sticky; top: 0; z-index: 10;
-      backdrop-filter: blur(14px);
-      background: rgba(8,17,12,0.82);
-      border-bottom: 1px solid var(--line);
-    }
-    .nav-inner {
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 16px; padding: 16px 0;
-    }
-    .nav-links {
-      display: flex; gap: 18px; flex-wrap: wrap; font-size: 14px;
-    }
-    .brand { font-weight: 700; letter-spacing: 0.04em; text-decoration: none; }
-    .hero { padding: 72px 0 40px; }
-    .eyebrow {
-      display: inline-block; color: var(--accent); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-    h1, h2, h3 { line-height: 1.1; margin: 0 0 14px; }
-    h1 { font-size: clamp(36px, 7vw, 64px); max-width: 820px; }
-    h2 { font-size: clamp(28px, 4vw, 40px); }
-    h3 { font-size: 22px; }
-    p { margin: 0 0 16px; color: var(--muted); }
-    .hero p { max-width: 760px; font-size: 18px; }
-    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 12px 18px; border-radius: 10px; text-decoration: none; border: 1px solid var(--line);
-      font-weight: 700;
-    }
-    .btn.primary { background: var(--accent); color: #06100a; border-color: transparent; }
-    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
-    .chip {
-      font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em;
-      padding: 8px 10px; border-radius: 999px; background: rgba(48,201,127,0.1); color: var(--accent);
-      border: 1px solid rgba(48,201,127,0.22);
-    }
-    .section { padding: 34px 0; }
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;
-    }
-    .card, .panel {
-      background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 22px;
-      text-decoration: none;
-    }
-    .card small, .panel small {
-      color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; display: inline-block; margin-bottom: 12px;
-    }
-    ul { margin: 0; padding-left: 18px; color: var(--muted); }
-    li { margin-bottom: 8px; }
-    .layout {
-      display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 18px;
-    }
-    .article {
-      padding: 28px 0; border-top: 1px solid var(--line);
-    }
-    .article:first-of-type { border-top: 0; }
-    .article p:last-child { margin-bottom: 0; }
-    .footer {
-      border-top: 1px solid var(--line); margin-top: 40px; padding: 28px 0 48px; color: var(--muted); font-size: 14px;
-    }
-    @media (max-width: 860px) {
-      .layout { grid-template-columns: 1fr; }
-      .hero { padding-top: 48px; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORQO Blog - Agentes IA para ventas, soporte y operaciones</title>
+<meta name="description" content="Blog de ORQO sobre agentes IA para WhatsApp, CRM, ERP, soporte, ventas y orquestacion omnicanal. Guias para equipos que quieren implementar IA con impacto real en su negocio.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><rect width='72' height='72' fill='%23111812' rx='14'/><path d='M52 59.5 A30 30 0 1 1 59.5 52' stroke='%23E9EDE9' stroke-width='4.5' stroke-linecap='round' fill='none'/><line x1='59.5' y1='52' x2='66' y2='58' stroke='%232CB978' stroke-width='4.5' stroke-linecap='round'/><circle cx='66' cy='58' r='5' fill='%232CB978'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog.css">
 </head>
 <body>
-  <div class="nav">
-    <div class="wrap nav-inner">
-      <a class="brand" href="/">ORQO</a>
-      <div class="nav-links">
-        <a href="#guias">Guias</a>
-        <a href="#radar">Radar IA</a>
-        <a href="/#contacto">Solicitar demo</a>
-      </div>
-    </div>
-  </div>
+<div class="bg-glow"></div>
+<div class="bg-grain"></div>
 
-  <main class="wrap">
-    <section class="hero">
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+    </svg>
+    <span class="nav-logo-text">ORQO</span>
+  </a>
+  <div class="nav-right">
+    <a href="/blog/radar-ia-para-negocio" class="nav-link">Radar IA</a>
+    <a href="/#contacto" class="nav-link">Solicitar demo</a>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+      <svg id="theme-ico" width="16" height="16" viewBox="0 0 24 24" fill="none"></svg>
+    </button>
+  </div>
+</nav>
+
+<main class="page">
+  <section class="hero-row">
+    <div>
       <span class="eyebrow">Blog ORQO</span>
-      <h1>Contenido para implementar agentes IA que generen negocio.</h1>
-      <p>Este blog no existe para perseguir trafico vacio. Existe para ayudar a equipos de CX, operaciones, producto y direccion comercial a decidir donde usar agentes IA, como conectarlos con su negocio y como medir impacto real.</p>
-      <div class="actions">
-        <a class="btn primary" href="/#contacto">Hablar con ORQO</a>
-        <a class="btn" href="#radar">Ver Radar IA</a>
+      <h1 class="hero-title">Contenido para implementar agentes que generen negocio.</h1>
+      <p class="hero-sub">Este blog no existe para perseguir trafico vacio. Existe para ayudar a equipos de CX, operaciones, producto y direccion comercial a entender donde usar agentes IA, como conectarlos con su negocio y como medir impacto real.</p>
+      <div class="hero-actions">
+        <a href="/#contacto" class="btn-primary">Hablar con ORQO</a>
+        <a href="/blog/radar-ia-para-negocio" class="btn-secondary">Ver Radar IA</a>
       </div>
-      <div class="chips">
+      <div class="chip-row">
         <span class="chip">WhatsApp</span>
         <span class="chip">CRM</span>
         <span class="chip">Soporte</span>
         <span class="chip">Ventas</span>
         <span class="chip">Omnicanal</span>
         <span class="chip">Agentes IA</span>
+        <span class="chip">ROI</span>
+        <span class="chip">ERP</span>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section layout">
-      <div class="panel">
-        <small>Linea editorial</small>
-        <h2>Buyer intent primero, noticias generales despues.</h2>
-        <p>ORQO debe dominar una categoria concreta: agentes IA para clientes finales conectados con CRM, ERP, ecommerce y canales conversacionales. Eso significa publicar guias de implementacion, comparativas y casos de uso con impacto operativo.</p>
-        <p>Una seccion de noticias puede funcionar, pero solo si filtra cambios que afectan costos, conversion, cumplimiento o despliegue real. Temas como guerra o defensa solo tienen cabida si cambian politicas, riesgo o capacidades relevantes para marcas que operan con agentes.</p>
+  <section class="featured">
+    <a class="featured-panel" href="/blog/como-medir-roi-de-agentes-ia-en-ventas-y-soporte">
+      <div class="card-kicker">Articulo destacado</div>
+      <div class="card-title">Como medir el ROI de agentes IA en ventas y soporte sin caer en metricas vacias</div>
+      <div class="card-desc">Una guia para buyers que necesitan justificar inversion con ahorro operativo, mas conversion y mejor tiempo de respuesta, en lugar de quedarse solo con demos bonitas.</div>
+      <div class="card-meta">
+        <span>ROI</span>
+        <span>Alta intencion</span>
+        <span>Lectura 8 min</span>
       </div>
-      <div class="panel">
-        <small>Que si cubrimos</small>
-        <ul>
-          <li>Agentes IA vs chatbots para negocio real</li>
-          <li>Automatizacion de WhatsApp conectada a sistemas</li>
-          <li>Integraciones con CRM y operaciones</li>
-          <li>Soporte automatizado con resolucion real</li>
-          <li>Radar IA curado para canales, seguridad y despliegue</li>
-        </ul>
+    </a>
+    <div class="featured-side">
+      <div class="note-box">
+        <strong>Linea editorial</strong>
+        <p style="margin-top:0.6rem;">ORQO debe construir autoridad en una categoria muy concreta: agentes IA para clientes finales, conectados con CRM, ERP, ecommerce y canales conversacionales. Por eso no conviene mezclar este blog con noticias generales, guerra o tendencias que no cambian decisiones de compra.</p>
       </div>
-    </section>
-
-    <section class="section" id="guias">
-      <span class="eyebrow">Guias y comparativas</span>
-      <h2>Entradas iniciales para construir autoridad.</h2>
-      <p>Estas piezas atacan keywords comerciales y preparan al comprador para entender por que ORQO no es otro chatbot suelto, sino una plataforma para desplegar agentes utiles en canales reales.</p>
-      <div class="grid">
-        <a class="card" href="#agentes-vs-chatbots">
-          <small>Comparativa</small>
-          <h3>Agentes IA vs chatbots para negocios</h3>
-          <p>Responder no es lo mismo que ejecutar. Esta pieza explica donde cambia el impacto de negocio.</p>
-        </a>
-        <a class="card" href="#automatizar-whatsapp">
-          <small>Implementacion</small>
-          <h3>Como automatizar WhatsApp con agentes IA</h3>
-          <p>De mensajes aislados a journeys que venden, atienden y escalan con contexto.</p>
-        </a>
-        <a class="card" href="#crm-whatsapp-agentes">
-          <small>Integraciones</small>
-          <h3>CRM, WhatsApp y agentes IA</h3>
-          <p>Como evitar la fuga comercial entre canal, CRM y equipo humano.</p>
-        </a>
-        <a class="card" href="#soporte-con-agentes">
-          <small>CX</small>
-          <h3>Automatizar soporte con agentes IA</h3>
-          <p>Como resolver mas casos sin perder control operativo ni contexto.</p>
-        </a>
-        <a class="card" href="#orquestacion-multiagente">
-          <small>Categoria</small>
-          <h3>Que es la orquestacion multiagente</h3>
-          <p>La capa que coordina canales, agentes, reglas y modelos sin fragmentacion.</p>
-        </a>
-        <a class="card" href="#radar">
-          <small>Radar IA</small>
-          <h3>Noticias de IA que si importan al negocio</h3>
-          <p>Un radar curado para cambios en herramientas, canales, seguridad y compliance.</p>
-        </a>
+      <div class="cta-box">
+        <strong>Lo que ya cubre el hub</strong>
+        <p style="margin-top:0.6rem;">Guias de implementacion, comparativas contra chatbots, integraciones CRM y ERP, ROI operativo, automatizacion de soporte, lead qualification, ecommerce, handoff a humano y senales de mercado que si afectan conversion, resolucion o costos.</p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section class="section">
-      <article class="article" id="agentes-vs-chatbots">
-        <small class="eyebrow">Comparativa</small>
-        <h2>Agentes IA vs chatbots para negocios: cuando uno si mueve la operacion</h2>
-        <p>Un chatbot tradicional responde preguntas. Un agente IA bien implementado puede entender contexto, consultar sistemas, ejecutar acciones y dejar trazabilidad. Esa diferencia cambia conversion, resolucion y carga operativa.</p>
-        <p>La pregunta para un decision maker no es si quiere IA. La pregunta es si el caso requiere solo contencion o una capa que atienda, ejecute y escale con criterio.</p>
-        <ul>
-          <li>Un chatbot responde; un agente resuelve pasos del journey.</li>
-          <li>Un chatbot vive aislado; un agente se conecta con CRM, ERP o agenda.</li>
-          <li>Un chatbot baja carga simple; un agente tambien puede elevar conversion o cierre.</li>
-        </ul>
-      </article>
+  <section class="section">
+    <span class="eyebrow">Ventas y conversion</span>
+    <h2 class="section-title">Entradas para equipos que quieren mover pipeline, respuesta y cierre.</h2>
+    <p class="section-sub">Estas piezas le hablan a operaciones comerciales, growth y direccion que quieren usar agentes para captar, calificar y convertir mejor sin perder contexto entre WhatsApp, CRM y equipo humano.</p>
+    <div class="grid-3" style="margin-top:1.6rem;">
+      <a class="card" href="/blog/como-calificar-leads-en-whatsapp-con-agentes-ia">
+        <div class="card-kicker">Leads</div>
+        <div class="card-title">Como calificar leads en WhatsApp con agentes IA sin frenar al vendedor</div>
+        <div class="card-desc">Una guia para responder rapido, capturar contexto util, asignar prioridad y dejar el lead listo para venta o agenda.</div>
+        <div class="card-meta"><span>WhatsApp</span><span>Conversion</span></div>
+      </a>
+      <a class="card" href="/blog/agentes-ia-vs-chatbots-para-negocios">
+        <div class="card-kicker">Comparativa</div>
+        <div class="card-title">Agentes IA vs chatbots para negocios: cuando uno si mueve la operacion</div>
+        <div class="card-desc">Una pieza BOFU para equipos que ya saben que un FAQ bot no alcanza y quieren entender la diferencia entre responder y ejecutar.</div>
+        <div class="card-meta"><span>Chatbots</span><span>Decision makers</span></div>
+      </a>
+      <a class="card" href="/blog/como-automatizar-whatsapp-con-agentes-ia">
+        <div class="card-kicker">Implementacion</div>
+        <div class="card-title">Como automatizar WhatsApp con agentes IA sin romper la experiencia del cliente</div>
+        <div class="card-desc">Explica como pasar de mensajes aislados a journeys de ventas, soporte y agenda con contexto y reglas operativas.</div>
+        <div class="card-meta"><span>WhatsApp</span><span>Journey</span></div>
+      </a>
+      <a class="card" href="/blog/conectar-crm-whatsapp-y-agentes-ia">
+        <div class="card-kicker">Integraciones</div>
+        <div class="card-title">Como conectar tu CRM, WhatsApp y agentes IA para no perder contexto comercial</div>
+        <div class="card-desc">Una guia enfocada en pipeline, seguimiento, notas, handoff y reduccion de fuga entre marketing, ventas y soporte.</div>
+        <div class="card-meta"><span>CRM</span><span>Pipeline</span></div>
+      </a>
+      <a class="card" href="/blog/agentes-ia-para-ecommerce-y-postventa">
+        <div class="card-kicker">Ecommerce</div>
+        <div class="card-title">Agentes IA para ecommerce y postventa: de carrito abandonado a recompra</div>
+        <div class="card-desc">Un playbook para marcas que quieren usar agentes en ventas, seguimiento de pedidos, cambios, devoluciones y fidelizacion.</div>
+        <div class="card-meta"><span>Ecommerce</span><span>Postventa</span></div>
+      </a>
+      <a class="card" href="/blog/como-medir-roi-de-agentes-ia-en-ventas-y-soporte">
+        <div class="card-kicker">ROI</div>
+        <div class="card-title">Como medir el ROI de agentes IA en ventas y soporte</div>
+        <div class="card-desc">Aterriza el caso de negocio en metricas como resolucion automatizada, conversion, tiempo de respuesta y ahorro operativo.</div>
+        <div class="card-meta"><span>Metricas</span><span>Negocio</span></div>
+      </a>
+    </div>
+  </section>
 
-      <article class="article" id="automatizar-whatsapp">
-        <small class="eyebrow">Implementacion</small>
-        <h2>Como automatizar WhatsApp con agentes IA sin romper la experiencia del cliente</h2>
-        <p>Automatizar WhatsApp no consiste en contestar mas rapido. Consiste en acompanar mejor el recorrido del cliente con respuestas, datos y acciones coherentes. Eso implica decidir que conversaciones automatizar primero y donde debe escalar a una persona.</p>
-        <ul>
-          <li>Define journeys, no respuestas aisladas.</li>
-          <li>Conecta el agente con informacion operativa antes de ampliar alcance.</li>
-          <li>Disena handoff con resumen y siguiente accion sugerida.</li>
-        </ul>
-      </article>
+  <section class="section">
+    <span class="eyebrow">CX y operaciones</span>
+    <h2 class="section-title">Contenido para automatizar mas sin perder control.</h2>
+    <p class="section-sub">Aqui la pregunta no es solo automatizar. Es automatizar bien: con handoff, reglas operativas, integraciones seguras y una ruta clara para escalar sin volver caotica la experiencia del cliente.</p>
+    <div class="grid-3" style="margin-top:1.6rem;">
+      <a class="card" href="/blog/automatizar-soporte-al-cliente-con-agentes-ia">
+        <div class="card-kicker">Soporte</div>
+        <div class="card-title">Como automatizar soporte al cliente con agentes IA sin perder control operativo</div>
+        <div class="card-desc">Pensado para equipos que quieren automatizar el 80% de lo repetitivo y dejar el 20% complejo listo para humanos.</div>
+        <div class="card-meta"><span>CX</span><span>Resolucion</span></div>
+      </a>
+      <a class="card" href="/blog/cuando-escalar-a-un-humano-en-soporte-con-agentes-ia">
+        <div class="card-kicker">Handoff</div>
+        <div class="card-title">Cuando escalar a un humano en soporte con agentes IA</div>
+        <div class="card-desc">Define criterios de escalamiento, resumen de contexto y reglas para proteger experiencia, CSAT y operacion.</div>
+        <div class="card-meta"><span>Humano</span><span>CSAT</span></div>
+      </a>
+      <a class="card" href="/blog/como-conectar-erp-inventario-y-agentes-ia">
+        <div class="card-kicker">ERP</div>
+        <div class="card-title">Como conectar ERP, inventario y agentes IA sin romper operaciones</div>
+        <div class="card-desc">Una lectura para negocios que necesitan consultar stock, estado de pedidos o disponibilidad antes de automatizar respuestas y acciones.</div>
+        <div class="card-meta"><span>Inventario</span><span>Operacion</span></div>
+      </a>
+      <a class="card" href="/blog/playbook-para-implementar-agentes-ia-en-90-dias">
+        <div class="card-kicker">Playbook</div>
+        <div class="card-title">Playbook para implementar agentes IA en 90 dias</div>
+        <div class="card-desc">Un mapa ejecutivo para pasar de diagnostico a piloto y luego a despliegue con KPI, ownership y foco comercial.</div>
+        <div class="card-meta"><span>Implementacion</span><span>90 dias</span></div>
+      </a>
+    </div>
+  </section>
 
-      <article class="article" id="crm-whatsapp-agentes">
-        <small class="eyebrow">Integraciones</small>
-        <h2>Como conectar tu CRM, WhatsApp y agentes IA para no perder contexto comercial</h2>
-        <p>Cuando el agente puede leer y escribir en CRM, el canal deja de ser una bandeja separada. El flujo puede capturar datos, enriquecer ficha, actualizar pipeline y recomendar la siguiente accion al ejecutivo.</p>
-        <ul>
-          <li>Menos fuga entre primera conversacion y seguimiento comercial.</li>
-          <li>Actualizacion del pipeline en tiempo real.</li>
-          <li>Escalamientos mas precisos porque el vendedor recibe contexto util.</li>
-        </ul>
-      </article>
+  <section class="section">
+    <span class="eyebrow">Categoria y mercado</span>
+    <h2 class="section-title">Piezas para defender la categoria de ORQO.</h2>
+    <p class="section-sub">Estas entradas ayudan a explicar por que la conversacion sola no basta, por que la orquestacion importa y como leer las noticias de IA sin perder foco en negocio.</p>
+    <div class="grid-3" style="margin-top:1.6rem;">
+      <a class="card" href="/blog/como-automatizar-whatsapp-con-agentes-ia">
+        <div class="card-kicker">Implementacion</div>
+        <div class="card-title">Como automatizar WhatsApp con agentes IA sin romper la experiencia del cliente</div>
+        <div class="card-desc">Explica como pasar de mensajes aislados a journeys de ventas, soporte y agenda con contexto y reglas operativas.</div>
+        <div class="card-meta"><span>WhatsApp</span><span>Journey</span></div>
+      </a>
+      <a class="card" href="/blog/orquestacion-multiagente-para-canales-digitales">
+        <div class="card-kicker">Categoria</div>
+        <div class="card-title">Que es la orquestacion multiagente y por que importa en canales digitales</div>
+        <div class="card-desc">Ideal para posicionar la categoria propia de ORQO: agentes especializados, multiples canales y una sola capa de control.</div>
+        <div class="card-meta"><span>Multiagente</span><span>Omnicanal</span></div>
+      </a>
+      <a class="card" href="/blog/radar-ia-para-negocio">
+        <div class="card-kicker">Radar IA</div>
+        <div class="card-title">Senales y noticias de IA que si importan para ventas, soporte y canales</div>
+        <div class="card-desc">Un formato editorial curado: no cubre noticias por volumen, solo cambios que afectan costos, canales, compliance o conversion.</div>
+        <div class="card-meta"><span>News</span><span>Curado</span></div>
+      </a>
+    </div>
+  </section>
 
-      <article class="article" id="soporte-con-agentes">
-        <small class="eyebrow">CX</small>
-        <h2>Como automatizar soporte al cliente con agentes IA sin perder control operativo</h2>
-        <p>El error comun en soporte es medir automatizacion por volumen de respuestas, no por calidad de resolucion. Una estrategia de agentes empieza por clasificar casos y definir cuales pueden cerrarse de punta a punta con acceso a datos y herramientas.</p>
-        <ul>
-          <li>Automatizar el 80 por ciento util no significa dejar solo al cliente.</li>
-          <li>El 20 por ciento complejo debe escalar con contexto, no desde cero.</li>
-          <li>La observabilidad importa tanto como la experiencia conversacional.</li>
-        </ul>
-      </article>
-
-      <article class="article" id="orquestacion-multiagente">
-        <small class="eyebrow">Categoria</small>
-        <h2>Que es la orquestacion multiagente y por que importa en canales digitales</h2>
-        <p>Un negocio real no necesita un solo agente para todo. Necesita una red coordinada de agentes especializados para captar, calificar, atender, ejecutar y escalar. Sin orquestacion, esa red se convierte en otra fuente de fragmentacion.</p>
-        <ul>
-          <li>Especializacion por tarea sin perder continuidad.</li>
-          <li>Routing por complejidad para bajar costos y mejorar tiempos.</li>
-          <li>Una sola capa de control para WhatsApp, web, redes y APIs.</li>
-        </ul>
-      </article>
-    </section>
-
-    <section class="section" id="radar">
-      <span class="eyebrow">Radar IA</span>
-      <h2>No noticias por volumen. Senales con impacto de negocio.</h2>
-      <p>La seccion de noticias de ORQO debe ser un radar curado, no un medio generalista. La pregunta editorial correcta es: esto cambia como una empresa despliega agentes en canales reales? Si la respuesta es no, no suma SEO ni conversion.</p>
-      <div class="grid">
-        <div class="card">
-          <small>Herramientas</small>
-          <h3>Releases de modelos y plataformas</h3>
-          <p>Cambios en costo, latencia, tool use, gobernanza u observabilidad que alteren como se opera IA en produccion.</p>
-        </div>
-        <div class="card">
-          <small>Canales</small>
-          <h3>WhatsApp, Meta, web chat y mensajeria</h3>
-          <p>Actualizaciones que cambien alcance de automatizacion, seguridad, verificacion o politicas de contacto.</p>
-        </div>
-        <div class="card">
-          <small>Riesgo</small>
-          <h3>Fraude, consentimiento y compliance</h3>
-          <p>Temas de seguridad o confianza solo entran si afectan la operacion real de marcas que usan agentes.</p>
-        </div>
+  <section class="section">
+    <span class="eyebrow">Radar IA</span>
+    <h2 class="section-title">No noticias por volumen. Senales con impacto de negocio.</h2>
+    <p class="section-sub">Una seccion de noticias puede funcionar, pero solo si filtra muy bien. Para ORQO, la pregunta editorial correcta es: "Esto cambia como una empresa despliega agentes en canales reales?" Si la respuesta es no, no suma SEO ni conversion.</p>
+    <div class="signal-list">
+      <div class="signal">
+        <h3>Cambios en herramientas para construir agentes</h3>
+        <p>Releases de OpenAI, Anthropic o Google que alteren costo, latencia, observabilidad o capacidades de tool use.</p>
       </div>
-      <p style="margin-top:18px;">Recomendacion editorial: publicar 2 a 4 piezas al mes con esta logica. Si se llena de noticias amplias de IA o geopolitica sin relacion con CX, soporte o ventas, la autoridad tematica se diluye.</p>
-    </section>
+      <div class="signal">
+        <h3>Cambios en canales conversacionales</h3>
+        <p>Actualizaciones de WhatsApp Business, Meta, Messenger o web chat que cambien el alcance de automatizacion o seguridad.</p>
+      </div>
+      <div class="signal">
+        <h3>Riesgo, fraude y cumplimiento</h3>
+        <p>Noticias sobre scam detection, verificacion de anunciantes, consentimientos o privacidad que afecten la operacion de marcas en canales.</p>
+      </div>
+    </div>
+    <div style="margin-top:1.4rem;">
+      <a href="/blog/radar-ia-para-negocio" class="btn-secondary">Abrir Radar IA</a>
+    </div>
+  </section>
 
-    <footer class="footer">
-      <div>ORQO Blog - 2026</div>
-      <div><a href="/">Volver a la landing</a> · <a href="mailto:hola@orqo.io">hola@orqo.io</a></div>
-    </footer>
-  </main>
+  <section class="section">
+    <div class="cta-box">
+      <strong>Recomendacion editorial</strong>
+      <p style="margin-top:0.6rem;">Con este hub ya podemos combinar piezas evergreen y un Radar IA curado sin salirnos de la categoria. Si lo llenamos con noticias generales o temas como guerra y defensa sin relacion clara con CX, soporte, ventas o riesgo operativo, la autoridad tematica se diluye y el trafico no calificara.</p>
+      <div class="hero-actions" style="margin-top:1rem;">
+        <a href="/#contacto" class="btn-primary">Definir calendario editorial</a>
+        <a href="/" class="btn-secondary">Volver a la landing</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-copy">ORQO blog - 2026</div>
+    <div class="footer-links">
+      <a href="/">Inicio</a>
+      <a href="/blog/radar-ia-para-negocio">Radar IA</a>
+      <a href="/changelog">Changelog</a>
+      <a href="mailto:hola@orqo.io">hola@orqo.io</a>
+    </div>
+  </footer>
+</main>
+
+<script src="/blog-theme.js"></script>
 </body>
 </html>

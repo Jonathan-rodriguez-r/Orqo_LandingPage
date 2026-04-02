@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como conectar ERP, inventario y agentes IA | ORQO Blog</title>
+<meta name="description" content="Guia para conectar ERP, inventario y agentes IA sin romper operaciones, con flujos seguros para stock, pedidos, disponibilidad y acciones controladas.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 72'><rect width='72' height='72' fill='%23111812' rx='14'/><path d='M52 59.5 A30 30 0 1 1 59.5 52' stroke='%23E9EDE9' stroke-width='4.5' stroke-linecap='round' fill='none'/><line x1='59.5' y1='52' x2='66' y2='58' stroke='%232CB978' stroke-width='4.5' stroke-linecap='round'/><circle cx='66' cy='58' r='5' fill='%232CB978'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Figtree:wght@300;400;500;600&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/blog.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Como conectar ERP, inventario y agentes IA",
+  "description": "Guia para conectar agentes IA con ERP e inventario de forma segura y operable.",
+  "datePublished": "2026-04-02",
+  "author": {
+    "@type": "Organization",
+    "name": "ORQO"
+  }
+}
+</script>
+</head>
+<body>
+<div class="bg-glow"></div>
+<div class="bg-grain"></div>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+      <path d="M52 59.5 A30 30 0 1 1 59.5 52" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="66" cy="58" r="4" fill="#2CB978"/>
+    </svg>
+    <span class="nav-logo-text">ORQO</span>
+  </a>
+  <div class="nav-right">
+    <a href="/blog" class="nav-link">Volver al blog</a>
+    <a href="/#contacto" class="nav-link">Solicitar demo</a>
+    <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+      <svg id="theme-ico" width="16" height="16" viewBox="0 0 24 24" fill="none"></svg>
+    </button>
+  </div>
+</nav>
+
+<main class="page page-narrow">
+  <article class="article-shell">
+    <header class="article-hero">
+      <div class="article-meta-row">
+        <span>ERP</span>
+        <span>2 abril 2026</span>
+        <span>Lectura 7 min</span>
+      </div>
+      <span class="eyebrow">Operacion conectada</span>
+      <h1 class="hero-title">Como conectar ERP, inventario y agentes IA sin romper operaciones.</h1>
+      <p class="hero-sub">Las empresas suelen querer automatizar conversaciones antes de resolver la integracion con sus sistemas. El resultado es previsible: respuestas incompletas, datos inconsistentes y frustracion del equipo. La prioridad correcta es conectar bien la operacion.</p>
+    </header>
+
+    <div class="prose">
+      <p>Cuando un cliente pregunta por disponibilidad, estado de pedido, cambios o tiempos de entrega, la respuesta valiosa no esta en el modelo. Esta en el ERP, el inventario o la capa transaccional del negocio. Por eso la integracion no es un detalle tecnico: es el nucleo de la experiencia.</p>
+
+      <h2>Que operaciones suelen necesitar integracion</h2>
+      <ul>
+        <li>Consulta de stock o disponibilidad.</li>
+        <li>Estado de pedido, despacho o factura.</li>
+        <li>Reserva o asignacion de inventario.</li>
+        <li>Creacion o actualizacion de casos, pedidos o registros.</li>
+        <li>Validaciones previas antes de prometer una accion al cliente.</li>
+      </ul>
+
+      <h2>La regla principal: leer es facil, escribir exige control</h2>
+      <p>No todas las acciones tienen el mismo riesgo. Leer informacion del sistema suele ser el primer paso. Escribir cambios, mover estados o reservar inventario ya requiere permisos, reglas y trazabilidad. Si el proyecto intenta abrir todo desde el dia uno, aumenta el riesgo y baja la confianza interna.</p>
+
+      <p>Lo recomendable es avanzar por capas: primero consultas confiables, luego acciones de bajo riesgo y finalmente operaciones mas sensibles con validaciones y aprobaciones cuando haga falta.</p>
+
+      <blockquote class="quote">La automatizacion gana traccion cuando el negocio siente que controla lo que el agente puede hacer, no cuando siente que el agente opera a ciegas dentro del ERP.</blockquote>
+
+      <h2>Que debe cuidar un buyer no tecnico</h2>
+      <ul>
+        <li>Que sistemas y endpoints se conectan realmente.</li>
+        <li>Que permisos tendra cada agente segun el caso.</li>
+        <li>Como se registran las acciones y errores.</li>
+        <li>Que pasa cuando la informacion no esta disponible.</li>
+        <li>Como se escalan las excepciones a humano.</li>
+      </ul>
+
+      <h2>Donde suelen fallar las implementaciones</h2>
+      <p>Fallan cuando se promete automatizar pedidos, disponibilidad o postventa sin definir contratos de datos, reglas de fallback y ownership operativo. El problema no es la IA; es que nadie definio como interactua con sistemas que ya son criticos para el negocio.</p>
+
+      <h2>Donde encaja ORQO</h2>
+      <p>ORQO permite conectar canales conversacionales con agentes y sistemas del negocio bajo una capa de control. Eso ayuda a decidir que agente consulta, que herramientas usa, que acciones puede ejecutar y cuando debe escalar. En otras palabras: convierte integraciones sueltas en una operacion conversacional gobernable.</p>
+
+      <p>Si una empresa quiere automatizar de verdad, tarde o temprano necesita esta capa entre conversacion y sistema transaccional.</p>
+    </div>
+
+    <section class="section">
+      <div class="cta-box">
+        <strong>Relacionados</strong>
+        <div class="related-grid">
+          <a class="card" href="/blog/orquestacion-multiagente-para-canales-digitales">
+            <div class="card-kicker">Categoria</div>
+            <div class="card-title">Que es la orquestacion multiagente</div>
+          </a>
+          <a class="card" href="/blog/agentes-ia-para-ecommerce-y-postventa">
+            <div class="card-kicker">Ecommerce</div>
+            <div class="card-title">Agentes IA para ecommerce y postventa</div>
+          </a>
+          <a class="card" href="/blog/playbook-para-implementar-agentes-ia-en-90-dias">
+            <div class="card-kicker">Playbook</div>
+            <div class="card-title">Implementar agentes IA en 90 dias</div>
+          </a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <footer class="footer">
+    <div class="footer-copy">ORQO blog - erp</div>
+    <div class="footer-links">
+      <a href="/blog">Blog</a>
+      <a href="/blog/radar-ia-para-negocio">Radar IA</a>
+      <a href="/#contacto">Solicitar demo</a>
+    </div>
+  </footer>
+</main>
+
+<script src="/blog-theme.js"></script>
+</body>
+</html>
