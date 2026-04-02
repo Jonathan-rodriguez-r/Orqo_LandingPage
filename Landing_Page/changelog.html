@@ -136,6 +136,46 @@ nav {
   <p class="page-sub">Actualizaciones del sistema ORQO — plataforma web, dashboard y widget embebible.</p>
 
   <div class="timeline">
+
+    <!-- v1.8 — Abril 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.8</span>
+        <span class="release-date">Abril 2026</span>
+        <span class="release-tag tag-feat">Integraciones</span>
+        <span class="release-tag tag-dash">Dashboard + Core</span>
+        <span class="release-tag" style="background:rgba(44,185,120,0.12);border:1px solid rgba(44,185,120,0.3);color:#2CB978;">Actual</span>
+      </div>
+      <ul class="release-list">
+        <li><strong>Dashboard conectado al motor de agentes</strong> — el dashboard ahora habla directamente con orqo-core via Management API; ya no accede a MongoDB por cuenta propia para el plano de control.</li>
+        <li><strong>Provisioning de workspace en un clic</strong> — nueva sección "Motor de Agentes" en Configuración: provisiona el workspace en el core, muestra la API key solo una vez y confirma el estado del motor en tiempo real.</li>
+        <li><strong>Gestión de integraciones MCP</strong> — interfaz completa para agregar, activar/desactivar y eliminar servidores MCP por workspace desde el dashboard (WooCommerce, Shopify, Odoo, REST genérico, custom).</li>
+        <li><strong>Catálogo visual de conectores</strong> — grid con todos los templates disponibles, descripción, tools incluidas y modal de credenciales por tipo de conector.</li>
+        <li><strong>Navegación directa</strong> — nueva entrada "MCP / Integraciones" en la barra lateral para acceso rápido desde cualquier sección.</li>
+        <li><strong>Fallback seguro</strong> — si el core no está activo, el catálogo se sirve desde una copia estática embebida; el dashboard nunca rompe por indisponibilidad del backend.</li>
+      </ul>
+    </div>
+
+    <!-- v1.7 — Abril 2026 -->
+    <div class="release">
+      <div class="release-header">
+        <span class="release-ver">v1.7</span>
+        <span class="release-date">Abril 2026</span>
+        <span class="release-tag tag-feat">MCP Marketplace</span>
+        <span class="release-tag tag-dash">Core + Multi-tenant</span>
+      </div>
+      <ul class="release-list">
+        <li><strong>Motor de agentes (orqo-core)</strong> — arquitectura hexagonal completa con 137 tests automatizados en 19 suites; cero dependencias de framework.</li>
+        <li><strong>MCP Marketplace</strong> — registro dinámico de servidores MCP por workspace: conecta WooCommerce, Shopify, Odoo, cualquier API REST o servidor custom en minutos, sin código nuevo.</li>
+        <li><strong>WorkspaceMcpRegistry</strong> — carga y cachea los MCPs del workspace al primer mensaje; agentes acceden a herramientas de sistemas externos de forma transparente.</li>
+        <li><strong>Transporte HTTP/SSE</strong> — HttpMcpGateway para servidores MCP remotos (además de procesos locales stdio), con soporte de autenticación Bearer.</li>
+        <li><strong>Plataforma multi-tenant</strong> — ciclo de vida de workspace (trial → activo → suspendido → cancelado), API keys con hash SHA-256, rotación sin downtime.</li>
+        <li><strong>WorkspaceGuard y RateLimiter</strong> — bloqueo automático de mensajes de workspaces vencidos; ventana deslizante de 60 msg/min por workspace en memoria.</li>
+        <li><strong>Management API</strong> — REST completo en puerto 3002: CRUD de workspaces, rotación de key, gestión de servidores MCP y catálogo de templates.</li>
+        <li><strong>RBAC hardening</strong> — 9 roles, aislamiento de tenant, permisos efectivos = JWT ∪ defaults del rol para compatibilidad con tokens legacy.</li>
+      </ul>
+    </div>
+
     <!-- v1.6 - Marzo 2026 -->
     <div class="release">
       <div class="release-header">
