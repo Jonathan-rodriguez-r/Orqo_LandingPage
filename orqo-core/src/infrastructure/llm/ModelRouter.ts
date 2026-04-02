@@ -1,0 +1,161 @@
+import { Ok, Err, type Result } from '../../shared/Result.js';
+import type { IModelRouter } from '../../application/ports/IModelRouter.js';
+import type { ITenantPolicyRepository } from '../../application/ports/ITenantPolicyRepository.js';
+import type { ICostTracker } from '../../application/ports/ICostTracker.js';
+import type { ILlmGateway } from '../../application/ports/ILlmGateway.js';
+import {
+  type ModelConfig,
+  type ModelPolicy,
+  DEFAULT_MODEL_POLICY,
+} from '../../domain/policy/ModelPolicy.js';
+import { estimateCostUsd } from '../../domain/policy/CostEstimator.js';
+import { ClaudeLlmGateway } from './ClaudeLlmGateway.js';
+import { OpenAILlmGateway } from './OpenAILlmGateway.js';
+import { FallbackLlmGateway } from './FallbackLlmGateway.js';
+
+function toDateUtc(date: Date): string {
+  return date.toISOString().slice(0, 10); // YYYY-MM-DD
+}
+
+function toYearMonthUtc(date: Date): string {
+  return date.toISOString().slice(0, 7); // YYYY-MM
+}
+
+/**
+ * Implementación del router de modelos.
+ *
+ * - Carga la política del workspace desde MongoDB (o usa la default).
+ * - Construye un FallbackLlmGateway con la cadena de proveedores configurada.
+ * - Verifica presupuesto diario y mensual antes de cada llamada.
+ * - Registra el uso de tokens para tracking de costos.
+ */
+export class ModelRouter implements IModelRouter {
+  constructor(
+    private readonly policyRepo: ITenantPolicyRepository,
+    private readonly costTracker: ICostTracker,
+    private readonly anthropicApiKey: string,
+    private readonly openaiApiKey: string,
+  ) {}
+
+  async getPolicy(workspaceId: string): Promise<ModelPolicy> {
+    const stored = await this.policyRepo.findByWorkspaceId(workspaceId);
+    if (stored) return stored;
+
+    return {
+      workspaceId,
+      ...DEFAULT_MODEL_POLICY,
+      updatedAt: new Date(),
+    };
+  }
+
+  async buildGateway(workspaceId: string): Promise<Result<ILlmGateway>> {
+    const policy = await this.getPolicy(workspaceId);
+    const configs: ModelConfig[] = [policy.primary, ...policy.fallbacks];
+
+    const gateways: ILlmGateway[] = [];
+    const missingKeys: string[] = [];
+
+    for (const config of configs) {
+      const gateway = this.createGateway(config, missingKeys);
+      if (gateway) {
+        gateways.push(gateway);
+      }
+    }
+
+    if (gateways.length === 0) {
+      const providers = [...new Set(missingKeys)].join(', ');
+      return Err(
+        new Error(
+          `No hay API keys configuradas para los proveedores requeridos: ${providers}`,
+        ),
+      );
+    }
+
+    const gateway =
+      gateways.length === 1 ? gateways[0]! : new FallbackLlmGateway(gateways);
+
+    return Ok(gateway);
+  }
+
+  async checkBudget(workspaceId: string): Promise<Result<void>> {
+    const policy = await this.getPolicy(workspaceId);
+    const { dailyLimitUsd, monthlyLimitUsd } = policy.costBudget;
+
+    const now = new Date();
+    const today = toDateUtc(now);
+    const thisMonth = toYearMonthUtc(now);
+
+    const [dailyUsd, monthlyUsd] = await Promise.all([
+      this.costTracker.getDailyUsageUsd(workspaceId, today),
+      this.costTracker.getMonthlyUsageUsd(workspaceId, thisMonth),
+    ]);
+
+    if (dailyUsd >= dailyLimitUsd) {
+      return Err(
+        new Error(
+          `Presupuesto diario excedido para workspace ${workspaceId}: ` +
+            `$${dailyUsd.toFixed(4)} / $${dailyLimitUsd}`,
+        ),
+      );
+    }
+
+    if (monthlyUsd >= monthlyLimitUsd) {
+      return Err(
+        new Error(
+          `Presupuesto mensual excedido para workspace ${workspaceId}: ` +
+            `$${monthlyUsd.toFixed(4)} / $${monthlyLimitUsd}`,
+        ),
+      );
+    }
+
+    return Ok(undefined);
+  }
+
+  async recordUsage(
+    workspaceId: string,
+    model: string,
+    provider: string,
+    usage: { inputTokens: number; outputTokens: number },
+  ): Promise<void> {
+    try {
+      const now = new Date();
+      await this.costTracker.record({
+        workspaceId,
+        model,
+        provider,
+        inputTokens: usage.inputTokens,
+        outputTokens: usage.outputTokens,
+        estimatedCostUsd: estimateCostUsd(model, usage.inputTokens, usage.outputTokens),
+        dateUtc: toDateUtc(now),
+        recordedAt: now,
+      });
+    } catch (err) {
+      // Best-effort: no detener el flujo por errores de tracking
+      console.error('[ModelRouter] Error registrando uso de tokens:', err);
+    }
+  }
+
+  private createGateway(
+    config: ModelConfig,
+    missingKeys: string[],
+  ): ILlmGateway | null {
+    if (config.provider === 'anthropic') {
+      if (!this.anthropicApiKey) {
+        missingKeys.push('anthropic');
+        return null;
+      }
+      return new ClaudeLlmGateway(this.anthropicApiKey, config.model);
+    }
+
+    if (config.provider === 'openai') {
+      if (!this.openaiApiKey) {
+        missingKeys.push('openai');
+        return null;
+      }
+      return new OpenAILlmGateway(this.openaiApiKey, config.model);
+    }
+
+    missingKeys.push(config.provider);
+    return null;
+  }
+}

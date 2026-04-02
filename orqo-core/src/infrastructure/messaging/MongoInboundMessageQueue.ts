@@ -3,6 +3,7 @@ import type {
   IInboundMessageQueue,
   InboundMessageEnqueueReceipt,
   InboundMessageQueueJob,
+  QueueStats,
 } from '../../application/ports/IInboundMessageQueue.js';
 import { CanonicalMessageEnvelope } from '../../domain/messaging/entities/CanonicalMessageEnvelope.js';
 import { Err, Ok, type Result } from '../../shared/Result.js';
@@ -221,6 +222,15 @@ export class MongoInboundMessageQueue implements IInboundMessageQueue {
     );
 
     return Ok(undefined);
+  }
+
+  async stats(): Promise<QueueStats> {
+    const [pending, processing, deadLetter] = await Promise.all([
+      this.col.countDocuments({ status: 'pending' }),
+      this.col.countDocuments({ status: 'processing' }),
+      this.col.countDocuments({ status: 'dead-letter' }),
+    ]);
+    return { pending, processing, deadLetter };
   }
 
   private computeRetryDelay(attempts: number): number {

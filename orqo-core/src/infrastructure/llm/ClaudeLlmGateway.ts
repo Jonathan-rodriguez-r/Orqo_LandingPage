@@ -72,6 +72,8 @@ export class ClaudeLlmGateway implements ILlmGateway {
           inputTokens: response.usage.input_tokens,
           outputTokens: response.usage.output_tokens,
         },
+        model: this.model,
+        provider: 'anthropic',
       } satisfies LlmResponse;
     });
   }

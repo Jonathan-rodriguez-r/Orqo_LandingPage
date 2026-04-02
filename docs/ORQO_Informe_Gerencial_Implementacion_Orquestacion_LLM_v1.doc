@@ -1,0 +1,444 @@
+﻿<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="UTF-8">
+<meta name="ProgId" content="Word.Document">
+<title>ORQO - Informe Gerencial de Implementación Omnicanal + Orquestación LLM</title>
+<style>
+  :root {
+    --orqo-primary: #2CB978;
+    --orqo-primary-dark: #1F8F5C;
+    --orqo-ink: #08140F;
+    --orqo-muted: #4C5F56;
+    --orqo-bg: #F5FBF8;
+    --orqo-line: #D8ECE2;
+    --orqo-warn: #F5A623;
+    --orqo-danger: #C62828;
+    --orqo-info: #0E7AA6;
+  }
+
+  body {
+    font-family: Calibri, Segoe UI, sans-serif;
+    font-size: 11pt;
+    color: var(--orqo-ink);
+    margin: 2.2cm;
+    line-height: 1.5;
+  }
+
+  h1 {
+    font-size: 28pt;
+    color: var(--orqo-primary);
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  h2 {
+    font-size: 14pt;
+    color: var(--orqo-ink);
+    border-bottom: 1pt solid var(--orqo-line);
+    padding-bottom: 4pt;
+    margin-top: 18pt;
+    margin-bottom: 8pt;
+  }
+
+  h3 {
+    font-size: 11pt;
+    color: var(--orqo-primary-dark);
+    margin-top: 12pt;
+    margin-bottom: 4pt;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    color: var(--orqo-muted);
+    margin-top: 8pt;
+    margin-bottom: 3pt;
+  }
+
+  p { margin: 4pt 0; }
+  ul, ol { margin: 4pt 0 10pt 0; padding-left: 18pt; }
+  li { margin-bottom: 2pt; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 10pt;
+    margin: 8pt 0 14pt 0;
+  }
+
+  th {
+    background: var(--orqo-primary);
+    color: #FFFFFF;
+    text-align: left;
+    padding: 6pt 8pt;
+    font-weight: bold;
+  }
+
+  td {
+    border-bottom: 0.6pt solid var(--orqo-line);
+    padding: 5pt 8pt;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: var(--orqo-bg);
+  }
+
+  .cover {
+    border: 1pt solid var(--orqo-line);
+    background: linear-gradient(145deg, #F8FFFB 0%, #EEF8F3 100%);
+    border-radius: 8pt;
+    padding: 20pt;
+    margin-bottom: 20pt;
+  }
+
+  .cover-subtitle {
+    font-size: 14pt;
+    color: var(--orqo-primary-dark);
+    margin: 6pt 0 0 0;
+    font-weight: bold;
+  }
+
+  .meta {
+    font-size: 10pt;
+    color: #5E7268;
+    margin-top: 12pt;
+  }
+
+  .pill {
+    display: inline-block;
+    font-size: 9pt;
+    font-weight: bold;
+    background: #DDF4E8;
+    color: #166C45;
+    border: 0.8pt solid #BFE7D3;
+    padding: 2pt 6pt;
+    border-radius: 8pt;
+    margin-right: 4pt;
+  }
+
+  .box {
+    border-left: 3pt solid var(--orqo-primary);
+    background: var(--orqo-bg);
+    padding: 8pt 10pt;
+    margin: 8pt 0;
+  }
+
+  .box-warn {
+    border-left: 3pt solid var(--orqo-warn);
+    background: #FFF8E8;
+    padding: 8pt 10pt;
+    margin: 8pt 0;
+  }
+
+  .box-danger {
+    border-left: 3pt solid var(--orqo-danger);
+    background: #FFF2F2;
+    padding: 8pt 10pt;
+    margin: 8pt 0;
+  }
+
+  .kpi {
+    font-weight: bold;
+    color: var(--orqo-info);
+  }
+
+  hr {
+    border: 0;
+    border-top: 0.6pt solid #D8E6DF;
+    margin: 16pt 0;
+  }
+
+  code {
+    font-family: Consolas, monospace;
+    font-size: 9.5pt;
+    background: #EFF3F1;
+    border-radius: 3pt;
+    padding: 1pt 4pt;
+  }
+
+  .footer {
+    text-align: center;
+    color: #647A6F;
+    font-size: 9.5pt;
+    margin-top: 22pt;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <h1>ORQO</h1>
+  <p class="cover-subtitle">Informe Gerencial de Implementación<br>Arquitectura Omnicanal + Orquestación de LLMs</p>
+
+  <p class="meta">
+    <strong>Versión:</strong> 1.0 &nbsp;|&nbsp;
+    <strong>Fecha:</strong> 31 de marzo de 2026 &nbsp;|&nbsp;
+    <strong>Preparado por:</strong> Lead Solutions Architecture<br>
+    <strong>Empresa:</strong> Bacata Digital Media (ORQO) &nbsp;|&nbsp;
+    <strong>Producto:</strong> orqo.io / dashboard.orqo.io
+  </p>
+
+  <p>
+    <span class="pill">Enfoque Ejecutivo</span>
+    <span class="pill">Escalable</span>
+    <span class="pill">AI-First</span>
+    <span class="pill">Omnicanal</span>
+  </p>
+</div>
+
+<h2>1. Resumen Ejecutivo</h2>
+<p>
+ORQO puede evolucionar su arquitectura actual sin reescritura total, incorporando una capa de orquestación asíncrona orientada a agentes de IA.
+La recomendación es una implementación por fases, con entrega de valor continua y riesgo controlado.
+</p>
+
+<div class="box">
+  <strong>Conclusión gerencial:</strong> el cambio es <strong>acoplable</strong> en gran parte del sistema actual.
+  Se proyecta una transformación en dos velocidades:
+  (1) mejoras evolutivas sobre la plataforma existente, y
+  (2) construcción de un núcleo de orquestación LLM-native.
+</div>
+
+<table>
+  <tr><th>Componente</th><th>Naturaleza del cambio</th><th>Impacto</th><th>Riesgo</th></tr>
+  <tr><td>Webhooks y conectores</td><td>Evolutivo</td><td>Alto (estabilidad y escala)</td><td>Bajo</td></tr>
+  <tr><td>Observabilidad de intentos y errores</td><td>Evolutivo</td><td>Alto (operación y soporte)</td><td>Bajo</td></tr>
+  <tr><td>Modelo de datos de eventos canónicos</td><td>Estructural</td><td>Muy alto (base AI-first)</td><td>Medio</td></tr>
+  <tr><td>Capa de razonamiento y políticas</td><td>Estructural</td><td>Muy alto (ventaja competitiva)</td><td>Medio</td></tr>
+</table>
+
+<h2>2. Objetivos del Programa</h2>
+<ol>
+  <li>Unificar la ingestión omnicanal (WhatsApp, Instagram, Facebook, Telegram, TikTok) bajo un modelo canónico.</li>
+  <li>Insertar una capa de decisión IA antes del dashboard y antes del envío al canal.</li>
+  <li>Aumentar resiliencia con retries, fallback de modelos y control por políticas.</li>
+  <li>Mejorar trazabilidad con logs por intento de proveedor/modelo y auditoría de decisiones.</li>
+  <li>Optimizar costo/latencia con gestión de contexto LLM (resumen incremental + memoria operativa).</li>
+</ol>
+
+<h2>3. Alcance y No Alcance</h2>
+<h3>Incluye</h3>
+<ul>
+  <li>Rediseño de flujo inbound/outbound con arquitectura asíncrona.</li>
+  <li>Diseño de tablas/colecciones para eventos canónicos y sesiones de agente.</li>
+  <li>Módulo de políticas de canal (ej. ventana de 24h de Meta) y compliance.</li>
+  <li>Observabilidad operativa y alertamiento por excepción funcional.</li>
+  <li>Plan de implementación por épicas, sprints y entregables.</li>
+</ul>
+
+<h3>No incluye (fase inicial)</h3>
+<ul>
+  <li>Reemplazo completo de front-end dashboard.</li>
+  <li>Migración histórica total de todos los mensajes antiguos (se propone migración progresiva).</li>
+  <li>Refactor masivo de módulos no relacionados con orquestación conversacional.</li>
+</ul>
+
+<h2>4. Arquitectura Objetivo (Lectura Ejecutiva)</h2>
+<p>
+La arquitectura objetivo opera como una cadena: <code>Webhook Ingress -&gt; Normalización -&gt; Cola -&gt; Razonamiento -&gt; Entrega -&gt; Observabilidad</code>.
+</p>
+
+<table>
+  <tr><th>Capa</th><th>Función</th><th>Resultado esperado</th></tr>
+  <tr><td>Ingress</td><td>Validar firmas/tokens, responder rápido</td><td>Disponibilidad y cumplimiento SLA webhook</td></tr>
+  <tr><td>Normalizer</td><td>Convertir payload externo a evento canónico</td><td>Modelo unificado multicanal</td></tr>
+  <tr><td>Orchestration Queue</td><td>Procesamiento asíncrono y reintentos</td><td>Resiliencia ante caídas de terceros</td></tr>
+  <tr><td>Policy Engine</td><td>Reglas por canal/tenant/compliance</td><td>Reducción de errores y bloqueos</td></tr>
+  <tr><td>Reasoning Layer</td><td>Router de modelos, herramientas y fallback</td><td>Respuesta AI confiable y costo controlado</td></tr>
+  <tr><td>Delivery</td><td>Adapter por canal/proveedor</td><td>Trazabilidad de entrega y estado</td></tr>
+  <tr><td>Observability</td><td>Logs, métricas, alertas, auditoría</td><td>Operación enterprise-grade</td></tr>
+</table>
+
+<div class="box">
+  <strong>Patrones recomendados:</strong> Adapter, Strategy, Template Method, Outbox,
+  Idempotency Guard, Saga liviana para orquestación multietapa.
+</div>
+
+<h2>5. Roadmap de Implementación por Fases</h2>
+
+<h3>Fase 0 - Preparación (1 semana)</h3>
+<table>
+  <tr><th>Tarea</th><th>Descripción</th><th>Entregable</th><th>Owner</th></tr>
+  <tr><td>0.1 Baseline técnico</td><td>Inventario de endpoints, colas, modelos y riesgos</td><td>Mapa AS-IS firmado</td><td>Arquitectura + Backend</td></tr>
+  <tr><td>0.2 Definición de eventos</td><td>Contrato canónico <code>MessageEnvelope v1</code></td><td>Especificación + JSON schema</td><td>Arquitectura</td></tr>
+  <tr><td>0.3 KPIs de referencia</td><td>Medición inicial de latencia, errores, reintentos, costo</td><td>Dashboard baseline</td><td>Data/Observabilidad</td></tr>
+</table>
+
+<h3>Fase 1 - Capa de Conectores Confiables (2 a 3 semanas)</h3>
+<table>
+  <tr><th>Tarea</th><th>Descripción</th><th>Criterio de aceptación</th></tr>
+  <tr><td>1.1 Ingress unificado</td><td>Controladores webhook delgados por canal + validación firma</td><td>ACK &lt; 200ms promedio</td></tr>
+  <tr><td>1.2 Idempotencia</td><td>Clave única por <code>channel/provider/external_message_id</code></td><td>Duplicados = 0 en pruebas de concurrencia</td></tr>
+  <tr><td>1.3 Cola y reintentos</td><td>Retry exponencial + DLQ</td><td>Sin pérdida de eventos ante caídas temporales</td></tr>
+  <tr><td>1.4 Adapter por canal</td><td>WhatsApp, Instagram, Facebook, Telegram, TikTok</td><td>Contrato canónico cumplido al 100%</td></tr>
+</table>
+
+<h3>Fase 2 - Estado Conversacional AI-First (2 a 3 semanas)</h3>
+<table>
+  <tr><th>Tarea</th><th>Descripción</th><th>Criterio de aceptación</th></tr>
+  <tr><td>2.1 Modelo de datos canónico</td><td>Colecciones/tablas de eventos, hilos y snapshots</td><td>Migración progresiva activa</td></tr>
+  <tr><td>2.2 Thread cross-canal</td><td>Vincular identidad externa a hilo de agente</td><td>Historial unificado por cliente</td></tr>
+  <tr><td>2.3 Context builder</td><td>Resumen incremental + memoria operativa</td><td>Reducción de tokens sin pérdida de calidad</td></tr>
+  <tr><td>2.4 Auditoría de decisiones</td><td>Trazas por intento de modelo/herramienta</td><td>100% intentos auditables</td></tr>
+</table>
+
+<h3>Fase 3 - Policy + Reasoning Layer (3 semanas)</h3>
+<table>
+  <tr><th>Tarea</th><th>Descripción</th><th>Criterio de aceptación</th></tr>
+  <tr><td>3.1 Policy engine</td><td>Reglas por canal, horario, compliance, tenant</td><td>Bloqueos/reglas aplicadas antes del envío</td></tr>
+  <tr><td>3.2 Router de modelos</td><td>Primary model + fallback chain</td><td>Disponibilidad superior al 99.5%</td></tr>
+  <tr><td>3.3 Taxonomía de errores</td><td><code>auth_error</code>, <code>quota_error</code>, <code>model_not_found</code>, etc.</td><td>Alertas accionables por tipo</td></tr>
+  <tr><td>3.4 Mensajería de contingencia</td><td>Respuesta controlada cuando no hay proveedor activo</td><td>Nunca respuesta vacía al usuario final</td></tr>
+</table>
+
+<h3>Fase 4 - Operación Enterprise y Cierre (2 semanas)</h3>
+<table>
+  <tr><th>Tarea</th><th>Descripción</th><th>Criterio de aceptación</th></tr>
+  <tr><td>4.1 Observabilidad total</td><td>Dashboards de salud, latencia, costo, fallas</td><td>NOC operativo con indicadores en vivo</td></tr>
+  <tr><td>4.2 Alertas por rol</td><td>Operaciones, propietario, seguridad</td><td>Notificación por severidad y canal</td></tr>
+  <tr><td>4.3 Manual operativo</td><td>Runbooks, procedimientos y escalamiento</td><td>Equipo habilitado para soporte 24/7</td></tr>
+  <tr><td>4.4 Go-Live controlado</td><td>Canary + rollback plan</td><td>Salida a producción sin interrupción</td></tr>
+</table>
+
+<div class="box-warn">
+  <strong>Duración total estimada:</strong> 10 a 12 semanas, dependiendo del número de canales activados y ambientes de prueba.
+</div>
+
+<h2>6. Backlog Priorizado (épicas y tareas)</h2>
+
+<h3>Épica A - Conectividad Omnicanal</h3>
+<ul>
+  <li>A1. Diseñar interfaz <code>IChannelInboundAdapter</code>.</li>
+  <li>A2. Implementar adapters Meta, Telegram y TikTok con pruebas contractuales.</li>
+  <li>A3. Implementar <code>canonical_event_mapper</code> por proveedor.</li>
+  <li>A4. Incorporar validación criptográfica de firma/timestamp.</li>
+  <li>A5. Implementar DLQ y re-proceso desde dashboard.</li>
+</ul>
+
+<h3>Épica B - Conversación y Contexto LLM</h3>
+<ul>
+  <li>B1. Crear entidad <code>agent_thread</code> y relación con identidades externas.</li>
+  <li>B2. Crear entidad <code>message_event</code> append-only.</li>
+  <li>B3. Crear <code>llm_context_snapshot</code> (resumen incremental).</li>
+  <li>B4. Implementar estrategia de compresión de contexto (últimos N + memoria).</li>
+  <li>B5. Versionar prompts de sistema por agente y por canal.</li>
+</ul>
+
+<h3>Épica C - Orquestación y Resiliencia</h3>
+<ul>
+  <li>C1. Router de modelos con fallback.</li>
+  <li>C2. Clasificación estándar de errores de proveedor/modelo.</li>
+  <li>C3. Registro de intento por proveedor (latencia, error, tokens).</li>
+  <li>C4. Política de contingencia por tenant.</li>
+  <li>C5. Circuit breaker por proveedor degradado.</li>
+</ul>
+
+<h3>Épica D - Observabilidad y Gobierno</h3>
+<ul>
+  <li>D1. Trazabilidad end-to-end con correlation ID.</li>
+  <li>D2. Alertas configurables por severidad y rol.</li>
+  <li>D3. Informes gerenciales automatizados (estadístico + AI insight).</li>
+  <li>D4. Auditoría de eliminación de conversaciones/logs.</li>
+  <li>D5. KPI board por canal, agente, tenant y periodo.</li>
+</ul>
+
+<h2>7. Estructura de Datos Recomendada</h2>
+<table>
+  <tr><th>Entidad</th><th>Propósito</th><th>Claves sugeridas</th></tr>
+  <tr><td>external_identity</td><td>Unificar identidad del cliente por canal</td><td><code>tenant_id, channel, provider, external_user_id</code></td></tr>
+  <tr><td>agent_thread</td><td>Hilo canónico de agente</td><td><code>thread_id, tenant_id, customer_id, status</code></td></tr>
+  <tr><td>message_event</td><td>Registro inmutable de eventos</td><td><code>event_id, thread_id, external_message_id</code></td></tr>
+  <tr><td>llm_context_snapshot</td><td>Memoria comprimida para LLM</td><td><code>thread_id, version, summary, facts</code></td></tr>
+  <tr><td>orchestration_run</td><td>Trazabilidad por ejecución IA</td><td><code>run_id, model_chain, result, cost, latency</code></td></tr>
+  <tr><td>delivery_receipt</td><td>Estado de entrega al canal</td><td><code>provider_message_id, status, error_code</code></td></tr>
+  <tr><td>alert_event</td><td>Alertas operativas y de negocio</td><td><code>severity, category, owner_role, status</code></td></tr>
+</table>
+
+<div class="box">
+  <strong>Principio clave:</strong> separar definitivamente
+  <em>evento conversacional</em>, <em>estado de hilo</em> y <em>ejecución LLM</em>.
+  Esta separación reduce acoplamiento y mejora la analítica.
+</div>
+
+<h2>8. Métricas de Éxito (KPIs)</h2>
+<table>
+  <tr><th>Dimensión</th><th>KPI</th><th>Meta inicial</th></tr>
+  <tr><td>Confiabilidad</td><td>Eventos perdidos</td><td class="kpi">0</td></tr>
+  <tr><td>Confiabilidad</td><td>Procesamiento duplicado</td><td class="kpi">menor a 0.1%</td></tr>
+  <tr><td>Performance</td><td>ACK webhook promedio</td><td class="kpi">menor a 200ms</td></tr>
+  <tr><td>Performance</td><td>P95 orquestación (sin tools externos)</td><td class="kpi">menor a 3.5s</td></tr>
+  <tr><td>Calidad IA</td><td>Resolución sin escalamiento</td><td class="kpi">más de 70%</td></tr>
+  <tr><td>Operación</td><td>MTTR incidentes críticos</td><td class="kpi">menor a 30 min</td></tr>
+  <tr><td>Costo</td><td>Costo promedio por interacción</td><td class="kpi">-15% vs baseline</td></tr>
+  <tr><td>Negocio</td><td>Satisfacción posconversación</td><td class="kpi">más de 80%</td></tr>
+</table>
+
+<h2>9. Gobierno, Roles y Responsabilidades</h2>
+<table>
+  <tr><th>Rol</th><th>Responsabilidad principal</th><th>Frecuencia de control</th></tr>
+  <tr><td>Product Owner</td><td>Priorizar backlog y valor de negocio</td><td>Semanal</td></tr>
+  <tr><td>Lead Architect</td><td>Decisiones de diseño y estándares</td><td>Semanal</td></tr>
+  <tr><td>Backend Lead</td><td>Adapters, colas, políticas, runtime IA</td><td>Diaria</td></tr>
+  <tr><td>Frontend Lead</td><td>Dashboard, observabilidad, UX operativa</td><td>Diaria</td></tr>
+  <tr><td>DevOps/SRE</td><td>Disponibilidad, monitoreo, rollback</td><td>Diaria</td></tr>
+  <tr><td>Data/Analytics</td><td>KPIs, informes, consistencia de métricas</td><td>Semanal</td></tr>
+</table>
+
+<h2>10. Riesgos y Mitigaciones</h2>
+<table>
+  <tr><th>Riesgo</th><th>Probabilidad</th><th>Impacto</th><th>Mitigación</th></tr>
+  <tr><td>Cambios en APIs externas (Meta/Telegram/TikTok)</td><td>Media</td><td>Alta</td><td>Contrato canónico + adapters desacoplados + pruebas contractuales</td></tr>
+  <tr><td>Costos LLM fuera de control</td><td>Media</td><td>Alta</td><td>Snapshots de contexto + límites por tenant + fallback por costo</td></tr>
+  <tr><td>Picos de tráfico</td><td>Alta</td><td>Media</td><td>Cola asíncrona + autoescalado + circuit breaker</td></tr>
+  <tr><td>Observabilidad incompleta</td><td>Media</td><td>Alta</td><td>Correlation IDs obligatorios + logging estructurado</td></tr>
+  <tr><td>Dependencia de un único proveedor IA</td><td>Media</td><td>Alta</td><td>Router multi-proveedor y fallback transaccional</td></tr>
+</table>
+
+<div class="box-danger">
+  <strong>Riesgo crítico a evitar:</strong> procesar lógica de negocio o llamadas LLM directamente en webhook síncrono.
+  Eso eleva fallas, latencia y pérdida de mensajes.
+</div>
+
+<h2>11. Entregables de Dirección por Hito</h2>
+<ol>
+  <li><strong>Hito 1:</strong> Ingress unificado + idempotencia + cola operativa.</li>
+  <li><strong>Hito 2:</strong> Evento canónico y thread AI-first en producción parcial.</li>
+  <li><strong>Hito 3:</strong> Policy engine + routing de modelos + fallback real.</li>
+  <li><strong>Hito 4:</strong> Dashboard de observabilidad completo + alertas por rol.</li>
+  <li><strong>Hito 5:</strong> Cierre de programa con KPIs y plan de optimización continua.</li>
+</ol>
+
+<h2>12. Plan de Ejecución (Sencillo de leer)</h2>
+<table>
+  <tr><th>Semana</th><th>Foco</th><th>Resultado visible para negocio</th></tr>
+  <tr><td>1</td><td>Preparación, contratos y baseline</td><td>Ruta clara y riesgos controlados</td></tr>
+  <tr><td>2-4</td><td>Conectores confiables y dedupe</td><td>Menos incidentes y mayor estabilidad</td></tr>
+  <tr><td>5-7</td><td>Thread AI-first y contexto LLM</td><td>Respuestas más consistentes y eficientes</td></tr>
+  <tr><td>8-10</td><td>Políticas, fallback y resiliencia</td><td>Continuidad operativa aunque falle un proveedor</td></tr>
+  <tr><td>11-12</td><td>Observabilidad, gobierno y cierre</td><td>Control gerencial completo por indicadores</td></tr>
+</table>
+
+<h2>13. Recomendación Final</h2>
+<p>
+Aprobar la implementación por fases, comenzando por confiabilidad de conectores y trazabilidad,
+seguido por la capa de razonamiento y políticas.
+Esta secuencia maximiza el valor temprano y reduce el riesgo técnico y operativo.
+</p>
+
+<div class="box">
+  <strong>Mensaje para comité:</strong> ORQO no requiere una reescritura total.
+  Requiere una evolución arquitectónica disciplinada para consolidarse como plataforma enterprise de orquestación de agentes IA.
+</div>
+
+<hr>
+<p class="footer">
+ORQO - Informe Gerencial de Implementación Omnicanal + Orquestación LLMs<br>
+Bacata Digital Media - Documento confidencial de trabajo - 31 de marzo de 2026
+</p>
+
+</body>
+</html>

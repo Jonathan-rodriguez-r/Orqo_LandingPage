@@ -23,6 +23,10 @@ export interface LlmResponse {
   /** Tool calls solicitadas por el LLM (puede ser vacío). */
   toolCalls: LlmToolCall[];
   usage: { inputTokens: number; outputTokens: number };
+  /** ID del modelo que generó la respuesta (e.g. 'claude-sonnet-4-6'). */
+  model: string;
+  /** Proveedor que respondió (e.g. 'anthropic', 'openai'). */
+  provider: string;
 }
 
 export interface LlmOptions {
