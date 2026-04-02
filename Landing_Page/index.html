@@ -1566,8 +1566,8 @@ footer {
 
 <section id="blog">
   <span class="section-eyebrow">Blog y Radar IA</span>
-  <h2 class="section-title reveal">Contenido que atrae buyers, no trafico vacio.</h2>
-  <p class="section-sub reveal">Creamos un blog orientado a equipos que van a implementar agentes en ventas, soporte y operaciones. No es un bloque de noticias genericas: es una capa editorial para posicionamiento, autoridad y conversion, ahora con mas piezas sobre ROI, WhatsApp, CRM, ERP y despliegue operativo.</p>
+  <h2 class="section-title reveal">Guias y senales para implementar agentes con impacto real.</h2>
+  <p class="section-sub reveal">Construimos un blog para equipos que quieren mover ventas, soporte y operaciones con agentes conectados a sus sistemas. Aqui encuentras comparativas, integraciones, casos de uso y senales de mercado relevantes para decidir mejor.</p>
 
   <div class="cases reveal" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
     <a class="content-card-link" href="/blog/agentes-ia-vs-chatbots-para-negocios">
@@ -1613,7 +1613,7 @@ footer {
       <div class="case-card">
         <div class="case-tag">ROI</div>
         <div class="case-title">Como medir el ROI de agentes IA</div>
-        <div class="case-desc">Una pieza para buyers que necesitan justificar inversion con ahorro operativo, resolucion automatizada y mas conversion.</div>
+        <div class="case-desc">Una pieza para equipos que necesitan justificar inversion con ahorro operativo, resolucion automatizada y mas conversion.</div>
         <ul class="case-list">
           <li>Metricas de negocio utiles</li>
           <li>Ahorro y conversion</li>
@@ -1626,7 +1626,7 @@ footer {
       <div class="case-card">
         <div class="case-tag">CX</div>
         <div class="case-title">Automatizar soporte con agentes IA</div>
-        <div class="case-desc">Un articulo para buyers que quieren resolver mas casos sin crecer el equipo al mismo ritmo.</div>
+        <div class="case-desc">Un articulo para equipos que quieren resolver mas casos sin crecer el equipo al mismo ritmo.</div>
         <ul class="case-list">
           <li>Automatizar el 80% util</li>
           <li>Escalar con contexto</li>
@@ -1808,6 +1808,9 @@ function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   document.getElementById('theme-ico').innerHTML = theme === 'light' ? MOON_ICO : SUN_ICO;
   localStorage.setItem('orqo_theme', theme);
+  const widgetEl = document.getElementById('orqo-widget');
+  if (widgetEl) widgetEl.setAttribute('data-theme', theme);
+  window.dispatchEvent(new CustomEvent('orqo-theme-change', { detail: { theme } }));
   // Keep widget theme vars scoped to the widget only (do not alter landing globals).
   if (window.__orqoApplyWidgetThemeVars) window.__orqoApplyWidgetThemeVars(theme);
 }
