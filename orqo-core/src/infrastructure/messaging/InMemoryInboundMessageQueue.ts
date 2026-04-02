@@ -2,6 +2,7 @@ import type {
   IInboundMessageQueue,
   InboundMessageEnqueueReceipt,
   InboundMessageQueueJob,
+  QueueStats,
 } from '../../application/ports/IInboundMessageQueue.js';
 import type { CanonicalMessageEnvelope } from '../../domain/messaging/entities/CanonicalMessageEnvelope.js';
 import { Err, Ok, type Result } from '../../shared/Result.js';
@@ -124,6 +125,14 @@ export class InMemoryInboundMessageQueue implements IInboundMessageQueue {
     return {
       pending: this.pending.length,
       inflight: this.inflight.size,
+      deadLetter: this.deadLetter.length,
+    };
+  }
+
+  async stats(): Promise<QueueStats> {
+    return {
+      pending: this.pending.length,
+      processing: this.inflight.size,
       deadLetter: this.deadLetter.length,
     };
   }

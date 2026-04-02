@@ -17,6 +17,7 @@ describe('IngestInboundMessageHandler', () => {
       reserveNext: jest.fn(),
       complete: jest.fn(),
       fail: jest.fn(),
+      stats: jest.fn().mockResolvedValue({ pending: 0, processing: 0, deadLetter: 0 }),
     };
 
     const envelopeResult = CanonicalMessageEnvelope.create({

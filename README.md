@@ -40,3 +40,7 @@ Ver [orqo-dashboard/README.md](./orqo-dashboard/README.md) para detalle completo
 ---
 
 Ver [CHANGELOG.md](./CHANGELOG.md) para historial de cambios.
+
+## Documentacion de arquitectura e infraestructura
+
+- [Infraestructura objetivo ORQO](./docs/INFRAESTRUCTURA_ORQO.md)

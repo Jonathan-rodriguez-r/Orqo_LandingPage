@@ -14,6 +14,12 @@ export interface InboundMessageQueueJob {
   readonly enqueuedAt: Date;
 }
 
+export interface QueueStats {
+  pending: number;
+  processing: number;
+  deadLetter: number;
+}
+
 export interface IInboundMessageQueue {
   enqueue(
     envelope: CanonicalMessageEnvelope,
@@ -21,4 +27,5 @@ export interface IInboundMessageQueue {
   reserveNext(): Promise<Result<InboundMessageQueueJob | null>>;
   complete(jobId: string): Promise<Result<void>>;
   fail(jobId: string, reason: string): Promise<Result<void>>;
+  stats(): Promise<QueueStats>;
 }

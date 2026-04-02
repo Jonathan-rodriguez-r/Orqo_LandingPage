@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, type Db } from 'mongodb';
 import { InMemoryCommandBus, type ICommandBus } from '../../shared/CommandBus.js';
 import { InMemoryQueryBus, type IQueryBus } from '../../shared/QueryBus.js';
 import { InMemoryEventBus, type IEventBus } from '../../shared/EventBus.js';
@@ -6,7 +6,7 @@ import { IngestInboundMessageHandler } from '../../application/commands/ingest-m
 import { ProcessIncomingMessageHandler } from '../../application/commands/process-message/ProcessIncomingMessageHandler.js';
 import type { IInboundMessageQueue } from '../../application/ports/IInboundMessageQueue.js';
 import { AgentOrchestrationService } from '../../application/services/AgentOrchestrationService.js';
-import { ClaudeLlmGateway } from '../llm/ClaudeLlmGateway.js';
+import { ModelRouter } from '../llm/ModelRouter.js';
 import { InboundMessageWorker } from '../messaging/InboundMessageWorker.js';
 import { MongoInboundMessageQueue } from '../messaging/MongoInboundMessageQueue.js';
 import { MetaWhatsAppGateway } from '../messaging/MetaWhatsAppGateway.js';
@@ -17,9 +17,17 @@ import { MongoConversationLockManager } from '../persistence/MongoConversationLo
 import { MongoConversationRepository } from '../persistence/MongoConversationRepository.js';
 import { MongoConversationSnapshotRepository } from '../persistence/MongoConversationSnapshotRepository.js';
 import { MongoOutboundMessageOutbox } from '../persistence/MongoOutboundMessageOutbox.js';
+import { MongoTenantPolicyRepository } from '../persistence/MongoTenantPolicyRepository.js';
+import { MongoCostTracker } from '../persistence/MongoCostTracker.js';
+import { MongoWorkspaceRepository } from '../persistence/MongoWorkspaceRepository.js';
+import { WorkspaceGuard } from '../../application/services/WorkspaceGuard.js';
 import { SkillRegistry } from '../skills/SkillRegistry.js';
 import { SupportFaqSkill } from '../skills/catalog/support-faq/SupportFaqSkill.js';
 import { WooCommerceOrderSkill } from '../skills/catalog/woocommerce-orders/WooCommerceOrderSkill.js';
+import { createLogger, type ILogger } from '../../shared/Logger.js';
+import { HealthChecker } from '../health/HealthChecker.js';
+import { MongoHealthCheck } from '../health/MongoHealthCheck.js';
+import { QueueHealthCheck } from '../health/QueueHealthCheck.js';
 
 export class Container {
   private static _instance: Container | undefined;
@@ -29,6 +37,8 @@ export class Container {
   readonly eventBus: IEventBus;
   readonly inboundMessageQueue: IInboundMessageQueue;
   readonly inboundMessageWorker: InboundMessageWorker;
+  readonly healthChecker: HealthChecker;
+  readonly logger: ILogger;
 
   private constructor(
     commandBus: ICommandBus,
@@ -36,12 +46,16 @@ export class Container {
     eventBus: IEventBus,
     inboundMessageQueue: IInboundMessageQueue,
     inboundMessageWorker: InboundMessageWorker,
+    healthChecker: HealthChecker,
+    logger: ILogger,
   ) {
     this.commandBus = commandBus;
     this.queryBus = queryBus;
     this.eventBus = eventBus;
     this.inboundMessageQueue = inboundMessageQueue;
     this.inboundMessageWorker = inboundMessageWorker;
+    this.healthChecker = healthChecker;
+    this.logger = logger;
   }
 
   static async build(): Promise<Container> {
@@ -49,12 +63,29 @@ export class Container {
       return Container._instance;
     }
 
+    // ── Hito 4: Logger estructurado ───────────────────────────────────────────
+    const logger = createLogger('orqo-core');
+
     const mongoClient = await MongoClient.connect(
       process.env['MONGODB_URI'] ?? 'mongodb://localhost:27017',
     );
-    const db = mongoClient.db(process.env['MONGODB_DB'] ?? 'orqo');
+    const db: Db = mongoClient.db(process.env['MONGODB_DB'] ?? 'orqo');
 
-    const llmGateway = new ClaudeLlmGateway();
+    // ── Hito 5: Workspace repository + guard ─────────────────────────────────
+    const workspaceRepo = new MongoWorkspaceRepository(db);
+    await workspaceRepo.ensureIndexes();
+    const workspaceGuard = new WorkspaceGuard(workspaceRepo);
+
+    // ── Hito 3: Model Router ──────────────────────────────────────────────────
+    const tenantPolicyRepo = new MongoTenantPolicyRepository(db);
+    const costTracker = new MongoCostTracker(db);
+    const modelRouter = new ModelRouter(
+      tenantPolicyRepo,
+      costTracker,
+      process.env['ANTHROPIC_API_KEY'] ?? '',
+      process.env['OPENAI_API_KEY'] ?? '',
+    );
+
     const mcpGateway = new StdioMcpGateway();
     const whatsAppGateway = new MetaWhatsAppGateway();
     const conversationRepo = new MongoConversationRepository(db);
@@ -75,9 +106,10 @@ export class Container {
     skillRegistry.register(new SupportFaqSkill());
 
     const orchestration = new AgentOrchestrationService(
-      llmGateway,
+      modelRouter,
       skillRegistry,
       mcpGateway,
+      logger.child({ component: 'orchestration' }),
     );
 
     const commandBus = new InMemoryCommandBus();
@@ -104,7 +136,15 @@ export class Container {
     const inboundMessageWorker = new InboundMessageWorker(
       commandBus,
       inboundMessageQueue,
+      logger.child({ component: 'worker' }),
+      workspaceGuard,
     );
+
+    // ── Hito 4: Health checks avanzados ──────────────────────────────────────
+    const healthChecker = new HealthChecker([
+      new MongoHealthCheck(db),
+      new QueueHealthCheck(inboundMessageQueue),
+    ]);
 
     Container._instance = new Container(
       commandBus,
@@ -112,6 +152,8 @@ export class Container {
       eventBus,
       inboundMessageQueue,
       inboundMessageWorker,
+      healthChecker,
+      logger,
     );
 
     return Container._instance;
