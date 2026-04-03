@@ -34,6 +34,7 @@ import { SkillRegistry } from '../skills/SkillRegistry.js';
 import { SupportFaqSkill } from '../skills/catalog/support-faq/SupportFaqSkill.js';
 import { WooCommerceOrderSkill } from '../skills/catalog/woocommerce-orders/WooCommerceOrderSkill.js';
 import { createLogger, type ILogger } from '../../shared/Logger.js';
+import { MongoAuditLogger } from '../../shared/MongoAuditLogger.js';
 import { HealthChecker } from '../health/HealthChecker.js';
 import { MongoHealthCheck } from '../health/MongoHealthCheck.js';
 import { QueueHealthCheck } from '../health/QueueHealthCheck.js';
@@ -50,6 +51,7 @@ export class Container {
   readonly logger: ILogger;
   readonly channelRouter: WorkspaceChannelRouter;
   readonly outboundGatewayRegistry: OutboundGatewayRegistry;
+  readonly db: Db;
 
   private constructor(
     commandBus: ICommandBus,
@@ -61,6 +63,7 @@ export class Container {
     logger: ILogger,
     channelRouter: WorkspaceChannelRouter,
     outboundGatewayRegistry: OutboundGatewayRegistry,
+    db: Db,
   ) {
     this.commandBus = commandBus;
     this.queryBus = queryBus;
@@ -71,6 +74,7 @@ export class Container {
     this.logger = logger;
     this.channelRouter = channelRouter;
     this.outboundGatewayRegistry = outboundGatewayRegistry;
+    this.db = db;
   }
 
   static async build(): Promise<Container> {
@@ -78,13 +82,16 @@ export class Container {
       return Container._instance;
     }
 
-    // ── Hito 4: Logger estructurado ───────────────────────────────────────────
-    const logger = createLogger('orqo-core');
+    // Logger base (stdout) — se reemplaza por MongoAuditLogger tras conectar MongoDB
+    const baseLogger = createLogger('orqo-core');
 
     const mongoClient = await MongoClient.connect(
       process.env['MONGODB_URI'] ?? 'mongodb://localhost:27017',
     );
     const db: Db = mongoClient.db(process.env['MONGODB_DB'] ?? 'orqo');
+
+    // Logger con persistencia MongoDB: WARN/ERROR van a audit_logs (categoría 'core')
+    const logger = new MongoAuditLogger(baseLogger, db, 'orqo-core');
 
     // ── Hito 5: Workspace repository + guard ─────────────────────────────────
     const workspaceRepo = new MongoWorkspaceRepository(db);
@@ -198,6 +205,7 @@ export class Container {
       logger,
       channelRouter,
       outboundGatewayRegistry,
+      db,
     );
 
     return Container._instance;

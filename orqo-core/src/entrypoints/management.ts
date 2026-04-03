@@ -614,6 +614,47 @@ async function start() {
     const pathname = url.pathname;
     const method = req.method ?? 'GET';
 
+    // / — página de estado (sin auth, solo metadata pública)
+    if (method === 'GET' && (pathname === '/' || pathname === '')) {
+      const status = initError ? 'error' : handler ? 'running' : 'starting';
+      const statusColor = status === 'running' ? '#2CB978' : status === 'error' ? '#DC4848' : '#F5B43C';
+      const authEnabled = Boolean(INTERNAL_SECRET);
+      const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>ORQO Management API</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{background:#060908;color:#E9EDE9;font-family:'Figtree',system-ui,sans-serif;padding:48px 24px;min-height:100vh}
+.card{background:#0B100D;border:1px solid #1D2920;border-radius:14px;padding:24px 28px;max-width:560px;margin:0 auto}
+h1{font-size:20px;font-weight:700;color:#F5F5F2;margin-bottom:4px}
+.sub{font-size:13px;color:#7A9488;margin-bottom:24px}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;background:${statusColor}18;color:${statusColor};border:1px solid ${statusColor}44;margin-left:10px}
+.dot{width:7px;height:7px;border-radius:50%;background:${statusColor}}
+.info{font-size:12.5px;color:#7A9488;line-height:1.8;margin-top:20px}
+.info b{color:#B4C4BC}
+code{color:#2CB978;font-family:monospace;font-size:12px}
+.auth{background:rgba(245,180,60,0.08);border:1px solid rgba(245,180,60,0.25);border-radius:8px;padding:10px 14px;margin-top:16px;font-size:12px;color:#F5B43C}
+</style></head><body><div class="card">
+<div style="display:flex;align-items:center;margin-bottom:4px">
+<h1>ORQO Management API</h1>
+<span class="status"><span class="dot"></span>${status}</span>
+</div>
+<div class="sub">API interna de administración de workspaces</div>
+${initError ? `<div style="background:rgba(220,72,72,0.1);border:1px solid rgba(220,72,72,0.3);border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:#DC4848">${initError.message}</div>` : ''}
+<div class="auth">${authEnabled ? '🔒 Autenticación activa — requiere header <code>x-orqo-internal-secret</code>' : '⚠️ Sin autenticación (CORE_INTERNAL_SECRET no configurado)'}</div>
+<div class="info">
+<b>Endpoints disponibles</b><br>
+<code>GET  /ping</code> · <code>GET  /healthz</code><br>
+<code>POST /workspaces</code> — provisionar workspace<br>
+<code>GET  /workspaces</code> — listar workspaces<br>
+<code>GET  /workspaces/:id</code> — detalle<br>
+<code>POST /workspaces/:id/activate</code> · <code>/suspend</code> · <code>/cancel</code><br>
+<code>POST /workspaces/:id/rotate-key</code><br>
+<code>GET  /workspaces/:id/mcp-servers</code> — integraciones MCP<br>
+<code>GET  /mcp-catalog</code> — catálogo de templates
+</div>
+</div></body></html>`;
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end(html);
+      return;
+    }
+
     // /ping — responde sin DB ni auth
     if (method === 'GET' && pathname === '/ping') {
       res.writeHead(200, { 'Content-Type': 'application/json' });
