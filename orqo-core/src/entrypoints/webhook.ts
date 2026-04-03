@@ -41,6 +41,58 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise
     return;
   }
 
+  // ── Status page — muestra config enmascarada ──────────────────────────────
+  if (method === 'GET' && (url.pathname === '/' || url.pathname === '')) {
+    const mask = (v: string | undefined, show = 4) =>
+      v ? (v.length > show ? `${'·'.repeat(6)}${v.slice(-show)}` : '****') : '—no configurado—';
+    const status = initError ? 'error' : container ? 'running' : 'starting';
+    const statusColor = status === 'running' ? '#2CB978' : status === 'error' ? '#DC4848' : '#F5B43C';
+    const env = {
+      NODE_ENV: process.env['NODE_ENV'] ?? '—',
+      ORQO_SERVICE: process.env['ORQO_SERVICE'] ?? 'webhook',
+      PORT: process.env['PORT'] ?? '3001',
+      MONGODB_URI: mask(process.env['MONGODB_URI'], 8),
+      ANTHROPIC_API_KEY: mask(process.env['ANTHROPIC_API_KEY']),
+      OPENAI_API_KEY: mask(process.env['OPENAI_API_KEY']),
+      ORQO_ENCRYPTION_KEY: process.env['ORQO_ENCRYPTION_KEY'] ? '✓ configurado' : '—no configurado—',
+      WHATSAPP_VERIFY_TOKEN: mask(process.env['WHATSAPP_VERIFY_TOKEN']),
+    };
+    const rows = Object.entries(env).map(([k, v]) =>
+      `<tr><td style="color:#7A9488;padding:6px 14px 6px 0;font-family:monospace;font-size:13px;white-space:nowrap">${k}</td><td style="color:#E9EDE9;padding:6px 0;font-family:monospace;font-size:13px">${v}</td></tr>`
+    ).join('');
+    const html = `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>ORQO Core</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{background:#060908;color:#E9EDE9;font-family:'Figtree',system-ui,sans-serif;padding:48px 24px;min-height:100vh}
+.card{background:#0B100D;border:1px solid #1D2920;border-radius:14px;padding:24px 28px;max-width:640px;margin:0 auto}
+h1{font-size:20px;font-weight:700;color:#F5F5F2;margin-bottom:4px}
+.sub{font-size:13px;color:#7A9488;margin-bottom:24px}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:3px 10px;border-radius:20px;background:${statusColor}18;color:${statusColor};border:1px solid ${statusColor}44;margin-left:10px}
+.dot{width:7px;height:7px;border-radius:50%;background:${statusColor}}
+table{width:100%;border-collapse:collapse}
+tr{border-bottom:1px solid #1D2920}tr:last-child{border-bottom:none}
+.endpoints{margin-top:20px;font-size:12px;color:#7A9488;line-height:2}
+code{color:#2CB978;font-family:monospace;font-size:12px}
+</style></head><body><div class="card">
+<div style="display:flex;align-items:center;margin-bottom:4px">
+<h1>ORQO Core</h1>
+<span class="status"><span class="dot"></span>${status}</span>
+</div>
+<div class="sub">Motor de orquestación de agentes IA</div>
+${initError ? `<div style="background:rgba(220,72,72,0.1);border:1px solid rgba(220,72,72,0.3);border-radius:8px;padding:12px 14px;margin-bottom:20px;font-size:12.5px;color:#DC4848">${initError.message}</div>` : ''}
+<table>${rows}</table>
+<div class="endpoints">
+<b style="color:#B4C4BC">Endpoints</b><br>
+<code>GET  /ping</code> — healthcheck inmediato<br>
+<code>GET  /healthz</code> — estado MongoDB + cola<br>
+<code>GET  /metrics</code> — Prometheus metrics<br>
+<code>POST /webhook/meta</code> — webhook Meta (WhatsApp · IG · Messenger)<br>
+<code>GET  /webhook/meta</code> — verificación Meta
+</div>
+</div></body></html>`;
+    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+    res.end(html);
+    return;
+  }
+
   // ── Verificación Meta (GET) — /webhook/meta y alias /webhook/whatsapp ─────
   if (method === 'GET' && (url.pathname === '/webhook/meta' || url.pathname === '/webhook/whatsapp')) {
     const mode = url.searchParams.get('hub.mode');
