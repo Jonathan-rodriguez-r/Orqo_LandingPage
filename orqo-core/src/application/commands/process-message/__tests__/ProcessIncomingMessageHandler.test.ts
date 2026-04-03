@@ -2,7 +2,7 @@ import { ProcessIncomingMessageHandler } from '../ProcessIncomingMessageHandler.
 import { createProcessIncomingMessageCommand } from '../ProcessIncomingMessageCommand.js';
 import type { IConversationRepository } from '../../../../domain/conversation/repositories/IConversationRepository.js';
 import type { IAgentRepository } from '../../../ports/IAgentRepository.js';
-import type { IWhatsAppGateway } from '../../../ports/IWhatsAppGateway.js';
+import type { IOutboundGateway } from '../../../ports/IOutboundGateway.js';
 import type { IEventBus } from '../../../../shared/EventBus.js';
 import type { AgentOrchestrationService } from '../../../services/AgentOrchestrationService.js';
 import { Agent } from '../../../../domain/agent/entities/Agent.js';
@@ -44,10 +44,11 @@ function makeOrchestration(
   } as any;
 }
 
-function makeWhatsAppGateway(): IWhatsAppGateway {
+function makeOutboundGateway(): IOutboundGateway {
   return {
-    sendMessage: jest.fn().mockResolvedValue(Ok({ messageId: 'wamid.123', status: 'sent' })),
+    sendTextMessage: jest.fn().mockResolvedValue(Ok({ messageId: 'wamid.123', status: 'sent' })),
     markAsRead: jest.fn().mockResolvedValue(undefined),
+    canHandle: jest.fn().mockReturnValue(true),
   };
 }
 
@@ -67,7 +68,7 @@ function makeLockManager(): IConversationLockManager {
         lockId: 'lock-1',
         ownerId: 'owner-1',
         workspaceId: 'ws-1',
-        key: 'phone:573001234567',
+        key: 'sender:573001234567',
         expiresAt: new Date('2026-03-31T22:00:00.000Z'),
       }),
     ),
@@ -101,7 +102,7 @@ describe('ProcessIncomingMessageHandler', () => {
       makeConversationRepo(),
       makeAgentRepo(),
       makeOrchestration() as any,
-      makeWhatsAppGateway(),
+      makeOutboundGateway(),
       makeEventBus(),
       makeLockManager(),
       makeSnapshotRepository(),
@@ -111,6 +112,7 @@ describe('ProcessIncomingMessageHandler', () => {
 
     const cmd = createProcessIncomingMessageCommand(
       'ws-1',
+      'whatsapp',
       '573001234567',
       'Hola, cual es el estado de mi pedido?',
       'wamid.incoming.abc',
@@ -124,12 +126,12 @@ describe('ProcessIncomingMessageHandler', () => {
     }
   });
 
-  it('retorna Err si el numero de telefono es invalido', async () => {
+  it('retorna Err si el senderExternalId es invalido', async () => {
     const handler = new ProcessIncomingMessageHandler(
       makeConversationRepo(),
       makeAgentRepo(),
       makeOrchestration() as any,
-      makeWhatsAppGateway(),
+      makeOutboundGateway(),
       makeEventBus(),
       makeLockManager(),
       makeSnapshotRepository(),
@@ -137,7 +139,7 @@ describe('ProcessIncomingMessageHandler', () => {
       makeOutboundMessageOutbox(),
     );
 
-    const cmd = createProcessIncomingMessageCommand('ws-1', 'no-es-numero', 'Hola', 'wamid.x');
+    const cmd = createProcessIncomingMessageCommand('ws-1', 'whatsapp', 'no-es-numero', 'Hola', 'wamid.x');
     const result = await handler.handle(cmd);
 
     expect(result.ok).toBe(false);
@@ -154,7 +156,7 @@ describe('ProcessIncomingMessageHandler', () => {
       makeConversationRepo(),
       agentRepo,
       makeOrchestration() as any,
-      makeWhatsAppGateway(),
+      makeOutboundGateway(),
       makeEventBus(),
       makeLockManager(),
       makeSnapshotRepository(),
@@ -162,25 +164,26 @@ describe('ProcessIncomingMessageHandler', () => {
       makeOutboundMessageOutbox(),
     );
 
-    const cmd = createProcessIncomingMessageCommand('ws-sin-agente', '573001234567', 'Hola', 'wamid.x');
+    const cmd = createProcessIncomingMessageCommand('ws-sin-agente', 'whatsapp', '573001234567', 'Hola', 'wamid.x');
     const result = await handler.handle(cmd);
 
     expect(result.ok).toBe(false);
   });
 
-  it('marca el outbox como fallido si falla el envio por WhatsApp', async () => {
+  it('marca el outbox como fallido si falla el envio por el gateway', async () => {
     const conversationRepo = makeConversationRepo();
     const outbox = makeOutboundMessageOutbox();
-    const waGateway: IWhatsAppGateway = {
-      sendMessage: jest.fn().mockResolvedValue(Err(new Error('WA timeout'))),
+    const gateway: IOutboundGateway = {
+      sendTextMessage: jest.fn().mockResolvedValue(Err(new Error('Gateway timeout'))),
       markAsRead: jest.fn(),
+      canHandle: jest.fn().mockReturnValue(true),
     };
 
     const handler = new ProcessIncomingMessageHandler(
       conversationRepo,
       makeAgentRepo(),
       makeOrchestration() as any,
-      waGateway,
+      gateway,
       makeEventBus(),
       makeLockManager(),
       makeSnapshotRepository(),
@@ -188,12 +191,12 @@ describe('ProcessIncomingMessageHandler', () => {
       outbox,
     );
 
-    const cmd = createProcessIncomingMessageCommand('ws-1', '573001234567', 'Test', 'wamid.x');
+    const cmd = createProcessIncomingMessageCommand('ws-1', 'whatsapp', '573001234567', 'Test', 'wamid.x');
     const result = await handler.handle(cmd);
 
     expect(result.ok).toBe(false);
     expect(conversationRepo.save).toHaveBeenCalled();
-    expect(outbox.markFailed).toHaveBeenCalledWith('outbox-1', 'WA timeout');
+    expect(outbox.markFailed).toHaveBeenCalledWith('outbox-1', 'Gateway timeout');
   });
 
   it('publica eventos, guarda snapshot y registra outbox cuando procesa el mensaje', async () => {
@@ -207,7 +210,7 @@ describe('ProcessIncomingMessageHandler', () => {
       makeConversationRepo(),
       makeAgentRepo(),
       makeOrchestration() as any,
-      makeWhatsAppGateway(),
+      makeOutboundGateway(),
       eventBus,
       lockManager,
       snapshotRepository,
@@ -215,7 +218,7 @@ describe('ProcessIncomingMessageHandler', () => {
       outbox,
     );
 
-    const cmd = createProcessIncomingMessageCommand('ws-1', '573001234567', 'Hola', 'wamid.x');
+    const cmd = createProcessIncomingMessageCommand('ws-1', 'whatsapp', '573001234567', 'Hola', 'wamid.x');
     await handler.handle(cmd);
 
     expect(outbox.createPending).toHaveBeenCalled();

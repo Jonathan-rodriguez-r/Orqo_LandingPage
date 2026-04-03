@@ -7,9 +7,11 @@ import { InboundMessageWorker } from '../InboundMessageWorker.js';
 function makeEnvelope(externalMessageId: string) {
   const result = CanonicalMessageEnvelope.create({
     workspaceId: 'ws-1',
+    channel: 'whatsapp',
+    provider: 'meta',
     providerAccountId: 'phone-id-1',
     externalMessageId,
-    customerPhone: '573001234567',
+    senderExternalId: '573001234567',
     occurredAt: new Date('2026-03-31T21:00:00.000Z'),
     payload: { type: 'text', text: 'Necesito soporte' },
   });

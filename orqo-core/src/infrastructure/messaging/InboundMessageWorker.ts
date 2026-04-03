@@ -147,7 +147,8 @@ export class InboundMessageWorker {
 
       const command = createProcessIncomingMessageCommand(
         job.envelope.workspaceId,
-        job.envelope.customerPhone.value,
+        job.envelope.channel,
+        job.envelope.senderExternalId,
         job.envelope.payload.text,
         job.envelope.externalMessageId,
         job.envelope.occurredAt,

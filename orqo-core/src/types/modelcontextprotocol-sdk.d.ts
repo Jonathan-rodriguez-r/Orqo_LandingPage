@@ -13,3 +13,9 @@ declare module '@modelcontextprotocol/sdk/client/stdio.js' {
     constructor(...args: any[]);
   }
 }
+
+declare module '@modelcontextprotocol/sdk/client/sse.js' {
+  export class SSEClientTransport {
+    constructor(...args: any[]);
+  }
+}

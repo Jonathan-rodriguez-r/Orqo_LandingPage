@@ -2,6 +2,7 @@ import { ModelRouter } from '../ModelRouter.js';
 import { Ok } from '../../../shared/Result.js';
 import type { ITenantPolicyRepository } from '../../../application/ports/ITenantPolicyRepository.js';
 import type { ICostTracker } from '../../../application/ports/ICostTracker.js';
+import type { IWorkspaceProviderKeysRepository } from '../../../application/ports/IWorkspaceProviderKeysRepository.js';
 import type { ModelPolicy } from '../../../domain/policy/ModelPolicy.js';
 import { DEFAULT_MODEL_POLICY } from '../../../domain/policy/ModelPolicy.js';
 
@@ -20,8 +21,16 @@ function makeCostTracker(dailyUsd = 0, monthlyUsd = 0): ICostTracker {
   };
 }
 
+function makeProviderKeysRepo(): IWorkspaceProviderKeysRepository {
+  return {
+    findByWorkspaceId: jest.fn().mockResolvedValue(Ok(null)),
+    save: jest.fn().mockResolvedValue(Ok(undefined)),
+  };
+}
+
 const FAKE_ANTHROPIC_KEY = 'sk-ant-test-key';
 const FAKE_OPENAI_KEY = 'sk-openai-test-key';
+const FAKE_ENCRYPTION_KEY = '';
 
 describe('ModelRouter.getPolicy', () => {
   it('retorna la política del workspace si existe', async () => {
@@ -34,7 +43,7 @@ describe('ModelRouter.getPolicy', () => {
       updatedAt: new Date(),
     };
 
-    const router = new ModelRouter(makePolicyRepo(customPolicy), makeCostTracker(), FAKE_ANTHROPIC_KEY, FAKE_OPENAI_KEY);
+    const router = new ModelRouter(makePolicyRepo(customPolicy), makeCostTracker(), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, FAKE_OPENAI_KEY);
     const policy = await router.getPolicy('ws-1');
 
     expect(policy.primary.model).toBe('gpt-4o');
@@ -42,7 +51,7 @@ describe('ModelRouter.getPolicy', () => {
   });
 
   it('retorna la política default si el workspace no tiene configuración', async () => {
-    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(), FAKE_ANTHROPIC_KEY, FAKE_OPENAI_KEY);
+    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, FAKE_OPENAI_KEY);
     const policy = await router.getPolicy('ws-nueva');
 
     expect(policy.primary.model).toBe(DEFAULT_MODEL_POLICY.primary.model);
@@ -52,7 +61,7 @@ describe('ModelRouter.getPolicy', () => {
 
 describe('ModelRouter.buildGateway', () => {
   it('retorna Ok con gateway anthropic si hay API key', async () => {
-    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(), FAKE_ANTHROPIC_KEY, '');
+    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, '');
     const result = await router.buildGateway('ws-1');
 
     expect(result.ok).toBe(true);
@@ -67,14 +76,14 @@ describe('ModelRouter.buildGateway', () => {
       guardrails: { maxToolCallsPerTurn: 3, toolTimeoutMs: 10_000, maxInputTokens: 8_192 },
       updatedAt: new Date(),
     };
-    const router = new ModelRouter(makePolicyRepo(policy), makeCostTracker(), FAKE_ANTHROPIC_KEY, FAKE_OPENAI_KEY);
+    const router = new ModelRouter(makePolicyRepo(policy), makeCostTracker(), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, FAKE_OPENAI_KEY);
     const result = await router.buildGateway('ws-1');
 
     expect(result.ok).toBe(true);
   });
 
   it('retorna Err si no hay API keys para ningún proveedor', async () => {
-    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(), '', '');
+    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, '', '');
     const result = await router.buildGateway('ws-1');
 
     expect(result.ok).toBe(false);
@@ -86,14 +95,14 @@ describe('ModelRouter.buildGateway', () => {
 
 describe('ModelRouter.checkBudget', () => {
   it('retorna Ok si no se supera ningún límite', async () => {
-    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(1, 5), FAKE_ANTHROPIC_KEY, '');
+    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(1, 5), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, '');
     const result = await router.checkBudget('ws-1');
     expect(result.ok).toBe(true);
   });
 
   it('retorna Err si se supera el límite diario', async () => {
     // Default dailyLimitUsd = 10, uso = 10 → excedido
-    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(10, 10), FAKE_ANTHROPIC_KEY, '');
+    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(10, 10), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, '');
     const result = await router.checkBudget('ws-1');
     expect(result.ok).toBe(false);
     if (!result.ok) {
@@ -103,7 +112,7 @@ describe('ModelRouter.checkBudget', () => {
 
   it('retorna Err si se supera el límite mensual', async () => {
     // Default monthlyLimitUsd = 100, uso = 100 → excedido
-    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(0, 100), FAKE_ANTHROPIC_KEY, '');
+    const router = new ModelRouter(makePolicyRepo(null), makeCostTracker(0, 100), makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, '');
     const result = await router.checkBudget('ws-1');
     expect(result.ok).toBe(false);
     if (!result.ok) {
@@ -115,7 +124,7 @@ describe('ModelRouter.checkBudget', () => {
 describe('ModelRouter.recordUsage', () => {
   it('registra el uso correctamente', async () => {
     const tracker = makeCostTracker();
-    const router = new ModelRouter(makePolicyRepo(null), tracker, FAKE_ANTHROPIC_KEY, '');
+    const router = new ModelRouter(makePolicyRepo(null), tracker, makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, '');
 
     await router.recordUsage('ws-1', 'claude-sonnet-4-6', 'anthropic', { inputTokens: 100, outputTokens: 50 });
 
@@ -135,7 +144,7 @@ describe('ModelRouter.recordUsage', () => {
     const tracker = makeCostTracker();
     (tracker.record as jest.Mock).mockRejectedValue(new Error('MongoDB down'));
 
-    const router = new ModelRouter(makePolicyRepo(null), tracker, FAKE_ANTHROPIC_KEY, '');
+    const router = new ModelRouter(makePolicyRepo(null), tracker, makeProviderKeysRepo(), FAKE_ENCRYPTION_KEY, FAKE_ANTHROPIC_KEY, '');
 
     await expect(
       router.recordUsage('ws-1', 'claude-sonnet-4-6', 'anthropic', { inputTokens: 10, outputTokens: 5 }),

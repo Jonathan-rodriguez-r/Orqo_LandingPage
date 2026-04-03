@@ -12,9 +12,11 @@ type QueueStatus = 'pending' | 'processing' | 'completed' | 'dead-letter';
 
 interface QueueEnvelopeDoc {
   workspaceId: string;
+  channel: string;
+  provider: string;
   providerAccountId: string;
   externalMessageId: string;
-  customerPhone: string;
+  senderExternalId: string;
   occurredAt: Date;
   payload: {
     type: 'text';
@@ -79,9 +81,11 @@ export class MongoInboundMessageQueue implements IInboundMessageQueue {
         dedupeKey: envelope.dedupeKey,
         envelope: {
           workspaceId: envelope.workspaceId,
+          channel: envelope.channel,
+          provider: envelope.provider,
           providerAccountId: envelope.providerAccountId,
           externalMessageId: envelope.externalMessageId,
-          customerPhone: envelope.customerPhone.value,
+          senderExternalId: envelope.senderExternalId,
           occurredAt: envelope.occurredAt,
           payload: envelope.payload,
           correlationId: envelope.correlationId,
@@ -241,9 +245,11 @@ export class MongoInboundMessageQueue implements IInboundMessageQueue {
   private toJob(doc: QueueJobDoc): InboundMessageQueueJob {
     const envelopeResult = CanonicalMessageEnvelope.create({
       workspaceId: doc.envelope.workspaceId,
+      channel: doc.envelope.channel as import('../../domain/messaging/entities/CanonicalMessageEnvelope.js').CanonicalChannel,
+      provider: doc.envelope.provider as import('../../domain/messaging/entities/CanonicalMessageEnvelope.js').CanonicalProvider,
       providerAccountId: doc.envelope.providerAccountId,
       externalMessageId: doc.envelope.externalMessageId,
-      customerPhone: doc.envelope.customerPhone,
+      senderExternalId: doc.envelope.senderExternalId,
       occurredAt: doc.envelope.occurredAt,
       payload: doc.envelope.payload,
       correlationId: doc.envelope.correlationId,

@@ -6,6 +6,7 @@ import type { ISkillRegistry } from '../ports/ISkillRegistry.js';
 import type { LlmOptions, LlmTool } from '../ports/ILlmGateway.js';
 import type { IMcpGateway } from '../ports/IMcpGateway.js';
 import type { IModelRouter } from '../ports/IModelRouter.js';
+import type { IWorkspaceMcpRegistry } from '../ports/IWorkspaceMcpRegistry.js';
 import type { ILogger } from '../../shared/Logger.js';
 import { NoopLogger } from '../../shared/Logger.js';
 import { MetricsRegistry } from '../../shared/Metrics.js';
@@ -39,6 +40,7 @@ export class AgentOrchestrationService {
     private readonly skillRegistry: ISkillRegistry,
     private readonly mcpGateway: IMcpGateway,
     private readonly logger: ILogger = new NoopLogger(),
+    private readonly workspaceMcpRegistry?: IWorkspaceMcpRegistry,
   ) {
     const metrics = MetricsRegistry.default;
     this.llmCalls = metrics.counter(
@@ -111,11 +113,19 @@ export class AgentOrchestrationService {
       .findCapable(context)
       .filter(skill => agent.canUseSkill(skill.manifest.id));
 
-    const tools: LlmTool[] = capableSkills.map(skill => ({
-      name: skill.manifest.id,
-      description: skill.manifest.description,
-      inputSchema: skill.manifest.inputSchema ?? { type: 'object', properties: {} },
-    }));
+    // Hito 6: tools dinámicas desde WorkspaceMcpRegistry
+    const dynamicMcpTools = this.workspaceMcpRegistry
+      ? await this.workspaceMcpRegistry.getTools(conversation.workspaceId, lastUserMessage.content)
+      : [];
+
+    const tools: LlmTool[] = [
+      ...capableSkills.map(skill => ({
+        name: skill.manifest.id,
+        description: skill.manifest.description,
+        inputSchema: skill.manifest.inputSchema ?? { type: 'object', properties: {} },
+      })),
+      ...dynamicMcpTools,
+    ];
 
     // ── Primera pasada LLM ───────────────────────────────────────────────────
 
@@ -179,6 +189,47 @@ export class AgentOrchestrationService {
 
     for (const toolCall of allowedToolCalls) {
       const skill = this.skillRegistry.findById(toolCall.toolName);
+
+      // Hito 6: buscar en el registry dinámico primero si el skill no existe en el registry estático
+      if (!skill && this.workspaceMcpRegistry) {
+        const mcpResult = await tryCatch(() =>
+          withTimeout(
+            this.workspaceMcpRegistry!.callTool(
+              conversation.workspaceId,
+              toolCall.toolName,
+              toolCall.toolInput,
+              toolTimeoutMs,
+            ),
+            toolTimeoutMs,
+            toolCall.toolName,
+          ),
+        );
+
+        if (!mcpResult.ok) {
+          this.toolCalls.inc({ tool: toolCall.toolName, status: 'error' });
+          this.logger.warn('Tool MCP dinámica falló', { tool: toolCall.toolName, error: mcpResult.error.message });
+          toolResults.push({
+            name: toolCall.toolName,
+            result: `[Error en MCP: ${mcpResult.error.message}]`,
+          });
+        } else if (!mcpResult.value.ok) {
+          this.toolCalls.inc({ tool: toolCall.toolName, status: 'error' });
+          this.logger.warn('Tool MCP dinámica retornó error', { tool: toolCall.toolName, error: mcpResult.value.error.message });
+          toolResults.push({
+            name: toolCall.toolName,
+            result: `[Error en MCP: ${mcpResult.value.error.message}]`,
+          });
+        } else {
+          this.toolCalls.inc({ tool: toolCall.toolName, status: 'success' });
+          const text = mcpResult.value.value.content
+            .map(contentBlock => contentBlock.text ?? '')
+            .filter(Boolean)
+            .join('\n');
+          toolResults.push({ name: toolCall.toolName, result: text });
+        }
+        continue;
+      }
+
       if (!skill) {
         continue;
       }
