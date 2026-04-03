@@ -1,11 +1,14 @@
 import type { ICommand } from '../../../shared/CommandBus.js';
+import type { CanonicalChannel } from '../../../domain/messaging/entities/CanonicalMessageEnvelope.js';
 
 export interface ProcessIncomingMessageCommand extends ICommand {
   readonly _type: 'ProcessIncomingMessage';
   /** ID del workspace ORQO (tenant). */
   readonly workspaceId: string;
-  /** Número de teléfono del usuario (formato E.164 o solo dígitos). */
-  readonly fromPhone: string;
+  /** Canal de origen del mensaje (whatsapp, instagram, facebook, widget). */
+  readonly channel: CanonicalChannel;
+  /** Identificador del remitente: teléfono para WA, userId numérico para IG/FB. */
+  readonly senderExternalId: string;
   /** Texto del mensaje. */
   readonly body: string;
   /** ID del mensaje en la plataforma de mensajería (para dedup y ack). */
@@ -15,7 +18,8 @@ export interface ProcessIncomingMessageCommand extends ICommand {
 
 export function createProcessIncomingMessageCommand(
   workspaceId: string,
-  fromPhone: string,
+  channel: CanonicalChannel,
+  senderExternalId: string,
   body: string,
   platformMessageId: string,
   timestamp: Date = new Date(),
@@ -23,7 +27,8 @@ export function createProcessIncomingMessageCommand(
   return {
     _type: 'ProcessIncomingMessage',
     workspaceId,
-    fromPhone,
+    channel,
+    senderExternalId,
     body,
     platformMessageId,
     timestamp,

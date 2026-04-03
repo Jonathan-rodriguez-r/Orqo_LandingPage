@@ -47,7 +47,7 @@ function toWorkspace(doc: WorkspaceDoc): Workspace {
     timezone: doc.timezone,
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
-    trialEndsAt: doc.trialEndsAt,
+    ...(doc.trialEndsAt !== undefined ? { trialEndsAt: doc.trialEndsAt } : {}),
   });
 }
 
@@ -64,7 +64,7 @@ function toDoc(workspace: Workspace): WorkspaceDoc {
     timezone: workspace.timezone,
     createdAt: workspace.createdAt,
     updatedAt: workspace.updatedAt,
-    trialEndsAt: workspace.trialEndsAt,
+    ...(workspace.trialEndsAt !== undefined ? { trialEndsAt: workspace.trialEndsAt } : {}),
   };
 }
 

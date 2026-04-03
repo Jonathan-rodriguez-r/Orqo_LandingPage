@@ -1,7 +1,9 @@
+import type { CanonicalChannel } from '../../domain/messaging/entities/CanonicalMessageEnvelope.js';
+
 export interface PendingOutboundMessage {
   readonly workspaceId: string;
   readonly conversationId: string;
-  readonly channel: 'whatsapp';
+  readonly channel: CanonicalChannel;
   readonly recipient: string;
   readonly body: string;
   readonly correlationId: string;

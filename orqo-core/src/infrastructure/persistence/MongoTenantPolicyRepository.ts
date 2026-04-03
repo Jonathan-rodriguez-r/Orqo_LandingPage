@@ -28,9 +28,11 @@ export class MongoTenantPolicyRepository implements ITenantPolicyRepository {
 
   async save(policy: ModelPolicy): Promise<void> {
     const { workspaceId, ...rest } = policy;
+    // MongoDB driver's WithoutId<T> strips _id from the replacement body;
+    // the _id is preserved automatically via the filter when upserting.
     await this.col.replaceOne(
       { _id: workspaceId },
-      { _id: workspaceId, ...rest },
+      rest as unknown as ModelPolicyDoc,
       { upsert: true },
     );
   }

@@ -5,7 +5,7 @@ import type { ProcessIncomingMessageCommand } from './ProcessIncomingMessageComm
 import type { IConversationRepository } from '../../../domain/conversation/repositories/IConversationRepository.js';
 import { PhoneNumber } from '../../../domain/conversation/value-objects/PhoneNumber.js';
 import { Conversation } from '../../../domain/conversation/entities/Conversation.js';
-import type { IWhatsAppGateway } from '../../ports/IWhatsAppGateway.js';
+import type { IOutboundGateway } from '../../ports/IOutboundGateway.js';
 import type { AgentOrchestrationService } from '../../services/AgentOrchestrationService.js';
 import type { IAgentRepository } from '../../ports/IAgentRepository.js';
 import type { IConversationLockManager } from '../../ports/IConversationLockManager.js';
@@ -21,7 +21,7 @@ export class ProcessIncomingMessageHandler
     private readonly conversationRepo: IConversationRepository,
     private readonly agentRepo: IAgentRepository,
     private readonly orchestration: AgentOrchestrationService,
-    private readonly whatsappGateway: IWhatsAppGateway,
+    private readonly outboundGateway: IOutboundGateway,
     private readonly eventBus: IEventBus,
     private readonly lockManager: IConversationLockManager,
     private readonly snapshotRepository: IConversationSnapshotRepository,
@@ -32,15 +32,17 @@ export class ProcessIncomingMessageHandler
   async handle(
     command: ProcessIncomingMessageCommand,
   ): Promise<Result<string>> {
-    const phoneResult = PhoneNumber.create(command.fromPhone);
+    // PhoneNumber is used as the conversation identity key. For IG/FB, senderExternalId
+    // is a purely numeric ID which passes the same length/digit validation.
+    const phoneResult = PhoneNumber.create(command.senderExternalId);
     if (!phoneResult.ok) {
       return Err(phoneResult.error);
     }
-    const phone = phoneResult.value;
+    const senderIdentity = phoneResult.value;
 
     const lockResult = await this.lockManager.acquire(
       command.workspaceId,
-      `phone:${phone.value}`,
+      `sender:${senderIdentity.value}`,
     );
     if (!lockResult.ok) {
       return Err(lockResult.error);
@@ -54,11 +56,11 @@ export class ProcessIncomingMessageHandler
 
       let conversation = await this.conversationRepo.findByPhone(
         command.workspaceId,
-        phone,
+        senderIdentity,
       );
 
       if (!conversation) {
-        conversation = Conversation.create(command.workspaceId, phone, agent.id);
+        conversation = Conversation.create(command.workspaceId, senderIdentity, agent.id);
       }
 
       conversation.receiveUserMessage(command.body, {
@@ -87,17 +89,17 @@ export class ProcessIncomingMessageHandler
       const outboxId = await this.outboundMessageOutbox.createPending({
         workspaceId: conversation.workspaceId,
         conversationId: conversation.id,
-        channel: 'whatsapp',
-        recipient: phone.value,
+        channel: command.channel,
+        recipient: senderIdentity.value,
         body: responseText,
         correlationId: command.platformMessageId,
       });
 
-      const sendResult = await this.whatsappGateway.sendMessage({
-        to: phone.value,
-        body: responseText,
-        type: 'text',
-      });
+      const sendResult = await this.outboundGateway.sendTextMessage(
+        senderIdentity.value,
+        responseText,
+        command.workspaceId,
+      );
 
       if (!sendResult.ok) {
         await this.outboundMessageOutbox.markFailed(

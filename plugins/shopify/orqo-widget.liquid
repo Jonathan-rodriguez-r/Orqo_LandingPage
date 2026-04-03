@@ -1,0 +1,26 @@
+{% comment %}
+  ORQO Chat Widget — Shopify Snippet
+
+  Instalación:
+  1. En el Admin de Shopify ve a: Online Store → Themes → Edit code
+  2. En la carpeta Snippets, crea un nuevo snippet llamado "orqo-widget"
+  3. Pega este contenido
+  4. Abre el archivo layout/theme.liquid
+  5. Antes del cierre </body> agrega: {% render 'orqo-widget' %}
+  6. Guarda — el widget aparece en tu tienda
+
+  Configuración:
+  Reemplaza el valor de orqo_api_key con tu API Key de workspace.
+  La encuentras en: dashboard.orqo.io → Configuración → Motor de Agentes
+{% endcomment %}
+
+{% assign orqo_api_key = 'TU_API_KEY_AQUI' %}
+{% assign orqo_enabled = true %}
+
+{% if orqo_enabled and orqo_api_key != 'TU_API_KEY_AQUI' and orqo_api_key != blank %}
+  <script
+    src="https://dashboard.orqo.io/widget.js"
+    data-key="{{ orqo_api_key | escape }}"
+    async
+  ></script>
+{% endif %}

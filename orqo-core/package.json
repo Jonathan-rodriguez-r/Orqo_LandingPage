@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "build": "tsc --project tsconfig.json",
+    "start": "node dist/server.js",
+    "start:management": "node dist/entrypoints/management.js",
     "dev": "tsx watch src/entrypoints/webhook.ts",
+    "dev:management": "tsx watch src/entrypoints/management.ts",
     "dev:health": "tsx watch src/entrypoints/health.ts",
     "test": "jest --passWithNoTests --runInBand",
     "test:watch": "jest --watch",

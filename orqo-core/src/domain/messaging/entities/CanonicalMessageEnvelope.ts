@@ -1,8 +1,7 @@
 import { Err, Ok, type Result } from '../../../shared/Result.js';
-import { PhoneNumber } from '../../conversation/value-objects/PhoneNumber.js';
 
-export type CanonicalChannel = 'whatsapp';
-export type CanonicalProvider = 'meta';
+export type CanonicalChannel = 'whatsapp' | 'instagram' | 'facebook' | 'widget';
+export type CanonicalProvider = 'meta' | 'web';
 export type CanonicalDirection = 'inbound';
 
 export interface CanonicalTextPayload {
@@ -12,9 +11,12 @@ export interface CanonicalTextPayload {
 
 export interface CreateCanonicalMessageEnvelopeInput {
   readonly workspaceId: string;
+  readonly channel: CanonicalChannel;
+  readonly provider: CanonicalProvider;
   readonly providerAccountId: string;
   readonly externalMessageId: string;
-  readonly customerPhone: string;
+  /** Raw sender identifier: phone number for WhatsApp, numeric user ID for IG/FB */
+  readonly senderExternalId: string;
   readonly occurredAt: Date;
   readonly payload: CanonicalTextPayload;
   readonly correlationId?: string;
@@ -27,16 +29,17 @@ export interface CreateCanonicalMessageEnvelopeInput {
  */
 export class CanonicalMessageEnvelope {
   readonly version = 'v1';
-  readonly channel: CanonicalChannel = 'whatsapp';
-  readonly provider: CanonicalProvider = 'meta';
   readonly direction: CanonicalDirection = 'inbound';
   readonly dedupeKey: string;
 
   private constructor(
     public readonly workspaceId: string,
+    public readonly channel: CanonicalChannel,
+    public readonly provider: CanonicalProvider,
     public readonly providerAccountId: string,
     public readonly externalMessageId: string,
-    public readonly customerPhone: PhoneNumber,
+    /** Raw sender identifier: phone for WA, userId for IG/FB */
+    public readonly senderExternalId: string,
     public readonly occurredAt: Date,
     public readonly payload: CanonicalTextPayload,
     public readonly correlationId: string,
@@ -65,13 +68,12 @@ export class CanonicalMessageEnvelope {
       return Err(new Error('externalMessageId es obligatorio'));
     }
 
-    if (!(input.occurredAt instanceof Date) || Number.isNaN(input.occurredAt.getTime())) {
-      return Err(new Error('occurredAt debe ser una fecha valida'));
+    if (!input.senderExternalId.trim()) {
+      return Err(new Error('senderExternalId es obligatorio'));
     }
 
-    const phoneResult = PhoneNumber.create(input.customerPhone);
-    if (!phoneResult.ok) {
-      return Err(phoneResult.error);
+    if (!(input.occurredAt instanceof Date) || Number.isNaN(input.occurredAt.getTime())) {
+      return Err(new Error('occurredAt debe ser una fecha valida'));
     }
 
     const text = input.payload.text.trim();
@@ -82,9 +84,11 @@ export class CanonicalMessageEnvelope {
     return Ok(
       new CanonicalMessageEnvelope(
         input.workspaceId.trim(),
+        input.channel,
+        input.provider,
         input.providerAccountId.trim(),
         input.externalMessageId.trim(),
-        phoneResult.value,
+        input.senderExternalId.trim(),
         input.occurredAt,
         { type: 'text', text },
         input.correlationId?.trim() || crypto.randomUUID(),

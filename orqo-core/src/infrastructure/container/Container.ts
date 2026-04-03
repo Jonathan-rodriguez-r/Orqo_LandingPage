@@ -10,7 +10,15 @@ import { ModelRouter } from '../llm/ModelRouter.js';
 import { InboundMessageWorker } from '../messaging/InboundMessageWorker.js';
 import { MongoInboundMessageQueue } from '../messaging/MongoInboundMessageQueue.js';
 import { MetaWhatsAppGateway } from '../messaging/MetaWhatsAppGateway.js';
+import { MetaInstagramGateway } from '../messaging/MetaInstagramGateway.js';
+import { MetaMessengerGateway } from '../messaging/MetaMessengerGateway.js';
+import { OutboundGatewayRegistry } from '../messaging/OutboundGatewayRegistry.js';
+import { WorkspaceChannelRouter } from '../messaging/WorkspaceChannelRouter.js';
+import { MongoWorkspaceChannelConfigRepository } from '../persistence/MongoWorkspaceChannelConfigRepository.js';
 import { StdioMcpGateway } from '../mcp/StdioMcpGateway.js';
+import { HttpMcpGateway } from '../mcp/HttpMcpGateway.js';
+import { WorkspaceMcpRegistry } from '../mcp/WorkspaceMcpRegistry.js';
+import { MongoWorkspaceMcpRepository } from '../persistence/MongoWorkspaceMcpRepository.js';
 import { MongoAgentRepository } from '../persistence/MongoAgentRepository.js';
 import { MongoConversationAuditRepository } from '../persistence/MongoConversationAuditRepository.js';
 import { MongoConversationLockManager } from '../persistence/MongoConversationLockManager.js';
@@ -19,6 +27,7 @@ import { MongoConversationSnapshotRepository } from '../persistence/MongoConvers
 import { MongoOutboundMessageOutbox } from '../persistence/MongoOutboundMessageOutbox.js';
 import { MongoTenantPolicyRepository } from '../persistence/MongoTenantPolicyRepository.js';
 import { MongoCostTracker } from '../persistence/MongoCostTracker.js';
+import { MongoWorkspaceProviderKeysRepository } from '../persistence/MongoWorkspaceProviderKeysRepository.js';
 import { MongoWorkspaceRepository } from '../persistence/MongoWorkspaceRepository.js';
 import { WorkspaceGuard } from '../../application/services/WorkspaceGuard.js';
 import { SkillRegistry } from '../skills/SkillRegistry.js';
@@ -39,6 +48,8 @@ export class Container {
   readonly inboundMessageWorker: InboundMessageWorker;
   readonly healthChecker: HealthChecker;
   readonly logger: ILogger;
+  readonly channelRouter: WorkspaceChannelRouter;
+  readonly outboundGatewayRegistry: OutboundGatewayRegistry;
 
   private constructor(
     commandBus: ICommandBus,
@@ -48,6 +59,8 @@ export class Container {
     inboundMessageWorker: InboundMessageWorker,
     healthChecker: HealthChecker,
     logger: ILogger,
+    channelRouter: WorkspaceChannelRouter,
+    outboundGatewayRegistry: OutboundGatewayRegistry,
   ) {
     this.commandBus = commandBus;
     this.queryBus = queryBus;
@@ -56,6 +69,8 @@ export class Container {
     this.inboundMessageWorker = inboundMessageWorker;
     this.healthChecker = healthChecker;
     this.logger = logger;
+    this.channelRouter = channelRouter;
+    this.outboundGatewayRegistry = outboundGatewayRegistry;
   }
 
   static async build(): Promise<Container> {
@@ -79,15 +94,41 @@ export class Container {
     // ── Hito 3: Model Router ──────────────────────────────────────────────────
     const tenantPolicyRepo = new MongoTenantPolicyRepository(db);
     const costTracker = new MongoCostTracker(db);
+    const providerKeysRepo = new MongoWorkspaceProviderKeysRepository(db);
     const modelRouter = new ModelRouter(
       tenantPolicyRepo,
       costTracker,
+      providerKeysRepo,
+      process.env['ORQO_ENCRYPTION_KEY'] ?? '',
       process.env['ANTHROPIC_API_KEY'] ?? '',
       process.env['OPENAI_API_KEY'] ?? '',
     );
 
     const mcpGateway = new StdioMcpGateway();
-    const whatsAppGateway = new MetaWhatsAppGateway();
+    const httpMcpGateway = new HttpMcpGateway();
+    const workspaceMcpRepo = new MongoWorkspaceMcpRepository(db);
+    await workspaceMcpRepo.ensureIndexes();
+    const workspaceMcpRegistry = new WorkspaceMcpRegistry(
+      workspaceMcpRepo,
+      mcpGateway,
+      httpMcpGateway,
+      logger.child({ component: 'mcp-registry' }),
+    );
+
+    // ── Hito 9: Per-workspace channel credentials ─────────────────────────────
+    const channelConfigRepo = new MongoWorkspaceChannelConfigRepository(db);
+    await channelConfigRepo.ensureIndexes();
+    const channelRouter = new WorkspaceChannelRouter(channelConfigRepo);
+
+    const whatsAppGateway = new MetaWhatsAppGateway(channelConfigRepo);
+    const instagramGateway = new MetaInstagramGateway(channelConfigRepo);
+    const messengerGateway = new MetaMessengerGateway(channelConfigRepo);
+    const outboundGatewayRegistry = new OutboundGatewayRegistry([
+      whatsAppGateway,
+      instagramGateway,
+      messengerGateway,
+    ]);
+
     const conversationRepo = new MongoConversationRepository(db);
     const agentRepo = new MongoAgentRepository(db);
     const conversationLockManager = new MongoConversationLockManager(db);
@@ -110,6 +151,7 @@ export class Container {
       skillRegistry,
       mcpGateway,
       logger.child({ component: 'orchestration' }),
+      workspaceMcpRegistry,
     );
 
     const commandBus = new InMemoryCommandBus();
@@ -119,7 +161,7 @@ export class Container {
         conversationRepo,
         agentRepo,
         orchestration,
-        whatsAppGateway,
+        whatsAppGateway, // default to WA; worker passes channel-specific gateway via registry in future
         eventBus,
         conversationLockManager,
         conversationSnapshotRepository,
@@ -154,6 +196,8 @@ export class Container {
       inboundMessageWorker,
       healthChecker,
       logger,
+      channelRouter,
+      outboundGatewayRegistry,
     );
 
     return Container._instance;
