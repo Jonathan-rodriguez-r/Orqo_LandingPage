@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ORQO — Manual de Marca · Entrega Final</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300;1,9..144,400&family=Figtree:wght@300;400;500;600&display=swap');
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -33,10 +31,11 @@
 :root {
 
   /* ── TIPOGRAFÍA ── */
-  --f-disp: 'Syne', sans-serif;
-  --f-body: 'Figtree', sans-serif;
-  --f-mono: 'DM Mono', monospace;
-  --f-edit: 'Fraunces', serif;
+  /* Produccion: self-host de archivos .woff2 licenciados de MD UI, MD IO y MD Nichrome. */
+  --f-disp: 'MD UI XL', 'MD UI', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+  --f-body: 'MD UI', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono: 'MD IO', 'SFMono-Regular', 'Cascadia Mono', 'Roboto Mono', monospace;
+  --f-edit: 'MD Nichrome', 'MD UI XL', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
 }
 
 html { scroll-behavior: smooth; }
@@ -67,14 +66,14 @@ body { background: var(--ink-00); color: var(--lit-07); font-family: var(--f-bod
 .cover-mark {
   font-family: var(--f-disp); font-weight: 800;
   font-size: clamp(5rem, 18vw, 14rem);
-  letter-spacing: -0.055em; line-height: 0.88;
+  letter-spacing: -0.03em; line-height: 0.88;
   color: var(--lit-08);
 }
 .cover-tagline {
-  font-family: var(--f-edit); font-style: italic; font-weight: 300;
-  font-size: clamp(1rem, 2vw, 1.5rem);
+  font-family: var(--f-edit); font-style: normal; font-weight: 700;
+  font-size: clamp(0.82rem, 1.4vw, 1.05rem);
+  letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--mid-05); margin-top: 1.5rem;
-  font-optical-sizing: auto;
 }
 .cover-meta { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mid-05); opacity: 0.45; }
 .cover-version { font-family: var(--f-mono); font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--acc); opacity: 0.7; }
@@ -97,7 +96,7 @@ body { background: var(--ink-00); color: var(--lit-07); font-family: var(--f-bod
 .ch-title {
   font-family: var(--f-disp); font-weight: 800;
   font-size: clamp(1.8rem, 4vw, 3rem);
-  letter-spacing: -0.04em; line-height: 1.0;
+  letter-spacing: -0.022em; line-height: 1.0;
   color: var(--lit-08); margin-bottom: 0.6rem;
 }
 .ch-sub {
@@ -146,7 +145,7 @@ body { background: var(--ink-00); color: var(--lit-07); font-family: var(--f-bod
 /* notch-mono: all in one color */
 
 /* ══ WORDMARK DISPLAY ══ */
-.wm-lg { font-family: var(--f-disp); font-weight: 800; letter-spacing: -0.055em; line-height: 1; }
+.wm-lg { font-family: var(--f-disp); font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
 .wm-dk { color: var(--lit-08); }
 .wm-lt { color: var(--ink-00); }
 
@@ -360,7 +359,7 @@ body { background: var(--ink-00); color: var(--lit-07); font-family: var(--f-bod
 }
 .m-theme-btn:hover { background: var(--ink-02); color: var(--lit-07); }
 .m-nav-logo { display: flex; align-items: center; gap: 0.55rem; text-decoration: none; }
-.m-nav-logo-text { font-family: var(--f-disp); font-weight: 800; font-size: 1.1rem; letter-spacing: -0.04em; color: var(--lit-08); }
+.m-nav-logo-text { font-family: var(--f-disp); font-weight: 800; font-size: 1.1rem; letter-spacing: -0.03em; color: var(--lit-08); }
 .m-nav-back {
   display: flex; align-items: center; gap: 0.5rem;
   font-family: var(--f-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -385,7 +384,7 @@ body { padding-top: 60px; }
   text-align: center;
 }
 .m-footer-logo { display: flex; align-items: center; gap: 0.5rem; text-decoration: none; }
-.m-footer-logo-text { font-family: var(--f-disp); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.04em; color: rgba(245,245,242,0.7); }
+.m-footer-logo-text { font-family: var(--f-disp); font-weight: 800; font-size: 1.15rem; letter-spacing: -0.03em; color: rgba(245,245,242,0.7); }
 .m-footer-links { display: flex; gap: 2rem; list-style: none; }
 .m-footer-links a { font-family: var(--f-body); font-size: 0.82rem; color: var(--mid-05); text-decoration: none; transition: color 0.15s; }
 .m-footer-links a:hover { color: var(--acc); }
@@ -494,7 +493,7 @@ body { padding-top: 60px; }
     </div>
     <div class="cell">
       <div class="lbl">Posicionamiento de marca</div>
-      <div style="font-family:var(--f-edit);font-style:italic;font-weight:300;font-size:1.2rem;color:var(--lit-08);line-height:1.4;margin-bottom:1.2rem;font-optical-sizing:auto;">"No automatización.<br>Orquestación."</div>
+      <div style="font-family:var(--f-edit);font-style:normal;font-weight:700;text-transform:uppercase;font-size:1rem;letter-spacing:0.05em;color:var(--lit-08);line-height:1.35;margin-bottom:1.2rem;">No automatización.<br>Orquestación.</div>
       <p class="bdy">La diferencia es estratégica: automatizar ejecuta tareas predefinidas. Orquestar coordina agentes con inteligencia, adaptando el flujo según el contexto. ORQO vende infraestructura, no asistentes.</p>
     </div>
     <div class="cell full s1">
@@ -688,7 +687,7 @@ body { padding-top: 60px; }
       <div style="flex:1;display:flex;align-items:center;">
         <div class="wm-lg wm-dk" style="font-size:3.5rem;">ORQO</div>
       </div>
-      <p class="bdy" style="font-size:0.74rem;margin-top:1rem;">Syne ExtraBold 800 · tracking −55 (−0.055em). Solo cuando el isotipo ya está visible en el contexto. Documentos, firmas de email, textos largos donde el símbolo ya apareció.</p>
+      <p class="bdy" style="font-size:0.74rem;margin-top:1rem;">MD UI XL Bold/Ultra · tracking −30 (−0.03em). Solo cuando el isotipo ya está visible en el contexto. Documentos, firmas de email, textos largos donde el símbolo ya apareció.</p>
     </div>
 
     <!-- LOGOTIPO SOLO LIGHT -->
@@ -1046,40 +1045,40 @@ body { padding-top: 60px; }
 <div class="chapter" id="s05">
   <span class="ch-num">§05 · Tipografía</span>
   <h1 class="ch-title">Sistema<br>tipográfico</h1>
-  <p class="ch-sub">Cuatro familias con roles exactos. Ninguna se usa fuera de su contexto definido.</p>
+  <p class="ch-sub">Una superfamilia técnica y un acento display. ORQO deja de sonar a plantilla SaaS y adopta una voz de infraestructura propia.</p>
 
   <div class="g2">
 
     <div class="cell s1">
-      <div class="lbl">Syne · Display y marca</div>
-      <div style="font-family:var(--f-disp);font-weight:800;font-size:4rem;letter-spacing:-0.055em;line-height:0.9;color:var(--lit-08);margin-bottom:1.2rem;">ORQO</div>
-      <div style="font-family:var(--f-disp);font-weight:700;font-size:1.5rem;letter-spacing:-0.035em;line-height:1.1;color:var(--lit-07);margin-bottom:0.8rem;">Orquestación<br>operativa.</div>
-      <div style="font-family:var(--f-disp);font-weight:600;font-size:1.1rem;letter-spacing:-0.02em;color:var(--mid-05);margin-bottom:1.5rem;">Subtítulo de sección</div>
-      <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">Syne (Google Fonts)</span></div>
-      <div class="typo-row"><span class="typo-role">Logotipo</span><span class="typo-val">ExtraBold 800 · −55 tracking</span></div>
-      <div class="typo-row"><span class="typo-role">H1</span><span class="typo-val">Bold 700 · −40 tracking</span></div>
-      <div class="typo-row"><span class="typo-role">H2</span><span class="typo-val">SemiBold 600 · −25 tracking</span></div>
-      <div class="typo-row"><span class="typo-role">Alternativa</span><span class="typo-val">Neue Haas Grotesk Display 75</span></div>
-      <div class="typo-row" style="border:none;"><span class="typo-role">Uso</span><span class="typo-val">Logotipo, headers, portadas deck</span></div>
+      <div class="lbl">MD UI XL · Display y marca</div>
+      <div style="font-family:var(--f-disp);font-weight:800;font-size:4rem;letter-spacing:-0.03em;line-height:0.9;color:var(--lit-08);margin-bottom:1.2rem;">ORQO</div>
+      <div style="font-family:var(--f-disp);font-weight:700;font-size:1.5rem;letter-spacing:-0.02em;line-height:1.1;color:var(--lit-07);margin-bottom:0.8rem;">Orquestación<br>operativa.</div>
+      <div style="font-family:var(--f-disp);font-weight:600;font-size:1.1rem;letter-spacing:-0.01em;color:var(--mid-05);margin-bottom:1.5rem;">Subtítulo de sección</div>
+      <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">MD UI XL (Mass-Driver)</span></div>
+      <div class="typo-row"><span class="typo-role">Logotipo</span><span class="typo-val">Ultra/Bold · −30 tracking</span></div>
+      <div class="typo-row"><span class="typo-role">H1</span><span class="typo-val">Bold 700 · −24 tracking</span></div>
+      <div class="typo-row"><span class="typo-role">H2</span><span class="typo-val">Semibold 600 · −12 tracking</span></div>
+      <div class="typo-row"><span class="typo-role">Fallback</span><span class="typo-val">Arial Narrow / Helvetica Neue</span></div>
+      <div class="typo-row" style="border:none;"><span class="typo-role">Uso</span><span class="typo-val">Wordmark, titulares, portadas y cifras hero</span></div>
     </div>
 
     <div class="cell">
-      <div class="lbl">Figtree · Producto y web</div>
+      <div class="lbl">MD UI · Producto y web</div>
       <div style="font-family:var(--f-body);font-weight:400;font-size:1.15rem;color:var(--lit-07);line-height:1.6;margin-bottom:0.8rem;">Convierte conversaciones en acciones reales. Sin fricciones, sin intermediarios.</div>
       <div style="font-family:var(--f-body);font-weight:300;font-size:0.88rem;color:var(--mid-05);line-height:1.75;margin-bottom:1.5rem;">ORQO coordina agentes de IA, conecta sistemas y ejecuta operaciones en WhatsApp, e-commerce y plataformas enterprise en tiempo real.</div>
-      <div style="font-family:var(--f-body);font-weight:500;font-size:0.82rem;color:var(--lit-07);">Solicitar demo →</div>
+      <div style="font-family:var(--f-body);font-weight:600;font-size:0.82rem;color:var(--lit-07);">Solicitar demo →</div>
       <div style="margin-top:1.5rem;">
-        <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">Figtree (Google Fonts)</span></div>
+        <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">MD UI (Mass-Driver)</span></div>
         <div class="typo-row"><span class="typo-role">Body</span><span class="typo-val">Regular 400 · 16px · 1.75 lh</span></div>
         <div class="typo-row"><span class="typo-role">Lead</span><span class="typo-val">Light 300 · 18px · 1.7 lh</span></div>
-        <div class="typo-row"><span class="typo-role">UI labels</span><span class="typo-val">Medium 500 · 14px · botones</span></div>
-        <div class="typo-row"><span class="typo-role">Alternativa</span><span class="typo-val">Geist / Plus Jakarta Sans</span></div>
+        <div class="typo-row"><span class="typo-role">UI labels</span><span class="typo-val">Semibold 600 · 14px · botones</span></div>
+        <div class="typo-row"><span class="typo-role">Fallback</span><span class="typo-val">Helvetica Neue / Arial</span></div>
         <div class="typo-row" style="border:none;"><span class="typo-role">Uso</span><span class="typo-val">Cuerpo web, UI, botones, forms</span></div>
       </div>
     </div>
 
     <div class="cell s1">
-      <div class="lbl">DM Mono · Datos e interfaz técnica</div>
+      <div class="lbl">MD IO · Datos e interfaz técnica</div>
       <div style="font-family:var(--f-mono);font-size:0.95rem;color:var(--acc);letter-spacing:0.02em;margin-bottom:0.5rem;">canal.whatsapp → activo</div>
       <div style="font-family:var(--f-mono);font-size:0.75rem;color:var(--mid-05);line-height:1.9;margin-bottom:1.5rem;">
         01 · Agente de ventas<br>
@@ -1089,22 +1088,22 @@ body { padding-top: 60px; }
       </div>
       <div style="font-family:var(--f-mono);font-size:0.65rem;color:var(--mid-05);opacity:0.4;letter-spacing:0.12em;text-transform:uppercase;">Última sincronización · 14:32 UTC</div>
       <div style="margin-top:1.5rem;">
-        <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">DM Mono (Google Fonts)</span></div>
+        <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">MD IO (Mass-Driver)</span></div>
         <div class="typo-row"><span class="typo-role">Datos</span><span class="typo-val">Regular 400 · 13px</span></div>
-        <div class="typo-row"><span class="typo-role">Labels</span><span class="typo-val">Light 300 · 11px · +14 tracking</span></div>
-        <div class="typo-row"><span class="typo-role">Alternativa</span><span class="typo-val">Geist Mono · IBM Plex Mono</span></div>
+        <div class="typo-row"><span class="typo-role">Labels</span><span class="typo-val">Regular 400 · 11px · +14 tracking</span></div>
+        <div class="typo-row"><span class="typo-role">Fallback</span><span class="typo-val">Cascadia Mono · SF Mono</span></div>
         <div class="typo-row" style="border:none;"><span class="typo-role">Uso</span><span class="typo-val">Datos, metadata, código, timestamps</span></div>
       </div>
     </div>
 
     <div class="cell">
-      <div class="lbl">Fraunces · Momentos editoriales</div>
-      <div style="font-family:var(--f-edit);font-weight:300;font-style:italic;font-size:1.45rem;line-height:1.35;color:var(--lit-08);margin-bottom:1.2rem;font-optical-sizing:auto;">"No automatización.<br>Orquestación."</div>
-      <div style="font-family:var(--f-body);font-size:0.8rem;color:var(--mid-05);line-height:1.7;margin-bottom:1.5rem;">Fraunces variable se usa exclusivamente en momentos de firma de marca: taglines en pitch decks, citas de autoridad en web, la frase de cierre en presentaciones comerciales. Una vez por pieza. Nunca en interfaz de producto.</div>
-      <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">Fraunces (óptica variable)</span></div>
-      <div class="typo-row"><span class="typo-role">Estilo</span><span class="typo-val">Light 300 · Italic · opsz 9–144</span></div>
-      <div class="typo-row"><span class="typo-role">Tamaño</span><span class="typo-val">1.2rem mínimo · nunca body text</span></div>
-      <div class="typo-row" style="border:none;"><span class="typo-role">Frecuencia</span><span class="typo-val">Selectivo · Máx. 1× por pieza</span></div>
+      <div class="lbl">MD Nichrome · Acento de marca</div>
+      <div style="font-family:var(--f-edit);font-weight:700;font-style:normal;text-transform:uppercase;font-size:1.35rem;letter-spacing:0.02em;line-height:1.2;color:var(--lit-08);margin-bottom:1.2rem;">No automatización.<br>Orquestación.</div>
+      <div style="font-family:var(--f-body);font-size:0.8rem;color:var(--mid-05);line-height:1.7;margin-bottom:1.5rem;">MD Nichrome se usa como firma de carácter: portadas, separadores, claims cortos y momentos de alto impacto. Nunca reemplaza a MD UI en producto ni en textos largos.</div>
+      <div class="typo-row"><span class="typo-role">Familia</span><span class="typo-val">MD Nichrome (Mass-Driver)</span></div>
+      <div class="typo-row"><span class="typo-role">Estilo</span><span class="typo-val">Bold/Black · mayúsculas selectivas</span></div>
+      <div class="typo-row"><span class="typo-role">Tamaño</span><span class="typo-val">1.2rem mínimo · frases cortas</span></div>
+      <div class="typo-row" style="border:none;"><span class="typo-role">Frecuencia</span><span class="typo-val">Selectivo · Máx. 1× por vista</span></div>
     </div>
 
   </div>
@@ -1132,7 +1131,7 @@ body { padding-top: 60px; }
             <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3" stroke-linecap="round"/>
             <circle cx="66" cy="58" r="4.5" fill="#2CB978"/>
           </svg>
-          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.8rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.8rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
           <!-- Indicadores de espacio -->
           <div style="position:absolute;top:-1.2rem;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:0.42rem;color:var(--acc);opacity:0.55;white-space:nowrap;">x = altura de la O</div>
           <div style="position:absolute;bottom:-1.2rem;left:50%;transform:translateX(-50%);font-family:var(--f-mono);font-size:0.42rem;color:var(--acc);opacity:0.55;white-space:nowrap;">zona de exclusión · x en todos los lados</div>
@@ -1149,7 +1148,7 @@ body { padding-top: 60px; }
             <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
             <circle cx="66" cy="58" r="6" fill="#2CB978"/>
           </svg>
-          <div style="font-family:var(--f-disp);font-weight:800;font-size:0.9rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:0.9rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
           <span class="bdy" style="font-size:0.72rem;margin-left:auto;">Mín. digital: 24px altura</span>
         </div>
         <div style="display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--ink-01);border-radius:8px;">
@@ -1194,7 +1193,7 @@ body { padding-top: 60px; }
     </div>
     <div class="cell">
       <div class="lbl">02 · Jerarquía visual</div>
-      <p class="bdy" style="margin-bottom:1rem;">Tres niveles jerárquicos por pieza, nunca más. Nivel 1: dato o mensaje principal (Syne, grande). Nivel 2: contexto y apoyo (Figtree, regular). Nivel 3: metadatos y labels (DM Mono, pequeño y opaco). El acento verde puede aparecer solo en nivel 1.</p>
+      <p class="bdy" style="margin-bottom:1rem;">Tres niveles jerárquicos por pieza, nunca más. Nivel 1: dato o mensaje principal (MD UI XL, grande). Nivel 2: contexto y apoyo (MD UI, regular). Nivel 3: metadatos y labels (MD IO, pequeño y opaco). MD Nichrome aparece solo como acento editorial.</p>
       <div style="display:flex;flex-direction:column;gap:0.4rem;padding:1rem;background:var(--ink-01);border-radius:8px;">
         <div style="font-family:var(--f-disp);font-weight:800;font-size:1.2rem;letter-spacing:-0.03em;color:var(--acc);">3,847</div>
         <div style="font-family:var(--f-body);font-size:0.82rem;color:var(--lit-07);">acciones ejecutadas hoy</div>
@@ -1245,7 +1244,7 @@ body { padding-top: 60px; }
             <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3" stroke-linecap="round"/>
             <circle cx="66" cy="58" r="4.5" fill="#2CB978"/>
           </svg>
-          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.6rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.6rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
         </div>
       </div>
     </div>
@@ -1260,7 +1259,7 @@ body { padding-top: 60px; }
             <line x1="59.5" y1="52" x2="66" y2="58" stroke="#FFD93D" stroke-width="3" stroke-linecap="round"/>
             <circle cx="66" cy="58" r="4.5" fill="#FFD93D"/>
           </svg>
-          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.6rem;letter-spacing:-0.055em;background:linear-gradient(90deg,#FF6B6B,#FFD93D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ORQO</div>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.6rem;letter-spacing:-0.03em;background:linear-gradient(90deg,#FF6B6B,#FFD93D);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">ORQO</div>
         </div>
       </div>
     </div>
@@ -1276,7 +1275,7 @@ body { padding-top: 60px; }
               <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
               <circle cx="66" cy="58" r="6" fill="#2CB978"/>
             </svg>
-            <div style="font-family:var(--f-disp);font-weight:800;font-size:1.1rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+            <div style="font-family:var(--f-disp);font-weight:800;font-size:1.1rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
           </div>
         </div>
       </div>
@@ -1292,7 +1291,7 @@ body { padding-top: 60px; }
             <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="4" stroke-linecap="round"/>
             <circle cx="66" cy="58" r="6" fill="#2CB978"/>
           </svg>
-          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.1rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.1rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
         </div>
       </div>
     </div>
@@ -1308,7 +1307,7 @@ body { padding-top: 60px; }
               <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
               <circle cx="66" cy="58" r="5" fill="#2CB978"/>
             </svg>
-            <div style="font-family:var(--f-disp);font-weight:800;font-size:1.4rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+            <div style="font-family:var(--f-disp);font-weight:800;font-size:1.4rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
           </div>
           <div style="display:flex;align-items:center;gap:0.4rem;">
             <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
@@ -1330,7 +1329,7 @@ body { padding-top: 60px; }
             <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="3.5" stroke-linecap="round"/>
             <circle cx="66" cy="58" r="5" fill="#2CB978"/>
           </svg>
-          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.4rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.4rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
         </div>
       </div>
     </div>
@@ -1443,7 +1442,7 @@ body { padding-top: 60px; }
           <div class="land-card"></div>
         </div>
       </div>
-      <p class="bdy" style="font-size:0.72rem;margin-top:1rem;">Fondo #F5F5F2. Nav con imagotipo light. H1 Syne 800. CTA en #060908. Sin gradientes. Sección de proof points con bordes #1D2920 muy suaves.</p>
+      <p class="bdy" style="font-size:0.72rem;margin-top:1rem;">Fondo #F5F5F2. Nav con imagotipo light. H1 MD UI XL 800. CTA en #060908. Sin gradientes. Sección de proof points con bordes #1D2920 muy suaves.</p>
     </div>
 
     <!-- PITCH DECK -->
@@ -1457,7 +1456,7 @@ body { padding-top: 60px; }
             <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.5" stroke-linecap="round"/>
             <circle cx="66" cy="58" r="3.5" fill="#2CB978"/>
           </svg>
-          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.3rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+          <div style="font-family:var(--f-disp);font-weight:800;font-size:1.3rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
           <div style="font-family:var(--f-mono);font-size:0.4rem;letter-spacing:0.14em;color:var(--mid-05);opacity:0.4;text-transform:uppercase;">Orquestación de Agentes IA</div>
         </div>
         <!-- Slide de dato -->
@@ -1473,10 +1472,10 @@ body { padding-top: 60px; }
               <div style="font-family:var(--f-mono);font-size:0.4rem;color:var(--mid-05);opacity:0.4;">crecimiento YoY</div>
             </div>
           </div>
-          <div style="font-family:var(--f-edit);font-style:italic;font-weight:300;font-size:0.6rem;color:var(--lit-07);line-height:1.5;margin-top:auto;font-optical-sizing:auto;">"No automatización. Orquestación."</div>
+          <div style="font-family:var(--f-edit);font-style:normal;font-weight:700;text-transform:uppercase;font-size:0.56rem;letter-spacing:0.04em;color:var(--lit-07);line-height:1.5;margin-top:auto;">No automatización. Orquestación.</div>
         </div>
       </div>
-      <p class="bdy" style="font-size:0.72rem;margin-top:1rem;">Portada: isotipo + wordmark centrado. Slides de dato: número en verde, contexto en blanco, cita en Fraunces italic. Máx. 4 elementos por slide.</p>
+      <p class="bdy" style="font-size:0.72rem;margin-top:1rem;">Portada: isotipo + wordmark centrado. Slides de dato: número en verde, contexto en blanco, claim en MD Nichrome. Máx. 4 elementos por slide.</p>
     </div>
 
   </div>
@@ -1541,13 +1540,13 @@ body { padding-top: 60px; }
     <div class="file-row">
       <div class="fn">orqo-logotipo-dark.svg</div>
       <div class="ft">SVG</div>
-      <div class="fd">Wordmark ORQO solo · #E9EDE9 · Syne 800 outline · Para dark mode</div>
+      <div class="fd">Wordmark ORQO solo · #E9EDE9 · MD UI XL 800 outline · Para dark mode</div>
       <div class="fs">~4.2 KB</div>
     </div>
     <div class="file-row">
       <div class="fn">orqo-logotipo-light.svg</div>
       <div class="ft">SVG</div>
-      <div class="fd">Wordmark ORQO solo · #060908 · Syne 800 outline · Para light mode</div>
+      <div class="fd">Wordmark ORQO solo · #060908 · MD UI XL 800 outline · Para light mode</div>
       <div class="fs">~4.2 KB</div>
     </div>
     <div class="file-row">
@@ -1782,10 +1781,10 @@ body { padding-top: 60px; }
       &nbsp;&nbsp;--orqo-accent-light: #1A8A55;<br>
       &nbsp;&nbsp;--orqo-accent-ghost: rgba(44,185,120,0.10);<br>
       &nbsp;&nbsp;/* Fuentes */<br>
-      &nbsp;&nbsp;--orqo-font-display: 'Syne', sans-serif;<br>
-      &nbsp;&nbsp;--orqo-font-body: 'Figtree', sans-serif;<br>
-      &nbsp;&nbsp;--orqo-font-mono: 'DM Mono', monospace;<br>
-      &nbsp;&nbsp;--orqo-font-editorial: 'Fraunces', serif;<br>
+      &nbsp;&nbsp;--orqo-font-display: 'MD UI XL', 'MD UI', 'Arial Narrow', sans-serif;<br>
+      &nbsp;&nbsp;--orqo-font-body: 'MD UI', 'Helvetica Neue', Arial, sans-serif;<br>
+      &nbsp;&nbsp;--orqo-font-mono: 'MD IO', 'SFMono-Regular', 'Cascadia Mono', monospace;<br>
+      &nbsp;&nbsp;--orqo-font-editorial: 'MD Nichrome', 'MD UI XL', 'Arial Narrow', sans-serif;<br>
       }
     </div>
   </div>
@@ -1804,9 +1803,9 @@ body { padding-top: 60px; }
           <line x1="59.5" y1="52" x2="66" y2="58" stroke="#2CB978" stroke-width="2.5" stroke-linecap="round"/>
           <circle cx="66" cy="58" r="3.5" fill="#2CB978"/>
         </svg>
-        <div style="font-family:var(--f-disp);font-weight:800;font-size:2rem;letter-spacing:-0.055em;color:var(--lit-08);">ORQO</div>
+        <div style="font-family:var(--f-disp);font-weight:800;font-size:2rem;letter-spacing:-0.03em;color:var(--lit-08);">ORQO</div>
       </div>
-      <div style="font-family:var(--f-edit);font-style:italic;font-weight:300;font-size:1rem;color:var(--mid-05);font-optical-sizing:auto;">"El gesto mínimo que lo ordena todo."</div>
+      <div style="font-family:var(--f-edit);font-style:normal;font-weight:700;text-transform:uppercase;font-size:0.78rem;letter-spacing:0.06em;color:var(--mid-05);">El gesto mínimo que lo ordena todo.</div>
     </div>
     <div style="text-align:right;">
       <div style="font-family:var(--f-mono);font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:rgba(233,237,233,0.15);">Manual de Marca</div>
