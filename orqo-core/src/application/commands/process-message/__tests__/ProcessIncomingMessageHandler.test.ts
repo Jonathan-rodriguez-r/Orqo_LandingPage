@@ -93,6 +93,7 @@ function makeOutboundMessageOutbox(): IOutboundMessageOutbox {
     createPending: jest.fn().mockResolvedValue('outbox-1'),
     markSent: jest.fn().mockResolvedValue(undefined),
     markFailed: jest.fn().mockResolvedValue(undefined),
+    markProviderStatus: jest.fn().mockResolvedValue(true),
   };
 }
 

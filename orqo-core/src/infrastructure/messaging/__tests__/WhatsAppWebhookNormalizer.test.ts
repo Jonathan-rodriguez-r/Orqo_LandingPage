@@ -1,4 +1,7 @@
-import { normalizeWhatsAppWebhook } from '../WhatsAppWebhookNormalizer.js';
+import {
+  normalizeWhatsAppStatusUpdates,
+  normalizeWhatsAppWebhook,
+} from '../WhatsAppWebhookNormalizer.js';
 import type { WorkspaceChannelRouter } from '../WorkspaceChannelRouter.js';
 import { Ok, Err } from '../../../shared/Result.js';
 
@@ -114,6 +117,135 @@ describe('normalizeWhatsAppWebhook', () => {
                       from: '573001234567',
                       timestamp: '1774990800',
                       type: 'image',
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      },
+      router,
+    );
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toHaveLength(0);
+    }
+  });
+});
+
+describe('normalizeWhatsAppStatusUpdates', () => {
+  it('convierte statuses de Meta a actualizaciones de outbox', async () => {
+    const router = makeRouter('ws-from-routing-table');
+    const result = await normalizeWhatsAppStatusUpdates(
+      {
+        entry: [
+          {
+            changes: [
+              {
+                value: {
+                  metadata: { phone_number_id: 'phone-id-1' },
+                  statuses: [
+                    {
+                      id: 'wamid.outbound.1',
+                      recipient_id: '573001234567',
+                      status: 'delivered',
+                      timestamp: '1774990800',
+                      conversation: { id: 'conversation-1' },
+                      pricing: { billable: true },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      },
+      router,
+    );
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      throw result.error;
+    }
+
+    expect(result.value).toHaveLength(1);
+    expect(result.value[0]).toMatchObject({
+      workspaceId: 'ws-from-routing-table',
+      providerMessageId: 'wamid.outbound.1',
+      providerAccountId: 'phone-id-1',
+      recipient: '573001234567',
+      status: 'delivered',
+      metadata: {
+        conversation: { id: 'conversation-1' },
+        pricing: { billable: true },
+      },
+    });
+    expect(result.value[0]?.occurredAt.toISOString()).toBe('2026-03-31T21:00:00.000Z');
+  });
+
+  it('incluye la razon de fallo cuando Meta envia errores', async () => {
+    const router = makeRouter('ws-1');
+    const result = await normalizeWhatsAppStatusUpdates(
+      {
+        entry: [
+          {
+            changes: [
+              {
+                value: {
+                  metadata: { phone_number_id: 'phone-id-1' },
+                  statuses: [
+                    {
+                      id: 'wamid.failed',
+                      recipient_id: '573001234567',
+                      status: 'failed',
+                      timestamp: '1774990800',
+                      errors: [
+                        {
+                          code: 131042,
+                          title: 'Business eligibility payment issue',
+                          message: 'Message failed to send',
+                          error_data: { details: 'Payment method issue' },
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
+      },
+      router,
+    );
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) {
+      throw result.error;
+    }
+
+    expect(result.value[0]?.status).toBe('failed');
+    expect(result.value[0]?.failureReason).toContain('131042');
+    expect(result.value[0]?.metadata?.['errors']).toHaveLength(1);
+  });
+
+  it('ignora estados no soportados sin romper el webhook', async () => {
+    const router = makeRouter('ws-1');
+    const result = await normalizeWhatsAppStatusUpdates(
+      {
+        entry: [
+          {
+            changes: [
+              {
+                value: {
+                  metadata: { phone_number_id: 'phone-id-1' },
+                  statuses: [
+                    {
+                      id: 'wamid.unknown',
+                      recipient_id: '573001234567',
+                      status: 'mystery',
+                      timestamp: '1774990800',
                     },
                   ],
                 },
