@@ -3,6 +3,7 @@ import { createIngestInboundMessageCommand } from '../application/commands/inges
 import { Container } from '../infrastructure/container/Container.js';
 import {
   normalizeWhatsAppWebhook,
+  normalizeWhatsAppStatusUpdates,
   type WhatsAppWebhookPayload,
 } from '../infrastructure/messaging/WhatsAppWebhookNormalizer.js';
 import {
@@ -171,6 +172,41 @@ ${initError ? `<div style="background:rgba(220,72,72,0.1);border:1px solid rgba(
         );
       } else {
         // Default: whatsapp_business_account or unknown — try WhatsApp normalizer
+        const statusResult = await normalizeWhatsAppStatusUpdates(
+          payload as WhatsAppWebhookPayload,
+          container.channelRouter,
+        );
+
+        if (!statusResult.ok) {
+          log.error('Error normalizando estados de WhatsApp', {
+            error: statusResult.error.message,
+            objectType,
+          });
+          webhookRequests.inc({ method: 'POST', path: url.pathname, status: 'status_normalize_error' });
+          return;
+        }
+
+        for (const update of statusResult.value) {
+          const matched = await container.outboundMessageOutbox.markProviderStatus(update);
+          if (matched) {
+            log.info('Estado de mensaje WhatsApp reconocido', {
+              workspaceId: update.workspaceId,
+              providerMessageId: update.providerMessageId,
+              status: update.status,
+              recipient: update.recipient,
+            });
+            webhookRequests.inc({ method: 'POST', path: url.pathname, status: 'status_update' });
+          } else {
+            log.warn('Estado de WhatsApp sin outbox asociado', {
+              workspaceId: update.workspaceId,
+              providerMessageId: update.providerMessageId,
+              status: update.status,
+              recipient: update.recipient,
+            });
+            webhookRequests.inc({ method: 'POST', path: url.pathname, status: 'status_unmatched' });
+          }
+        }
+
         normalizationResult = await normalizeWhatsAppWebhook(
           payload as WhatsAppWebhookPayload,
           container.channelRouter,

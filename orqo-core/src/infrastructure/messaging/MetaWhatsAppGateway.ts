@@ -49,9 +49,14 @@ export class MetaWhatsAppGateway implements IOutboundGateway {
         throw new Error(`Meta WhatsApp API error ${res.status}: ${err}`);
       }
 
-      const data = (await res.json()) as { messages: Array<{ id: string }> };
+      const data = (await res.json()) as { messages?: Array<{ id?: string }> };
+      const messageId = data.messages?.[0]?.id;
+      if (!messageId) {
+        throw new Error(`Meta WhatsApp API response sin message id: ${JSON.stringify(data)}`);
+      }
+
       return {
-        messageId: data.messages[0]?.id ?? '',
+        messageId,
         status: 'sent' as const,
       };
     });

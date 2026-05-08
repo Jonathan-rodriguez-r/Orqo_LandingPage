@@ -5,6 +5,7 @@ import { InMemoryEventBus, type IEventBus } from '../../shared/EventBus.js';
 import { IngestInboundMessageHandler } from '../../application/commands/ingest-message/IngestInboundMessageHandler.js';
 import { ProcessIncomingMessageHandler } from '../../application/commands/process-message/ProcessIncomingMessageHandler.js';
 import type { IInboundMessageQueue } from '../../application/ports/IInboundMessageQueue.js';
+import type { IOutboundMessageOutbox } from '../../application/ports/IOutboundMessageOutbox.js';
 import { AgentOrchestrationService } from '../../application/services/AgentOrchestrationService.js';
 import { ModelRouter } from '../llm/ModelRouter.js';
 import { InboundMessageWorker } from '../messaging/InboundMessageWorker.js';
@@ -51,6 +52,7 @@ export class Container {
   readonly logger: ILogger;
   readonly channelRouter: WorkspaceChannelRouter;
   readonly outboundGatewayRegistry: OutboundGatewayRegistry;
+  readonly outboundMessageOutbox: IOutboundMessageOutbox;
   readonly db: Db;
 
   private constructor(
@@ -63,6 +65,7 @@ export class Container {
     logger: ILogger,
     channelRouter: WorkspaceChannelRouter,
     outboundGatewayRegistry: OutboundGatewayRegistry,
+    outboundMessageOutbox: IOutboundMessageOutbox,
     db: Db,
   ) {
     this.commandBus = commandBus;
@@ -74,6 +77,7 @@ export class Container {
     this.logger = logger;
     this.channelRouter = channelRouter;
     this.outboundGatewayRegistry = outboundGatewayRegistry;
+    this.outboundMessageOutbox = outboundMessageOutbox;
     this.db = db;
   }
 
@@ -205,6 +209,7 @@ export class Container {
       logger,
       channelRouter,
       outboundGatewayRegistry,
+      outboundMessageOutbox,
       db,
     );
 
