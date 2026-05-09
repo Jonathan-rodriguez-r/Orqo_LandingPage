@@ -100,7 +100,9 @@ export async function normalizeWhatsAppWebhook(
     for (const change of entry.changes ?? []) {
       const phoneNumberId = change.value?.metadata?.phone_number_id?.trim();
       if (!phoneNumberId) {
-        return Err(new Error('El webhook de WhatsApp no trae phone_number_id'));
+        // Algunos eventos de sistema de Meta (account updates, templates, etc.)
+        // no traen phone_number_id — se omiten sin fallar el payload completo.
+        continue;
       }
 
       const workspaceResult = await router.resolveByPhoneNumberId(phoneNumberId);
